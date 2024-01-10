@@ -67,7 +67,7 @@ def visualize_grid(output):
 
     return result
 
-# Example usage with dummy data (from the output example of SmartGrid)
+# example usage with dummy data (from the output example of SmartGrid)
 dummy_output = [
     {
         "district": 1,
