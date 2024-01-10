@@ -4,3 +4,5 @@ class House():
         self.pos_x = pos_x
         self.solar_output = solar_output
 
+
+if __name__ is "__main__":
