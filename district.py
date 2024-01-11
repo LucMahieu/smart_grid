@@ -3,7 +3,7 @@ from battery import Battery
 from house import House
 
 class District():
-    def _init_(self, battery_file, house_file):
+    def __init__(self, battery_file, house_file):
         self.houses = self.add_houses(house_file)
         self.batteries = self.add_batteries(battery_file)
 
@@ -15,8 +15,8 @@ class District():
             csv_reader = csv.reader(input_file, delimiter=',')
 
             for row in csv_reader:
-                pos_x, pos_y, max_output = row.split(',')
-                self.houses.append(house.House(int(pos_x), int(pos_y), float(max_output))
+                pos_x, pos_y, max_output = row
+                self.houses.append(house.House(int(pos_x), int(pos_y), float(max_output)))
 
         
     def add_batteries(self, battery_file):
@@ -28,8 +28,8 @@ class District():
             csv_reader = csv.reader(input_file, delimiter=',')
 
             for row in csv_reader:
-                position, capacity = row.split(',')
-                pos_x, pos_y = int(position.split(","))
-                self.batteries.append(battery.Battery(pos_x, pos_y, float(capacity)))
+                capacity = row[1]
+                pos_x, pos_y = row[0].split(",")
+                self.batteries.append(battery.Battery(int(pos_x), int(pos_y), float(capacity)))
     
 
