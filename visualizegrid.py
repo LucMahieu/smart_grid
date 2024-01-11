@@ -23,6 +23,7 @@ def visualize_grid(output):
                 x, y = map(float, house_location.split(','))
 
                 # display house icon
+                # from https://matplotlib.org/stable/gallery/text_labels_and_annotations/demo_annotation_box.html
                 house_box = AnnotationBbox(OffsetImage(house_icon, zoom=0.04), (x, y), frameon=False, pad=0)
                 ax.add_artist(house_box
 
@@ -34,6 +35,7 @@ def visualize_grid(output):
             x_battery, y_battery = map(float, battery_location.split(','))
 
             #display battery icon
+            # from https://matplotlib.org/stable/gallery/text_labels_and_annotations/demo_annotation_box.html
             battery_box = AnnotationBbox(OffsetImage(battery_icon, zoom=0.04), (x_battery, y_battery), frameon=False, pad=0)
             ax.add_artist(battery_box)
 
