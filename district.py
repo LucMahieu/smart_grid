@@ -15,8 +15,8 @@ class District():
             csv_reader = csv.reader(input_file, delimiter=',')
 
             for row in csv_reader:
-                row = row.split(',')
-                self.houses.append(house.House(int(row[0]), int(row[1]), float(row[2])))
+                pos_x, pos_y, max_output = row.split(',')
+                self.houses.append(house.House(int(pos_x), int(pos_y), float(max_output))
 
         
     def add_batteries(self, battery_file):
