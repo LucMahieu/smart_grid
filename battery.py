@@ -1,0 +1,13 @@
+class Battery():
+        
+    def _init_(self, position_x, position_y, capacity):
+        self.position_x = position_x
+        self.position_y = position_y
+        self.capacity = capacity
+
+    
+    # def capacity_limit(self):
+        """
+        Calculates the output the battery recieves from the houses,
+        and checks if the capacity limit of the battery is exceeded.
+        """
