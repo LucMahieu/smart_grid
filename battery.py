@@ -1,6 +1,6 @@
 class Battery():
         
-    def _init_(self, position_x, position_y, capacity):
+    def __init__(self, position_x, position_y, capacity):
         self.position_x = position_x
         self.position_y = position_y
         self.capacity = capacity
