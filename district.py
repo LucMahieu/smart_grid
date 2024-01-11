@@ -4,6 +4,8 @@ from house import House
 
 class District():
     def __init__(self, battery_file, house_file):
+        self.houses = []
+        self.batteries = []
         self.houses = self.add_houses(house_file)
         self.batteries = self.add_batteries(battery_file)
 
@@ -14,9 +16,12 @@ class District():
         with open(house_file, 'r') as input_file:
             csv_reader = csv.reader(input_file, delimiter=',')
 
+            # skipping header
+            next(csv_reader, None)
+            
             for row in csv_reader:
                 pos_x, pos_y, max_output = row
-                self.houses.append(house.House(int(pos_x), int(pos_y), float(max_output)))
+                self.houses.append(House(int(pos_x), int(pos_y), float(max_output)))
 
         
     def add_batteries(self, battery_file):
@@ -27,9 +32,12 @@ class District():
             # read csv file and split on commas
             csv_reader = csv.reader(input_file, delimiter=',')
 
+            # skipping header
+            next(csv_reader, None)
+            
             for row in csv_reader:
                 capacity = row[1]
                 pos_x, pos_y = row[0].split(",")
-                self.batteries.append(battery.Battery(int(pos_x), int(pos_y), float(capacity)))
+                self.batteries.append(Battery(int(pos_x), int(pos_y), float(capacity)))
     
 
