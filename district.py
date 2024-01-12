@@ -44,18 +44,20 @@ class District():
                 self.batteries.append(Battery(int(pos_x), int(pos_y), float(capacity)))
 
     def create_cables(self):
-        """
-        This function creates cables based on the connection between houses and batteries
-        """
-        cables = []
-        for house in self.houses:
-            if house.battery:
-                cable = Cable(
-                    (house.x_position, house.y_position),
-                    (house.battery.position_x, house.battery.position_y)
-                )
-                cables.append(cable)
+    """
+    This function creates cables based on the connection between houses and batteries
+    """
+    cables = []
+    for house in self.houses:
+        if house.battery:
+            cable = Cable(
+                (house.x_position, house.y_position),
+                (house.battery.position_x, house.battery.position_y)
+            )
+            cables.append(cable)
+            # Update connected_cables in Battery
+            house.battery.connected_cables.append(cable)
 
-        return cables
+    return cables
 
 if __name__ == "__main__":
