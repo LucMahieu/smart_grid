@@ -2,6 +2,7 @@ import csv
 from cable import Cable
 from battery import Battery
 from house import House
+import cable from Cable
 
 class District():
     def __init__(self, name, battery_file, house_file):
