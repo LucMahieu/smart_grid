@@ -28,7 +28,7 @@ class District():
         
     def add_batteries(self, battery_file):
         """
-        This function reads the given file, loads information about batteries,s and creates a list
+        This function reads the given file, loads information about batteries, and creates a list
         """        
         with open(battery_file, 'r') as input_file:
             # read csv file and split on commas
@@ -44,7 +44,7 @@ class District():
         
     def create_cables(self):
         """
-        This function creates cables that start from an existing house 
+        This function creates a cable that starts at the location of a house 
         """
         for house in self.houses:
             house.cables = [str(house.x_position) + str(",") + str(house.y_position)]
