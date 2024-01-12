@@ -5,10 +5,6 @@ class House:
         self.max_output = max_output
         self.battery = None
 
-    # connects the house to a specified battery
-    def connect_to_battery(self, battery):
-        self.battery = battery
-
     # calculates manhattan distance between this house and another house
     def calculate_distance(self, other_house):
         return abs(self.x_position - other_house.x_position) + abs(self.y_position - other_house.y_position)
