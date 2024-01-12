@@ -54,10 +54,13 @@ class District():
 
             if house.battery:
                 cable = Cable(
-                    (house.pos_x_house, house.pos_y_house),
-                    (house.battery.pos_x_batt, house.battery.pos_y_batt)
+                (house.pos_x_house, house.pos_y_house),
+                (house.battery.pos_x_batt, house.battery.pos_y_batt)
                 )
                 cables.append(cable)
+
+            # Update connected_cables in Battery
+            house.battery.connected_cables.append(cable)
 
         return cables
 
