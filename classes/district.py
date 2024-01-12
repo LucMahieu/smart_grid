@@ -51,18 +51,19 @@ class District():
         """
         cables = []
         for house in self.houses:
-
+            # Check if the house has a battery
             if house.battery:
                 cable = Cable(
-                (house.pos_x_house, house.pos_y_house),
-                (house.battery.pos_x_batt, house.battery.pos_y_batt)
+                    (house.pos_x, house.pos_y),
+                    (house.battery.pos_x, house.battery.pos_y)
                 )
                 cables.append(cable)
 
-            # Update connected_cables in Battery
-            house.battery.connected_cables.append(cable)
+                # Update connected_cables in Battery
+                house.battery.connected_cables.append(cable)
 
         return cables
+
 
 if __name__ == "__main__":
     pass
