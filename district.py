@@ -41,7 +41,13 @@ class District():
                 capacity = row[1]
                 pos_x, pos_y = row[0].split(",")
                 self.batteries.append(Battery(int(pos_x), int(pos_y), float(capacity)))
-        
+
+    # def connections(self):
+    #     closest_battery = self.find_closest_battery(house)
+    
+    # def find_closest_battery(self, house):
+    # closest_battery = min(self.batteries, key=lambda battery: house.calculate_distance(battery))
+    #     return closest_battery
     def create_cables(self):
         """
         This function creates a cable that starts at the location of a house 
