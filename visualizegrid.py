@@ -25,7 +25,7 @@ def visualize_grid(output):
                 # display house icon
                 # from https://matplotlib.org/stable/gallery/text_labels_and_annotations/demo_annotation_box.html
                 house_box = AnnotationBbox(OffsetImage(house_icon, zoom=0.04), (x, y), frameon=False, pad=0)
-                ax.add_artist(house_box
+                ax.add_artist(house_box)
 
                 connected_houses.append((x, y))
 

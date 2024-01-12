@@ -12,5 +12,5 @@ class Battery():
         and checks if the capacity limit of the battery is exceeded.
         """
         total_output = sum(house.max_output for house in self.connected_houses)
-            return total_output > self.capacity
+        return total_output > self.capacity
             
