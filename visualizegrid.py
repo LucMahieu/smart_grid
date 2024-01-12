@@ -47,7 +47,7 @@ def visualize_grid(output):
 
     plt.show()
 
-from export_json.py import export_json
+from export_json import export_json
 
 if __name__ == "__main__":
     districts = [District(1, "data/district_1/district-1_batteries.csv", "data/district_1/district-1_houses.csv"),
