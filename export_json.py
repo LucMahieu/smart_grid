@@ -7,15 +7,15 @@ def house_to_dict(house):
     output = OrderedDict()
     output["location"] = str(house.pos_x_house) + "," + str(house.pos_y_house)
     output["output"] = house.max_output
-    output["cables"] = house.cables
+    output["cables"] = [cable for cable in house.cables]
     return output
 
-def battery_to_dict(battery):
+def battery_to_dict(battery, district):
     """Converts the attributes of a class to a dictionary."""
     output = OrderedDict()
     output["location"] = str(battery.pos_x_batt) + "," + str(battery.pos_y_batt)
     output["capacity"] = battery.capacity
-    output["houses"] = [house_to_dict(house) for house in battery.connected_houses]
+    output["houses"] = [house_to_dict(house) for house in district.houses if house.battery == battery]
     return output
 
 def district_to_dict(district):
@@ -23,7 +23,7 @@ def district_to_dict(district):
     output = OrderedDict()
     output["district"] = district.name
     output["costs-shared"] = district.costs_shared
-    output["batteries"] = [battery_to_dict(battery) for battery in district.batteries]
+    output["batteries"] = [battery_to_dict(battery, district) for battery in district.batteries]
     return output
 
 def export_json(districts):

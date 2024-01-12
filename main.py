@@ -1,5 +1,5 @@
 from classes.district import District
-from visualization.export_json import export_json
+from export_json import export_json
 from visualization.visualizegrid import visualize_grid
 
 if __name__ == "__main__":
