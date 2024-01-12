@@ -58,5 +58,4 @@ class District():
 
         return cables
 
-
 if __name__ == "__main__":
