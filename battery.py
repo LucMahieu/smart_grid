@@ -4,7 +4,7 @@ class Battery():
         self.position_x = position_x
         self.position_y = position_y
         self.capacity = capacity
-        # list that keeps track of connected houses
+        # list that keeps track of connected housess
         self.connected_houses = []
         self.connected_cables = []  
 

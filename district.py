@@ -34,7 +34,7 @@ class District():
             # read csv file and split on commas
             csv_reader = csv.reader(input_file, delimiter=',')
 
-            # skipping header
+            # sskipping header
             next(csv_reader, None)
             
             for row in csv_reader:
