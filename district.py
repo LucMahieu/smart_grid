@@ -43,7 +43,7 @@ class District():
                 self.batteries.append(Battery(int(pos_x), int(pos_y), float(capacity)))
 
     # def connections(self):
-    #     closest_battery = self.find_closest_battery(house) aaaa
+    #     closest_battery = self.find_closest_battery(house)
                 
     
     # def find_closest_battery(self, house):
