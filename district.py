@@ -2,6 +2,7 @@ import csv
 from cable import Cable
 from battery import Battery
 from house import House
+from cable import Cable
 
 class District():
     def __init__(self, name, battery_file, house_file):
@@ -24,8 +25,8 @@ class District():
             next(csv_reader, None)
             
             for row in csv_reader:
-                pos_x, pos_y, max_output = row
-                self.houses.append(House(int(pos_x), int(pos_y), float(max_output)))
+                pos_x_house, pos_y_house, max_output = row
+                self.houses.append(House(int(pos_x_house), int(pos_y_house), float(max_output)))
 
         
     def add_batteries(self, battery_file):
@@ -36,13 +37,13 @@ class District():
             # read csv file and split on commas
             csv_reader = csv.reader(input_file, delimiter=',')
 
-            # sskipping header
+            # skipping header
             next(csv_reader, None)
             
             for row in csv_reader:
                 capacity = row[1]
-                pos_x, pos_y = row[0].split(",")
-                self.batteries.append(Battery(int(pos_x), int(pos_y), float(capacity)))
+                pos_x_batt, pos_y_batt = row[0].split(",")
+                self.batteries.append(Battery(int(pos_x_batt), int(pos_y_batt), float(capacity)))
 
     def create_cables(self):
         """
@@ -50,14 +51,16 @@ class District():
         """
         cables = []
         for house in self.houses:
+
             if house.battery:
                 cable = Cable(
-                    (house.x_position, house.y_position),
-                    (house.battery.position_x, house.battery.position_y)
+                (house.pos_x_house, house.pos_y_house),
+                (house.battery.pos_x_batt, house.battery.pos_y_batt)
                 )
                 cables.append(cable)
-                # Update connected_cables in Battery
-                house.battery.connected_cables.append(cable)
+
+            # Update connected_cables in Battery
+            house.battery.connected_cables.append(cable)
 
         return cables
 
