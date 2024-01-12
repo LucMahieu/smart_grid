@@ -6,12 +6,14 @@ class District():
     def __init__(self, battery_file, house_file):
         self.houses = []
         self.batteries = []
-        self.houses = self.add_houses(house_file)
-        self.batteries = self.add_batteries(battery_file)
+        self.add_houses(house_file)
+        self.add_batteries(battery_file)
+        self.costs_shared = 0
+        self.create_cables()
 
     def add_houses(self, house_file):
         """
-        This function reads the given file, loads the information about houses and creates a list
+        This function reads the given file, loads the information about houses, and creates a list
         """
         with open(house_file, 'r') as input_file:
             csv_reader = csv.reader(input_file, delimiter=',')
@@ -26,7 +28,7 @@ class District():
         
     def add_batteries(self, battery_file):
         """
-        This function reads the given file, load information about batteries and creates a list
+        This function reads the given file, loads information about batteries,s and creates a list
         """        
         with open(battery_file, 'r') as input_file:
             # read csv file and split on commas
@@ -39,5 +41,10 @@ class District():
                 capacity = row[1]
                 pos_x, pos_y = row[0].split(",")
                 self.batteries.append(Battery(int(pos_x), int(pos_y), float(capacity)))
-    
-
+        
+    def create_cables(self):
+        """
+        This function creates cables that start from an existing house 
+        """
+        for house in self.houses:
+            house.cables = [str(house.x_position) + str(",") + str(house.y_position)]
