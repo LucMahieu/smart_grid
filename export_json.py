@@ -1,4 +1,4 @@
-from district import District
+from classes.district import District
 from collections import OrderedDict
 import json
 

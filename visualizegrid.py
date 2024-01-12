@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 from PIL import Image
-from district import District
+from classes.district import District
 
 def visualize_grid(output):
     fig, ax = plt.subplots(figsize=(8, 8))
