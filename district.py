@@ -57,3 +57,6 @@ class District():
                 cables.append(cable)
 
         return cables
+
+
+if __name__ == "__main__":
