@@ -9,7 +9,7 @@ class District():
         self.add_houses(house_file)
         self.add_batteries(battery_file)
         self.costs_shared = 0
-        self.create_cables()
+        self.cables = self.create_cables()
 
     def add_houses(self, house_file):
         """
@@ -42,16 +42,17 @@ class District():
                 pos_x, pos_y = row[0].split(",")
                 self.batteries.append(Battery(int(pos_x), int(pos_y), float(capacity)))
 
-    # def connections(self):
-    #     closest_battery = self.find_closest_battery(house)
-                
-    
-    # def find_closest_battery(self, house):
-    # closest_battery = min(self.batteries, key=lambda battery: house.calculate_distance(battery))
-    #     return closest_battery
     def create_cables(self):
         """
-        This function creates a cable that starts at the location of a house 
+        This function creates cables based on the connection between houses and batteries
         """
+        cables = []
         for house in self.houses:
-            house.cables = [str(house.x_position) + str(",") + str(house.y_position)]
+            if house.battery:
+                cable = Cable(
+                    (house.x_position, house.y_position),
+                    (house.battery.position_x, house.battery.position_y)
+                )
+                cables.append(cable)
+
+        return cables

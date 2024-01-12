@@ -5,4 +5,4 @@ class House():
         self.solar_output = solar_output
 
 
-if __name__ is "__main__":
+if __name__ == "__main__":
