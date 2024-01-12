@@ -4,5 +4,5 @@ class Cable:
         self.battery_position = battery_position
 
     #def __str__(self):
-    #    rreturn f"Cable from {self.house_position} to {self.battery_position}"
+    #    return f"Cable from {self.house_position} to {self.battery_position}"
 
