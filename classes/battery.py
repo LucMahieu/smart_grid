@@ -1,8 +1,8 @@
 class Battery():
         
     def __init__(self, pos_x_batt, pos_y_batt, capacity):
-        self.position_x_batt = pos_x_batt
-        self.position_y_batt = pos_y_batt
+        self.pos_x_batt = pos_x_batt
+        self.pos_y_batt = pos_y_batt
         self.capacity = capacity
         # list that keeps track of connected houses
         self.connected_houses = []
