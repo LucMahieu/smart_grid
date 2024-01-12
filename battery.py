@@ -4,8 +4,6 @@ class Battery():
         self.position_x = position_x
         self.position_y = position_y
         self.capacity = capacity
-        # list that keeps track of connected houses
-        self.connected_houses = [] 
 
             
     def capacity_limit(self):

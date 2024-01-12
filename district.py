@@ -3,7 +3,8 @@ from battery import Battery
 from house import House
 
 class District():
-    def __init__(self, battery_file, house_file):
+    def __init__(self, name, battery_file, house_file):
+        self.name = name
         self.houses = []
         self.batteries = []
         self.add_houses(house_file)
@@ -48,3 +49,7 @@ class District():
         """
         for house in self.houses:
             house.cables = [str(house.x_position) + str(",") + str(house.y_position)]
+
+    def attributes_to_dict(self):
+        """Converts the attributes of a class to a dictionary."""
+
