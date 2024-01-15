@@ -17,5 +17,8 @@ def random_cables(district, connections):
         }
 
         #lay cables and save info
-        cable = Cable(
+        cable = Cable((cable_route['start_x'], cable_route['start_y']),
+            (cable_route['end_x'], cable_route['end_y']))
+
+        
 
