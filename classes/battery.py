@@ -1,9 +1,10 @@
 class Battery():
         
-    def __init__(self, pos_x_batt, pos_y_batt, capacity):
+    def __init__(self, pos_x_batt, pos_y_batt, capacity, price):
         self.pos_x_batt = pos_x_batt
         self.pos_y_batt = pos_y_batt
         self.capacity = capacity
+        self.price = 5000
         # list that keeps track of connected houses
         self.connected_houses = []
         self.connected_cables = []
