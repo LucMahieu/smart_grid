@@ -15,7 +15,7 @@ def battery_to_dict(battery, district):
     output = OrderedDict()
     output["location"] = str(battery.pos_x_batt) + "," + str(battery.pos_y_batt)
     output["capacity"] = battery.capacity
-    output["houses"] = [house_to_dict(house) for house in district.houses if house.battery == battery]
+    output["houses"] = [house_to_dict(house) for house in district.houses]
     return output
 
 def district_to_dict(district):
