@@ -15,22 +15,26 @@ def random_cables(houses):
         cable_end_y = house.battery.pos_y
 
         # generate random route 
+        cable_route = [cable_start_x, cable_start_y]
         cable_x = cable_start_x
         cable_y = cable_start_y
-        for ... in range ...:
+
+        # kaying cable untill battery is reached 
+        while (cable_x, cable_y) != (cable_end_x, cable_end_y):
             if ...:
                 cable_x += 1
             else:
                 cable_x -= 1
         
-        for ... in range ...:
             if ...: 
                 cable_y += 1
             else:
                 cable_y -= 1
 
-        #lay cables and save info
-        cable = Cable((cable_route['start_x'], cable_route['start_y']),
-            (cable_route['end_x'], cable_route['end_y']))
+            cable_route.append(cable_x, cable_y)
+            
+        # #lay cables and save info
+        # cable = Cable((cable_route['start_x'], cable_route['start_y']),
+        #     (cable_route['end_x'], cable_route['end_y']))
 
         
