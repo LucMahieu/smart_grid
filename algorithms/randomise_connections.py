@@ -3,7 +3,7 @@ from classes.district import District
 
 def random_assignment(batteries, houses):
     '''
-    Randomly assign each house to batteryi now want 
+    Randomly assign each house to a battery that meets the requirements
     '''
     for house in houses:
         # randomly select battery
