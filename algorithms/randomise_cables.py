@@ -39,13 +39,13 @@ def random_cables(houses):
 
   ### KIJK HIER###      
 
-            if move_horizontally:
-                cable_x += 1 if random.choice([True, False]) else -1
-            elif move_vertically:
-                cable_y += 1 if random.choice([True, False]) else -1
+    #         if move_horizontally:
+    #             cable_x += 1 if random.choice([True, False]) else -1
+    #         elif move_vertically:
+    #             cable_y += 1 if random.choice([True, False]) else -1
 
-            # lay cables and save info
-            cable = Cable((cable_start_x, cable_start_y), (cable_x, cable_y))
-            cables.append(cable)
+    #         # lay cables and save info
+    #         cable = Cable((cable_start_x, cable_start_y), (cable_x, cable_y))
+    #         cables.append(cable)
 
-    return cables
+    # return cables
