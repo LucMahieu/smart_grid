@@ -35,6 +35,12 @@ def laying_cables(houses):
         while (cable_x, cable_y) != (cable_end_x, cable_end_y):
             cable_x += random_segment(cable_x, cable_end_x)
             cable_y += random_segment(cable_y, cable_end_y)
+           
+            
+            # ensure that cable is within the 50 x 50 grid
+            cable_x = max(0, min(50, cable_x))
+            cable_y = max(0, min(50, cable_y))
+
             cable_route.append((cable_x, cable_y))
             
             # if cable_x == 50:
