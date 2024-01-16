@@ -1,4 +1,5 @@
 import random
+from algorithms.random_steps import determine_next_step
 
 class Random_algo():
     def __init__(self):
@@ -12,7 +13,8 @@ class Random_algo():
         for house in district.houses:
             district.battery_houses_connections
             house.battery = self.random_assignment(district, house)
-            house.cables = self.random_cables(house)
+            # house.cables = self.random_cables(house)
+            house.cables = self.random_cables_v2(house)
     
         return district 
     
@@ -96,3 +98,47 @@ class Random_algo():
             cable_route.append((cable_x, cable_y))
             
         return cable_route 
+    
+
+
+# ---------------------------------------------------------------------------------------------
+    # new version of random_cables
+
+    def random_cables_v2(self, house):
+        '''
+        Lay cable from house to selected battery.
+        '''
+        # Cable starts at house and ends at battery
+        cable_end_x = house.battery.pos_x
+        cable_end_y = house.battery.pos_y
+        cable_route = [(house.pos_x, house.pos_y)]
+
+        # starting position of cable is the house position
+        current_x = house.pos_x
+        current_y = house.pos_y
+
+        # initialize fictitious previous position to determine direction of next step
+        prev_x = current_x - 1
+        prev_y = current_y
+
+        # initialize new position
+        new_x = current_x
+        new_y = current_y
+
+        # keep generating and adding cable segments untill battery is reached
+        while (current_x, current_y) != (cable_end_x, cable_end_y):
+            # Generate random segment (step)
+            new_x, new_y = determine_next_step(prev_x, prev_y, current_x, current_y)
+
+            # Add segment to cable route
+            cable_route.append((new_x, new_y))
+
+            # after the step, the current position becomes the previous position
+            prev_x = current_x
+            prev_y = current_y
+
+            # after the step, the new position becomes the current position
+            current_x = new_x
+            current_y = new_y
+            
+        return cable_route
