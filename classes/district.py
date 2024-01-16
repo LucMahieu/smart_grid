@@ -2,17 +2,16 @@ import csv
 from classes.cable import Cable
 from classes.battery import Battery
 from classes.house import House
-from classes.cable import Cable
 
 
 class District():
-    def __init__(self, battery_file, house_file):
+    def __init__(self, name, battery_file, house_file):
+        self.name = name
         self.houses = []
         self.batteries = []
         self.add_houses(house_file)
         self.add_batteries(battery_file)
         self.costs_shared = 0
-        #self.cables = self.create_cables()
         self.battery_houses_connections = {battery: [] for battery in self.batteries}
 
     def add_houses(self, house_file):
@@ -26,8 +25,8 @@ class District():
             next(csv_reader, None)
             
             for row in csv_reader:
-                pos_x_house, pos_y_house, max_output = row
-                self.houses.append(House(int(pos_x_house), int(pos_y_house), float(max_output)))
+                pos_x, pos_y, max_output = row
+                self.houses.append(House(int(pos_x), int(pos_y), float(max_output)))
 
         
     def add_batteries(self, battery_file):
@@ -43,5 +42,5 @@ class District():
             
             for row in csv_reader:
                 capacity = row[1]
-                pos_x_batt, pos_y_batt = row[0].split(",")
-                self.batteries.append(Battery(int(pos_x_batt), int(pos_y_batt), float(capacity)))
+                pos_x, pos_y = row[0].split(",")
+                self.batteries.append(Battery(int(pos_x), int(pos_y), float(capacity)))

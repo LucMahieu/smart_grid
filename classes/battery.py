@@ -1,8 +1,8 @@
 class Battery():
         
-    def __init__(self, pos_x_batt, pos_y_batt, capacity):
-        self.pos_x_batt = pos_x_batt
-        self.pos_y_batt = pos_y_batt
+    def __init__(self, pos_x, pos_y, capacity):
+        self.pos_x = pos_x
+        self.pos_y = pos_y
         self.capacity = capacity
         self.price = 5000
     
