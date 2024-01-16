@@ -12,7 +12,8 @@ if __name__ == "__main__":
         District("data/district_3/district-3_batteries.csv", "data/district_3/district-3_houses.csv")
     ]
     # connect houses with batteries in a district
-    random_assignment(district1)
+    for district in districts:
+        random_assignment(district)
     
     # # print the connections between batteries and houses 
     # for battery in district1.batteries:
