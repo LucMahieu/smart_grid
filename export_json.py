@@ -21,7 +21,7 @@ def battery_to_dict(battery, district):
 def district_to_dict(district):
     """Converts the attributes of a class to a dictionary."""
     output = OrderedDict()
-    output["district"] = district.name
+    output["district"] = district.district_id
     output["costs-shared"] = district.costs_shared
     output["batteries"] = [battery_to_dict(battery, district) for battery in district.batteries]
     return output
