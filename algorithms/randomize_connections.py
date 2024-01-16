@@ -4,9 +4,6 @@ def random_assignment(district):
     '''
     Randomly assign each house to a battery that meets the requirements
     '''
-    # add batteries to connections dict with empty list for connected houses
-    for battery in district.batteries:
-        district.battery_houses_connections[battery] = []
 
     for house in district.houses:        
         # make copy of batteries list to keep track of batteries that have been tried

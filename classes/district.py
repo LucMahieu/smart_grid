@@ -9,11 +9,11 @@ class District():
     def __init__(self, battery_file, house_file):
         self.houses = []
         self.batteries = []
-        self.battery_houses_connections = {}
         self.add_houses(house_file)
         self.add_batteries(battery_file)
         self.costs_shared = 0
         self.cables = self.create_cables()
+        self.battery_houses_connections = {battery: [] for battery in self.batteries}
 
     def add_houses(self, house_file):
         """
