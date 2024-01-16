@@ -10,7 +10,7 @@ if __name__ == "__main__":
         District(1, "data/district_1/district-1_batteries.csv", "data/district_1/district-1_houses.csv"),
         District(2, "data/district_2/district-2_batteries.csv", "data/district_2/district-2_houses.csv"),
         District(3, "data/district_3/district-3_batteries.csv", "data/district_3/district-3_houses.csv")
-    
+    ]
     # connect houses with batteries in a district
     for district in districts:
         random_assignment(district)
