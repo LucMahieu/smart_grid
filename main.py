@@ -12,10 +12,9 @@ if __name__ == "__main__":
     district3 = District("data/district_3/district-3_batteries.csv", "data/district_3/district-3_houses.csv")
 
     # connect houses with batteries in a district
-    for district in districts:
-        print("hoi")
-        R = Random_algo
-        R.run(district)
+    print("hoi")
+    R = Random_algo()
+    R.run(district1)
         
         # random_assignment(district)
     
