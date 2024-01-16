@@ -4,11 +4,12 @@ from classes.battery import Battery
 from classes.house import House
 from classes.cable import Cable
 
+
 class District():
-    def __init__(self, name, battery_file, house_file):
-        self.name = name
+    def __init__(self, battery_file, house_file):
         self.houses = []
         self.batteries = []
+        self.battery_houses_connections = {}
         self.add_houses(house_file)
         self.add_batteries(battery_file)
         self.costs_shared = 0
@@ -44,6 +45,7 @@ class District():
                 capacity = row[1]
                 pos_x_batt, pos_y_batt = row[0].split(",")
                 self.batteries.append(Battery(int(pos_x_batt), int(pos_y_batt), float(capacity)))
+
 
     def create_cables(self):
         """
