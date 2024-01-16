@@ -6,6 +6,6 @@ class House:
         self.max_output = max_output
         self.battery = None
 
-    # calculates mmanhattan distance between this house and another house
-    def calculate_distance(self, other_house):
-        return abs(self.pos_x_house - other_house.pos_x_house) + abs(self.pos_y_house - other_house.pos_y_house)
+    # # calculates mmanhattan distance between this house and another house
+    # def calculate_distance(self, other_house):
+    #     return abs(self.pos_x_house - other_house.pos_x_house) + abs(self.pos_y_house - other_house.pos_y_house)

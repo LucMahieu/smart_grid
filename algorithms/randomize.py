@@ -9,17 +9,17 @@ class Random_algo():
         Runs random algorithm; randomizes which battery a house is connected to and cableroute.
         '''
         for house in district.houses:
-            house.battery = self.random_assignment(district.batteries, house)
+            house.battery = self.random_assignment(district, house)
             house.cables = self.random_cables(house)
     
         return district 
     
-    def random_assignment(self, district, batteries, house):
+    def random_assignment(self, district, house):
         '''
         Randomly assigns each house a battery that meets the requirements.
         '''
         # make copy of batteries list to keep track of batteries that have been tried
-        batteries_copy = batteries.copy()
+        batteries_copy = district.batteries.copy()
 
         # set enough_capacity to False to start while loop
         enough_capacity = False
