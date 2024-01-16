@@ -6,7 +6,7 @@ from classes.cable import Cable
 
 
 class District():
-    def __init__(self, district_id, battery_file, house_file):
+    def __init__(self, battery_file, house_file):
         self.houses = []
         self.batteries = []
         self.add_houses(house_file)
