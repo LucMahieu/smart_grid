@@ -3,7 +3,7 @@ from classes.district import District
 
 class Random():
     def __init__(self):
-        ""
+
         pass
 
     def run(self, district):
@@ -24,23 +24,10 @@ class Random():
         selected_battery = random.choice(batteries)
             
         # If selected battery does not have capacityleft, keep selecting random battery from list
-        while self.capacity_check(selected_battery, house) == False:
+        while battery.capacity_check(selected_battery, house) == False:
             selected_battery = random.choice(batteries)
 
         return selected_battery
-
-
-    def capacity_check(self, battery, house):
-        '''
-        Checks if assigned battery has capacity left to be connected to new house based on its output
-        '''
-        if battery.capacity >= house.max_output:
-            # updating battery capacity
-            battery.capacity -= house.max_output
-            return True 
-        
-        else:
-            return False
 
     def random_segment(self, current, end):
         '''
