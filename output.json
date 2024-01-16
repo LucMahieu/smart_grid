@@ -5,7 +5,7 @@
         "batteries": [
             {
                 "location": "38,12",
-                "capacity": 1507.0,
+                "capacity": 5.3911644500000335,
                 "houses": [
                     {
                         "location": "34,47",
@@ -1211,7 +1211,7 @@
             },
             {
                 "location": "43,13",
-                "capacity": 1507.0,
+                "capacity": 1.3860107099999226,
                 "houses": [
                     {
                         "location": "34,47",
@@ -2417,7 +2417,7 @@
             },
             {
                 "location": "42,3",
-                "capacity": 1507.0,
+                "capacity": 5.732434169999976,
                 "houses": [
                     {
                         "location": "34,47",
@@ -3623,7 +3623,7 @@
             },
             {
                 "location": "49,23",
-                "capacity": 1507.0,
+                "capacity": 7.706714209999671,
                 "houses": [
                     {
                         "location": "34,47",
@@ -4829,7 +4829,7 @@
             },
             {
                 "location": "3,45",
-                "capacity": 1507.0,
+                "capacity": 14.783676459999796,
                 "houses": [
                     {
                         "location": "34,47",
@@ -6041,7 +6041,7 @@
         "batteries": [
             {
                 "location": "19,20",
-                "capacity": 1508.25,
+                "capacity": 27.15062995000023,
                 "houses": [
                     {
                         "location": "44,6",
@@ -7247,7 +7247,7 @@
             },
             {
                 "location": "1,36",
-                "capacity": 1508.25,
+                "capacity": 23.145970650000656,
                 "houses": [
                     {
                         "location": "44,6",
@@ -8453,7 +8453,7 @@
             },
             {
                 "location": "34,49",
-                "capacity": 1508.25,
+                "capacity": 27.774151430000494,
                 "houses": [
                     {
                         "location": "44,6",
@@ -9659,7 +9659,7 @@
             },
             {
                 "location": "41,21",
-                "capacity": 1508.25,
+                "capacity": 17.719342399999576,
                 "houses": [
                     {
                         "location": "44,6",
@@ -10865,7 +10865,7 @@
             },
             {
                 "location": "26,22",
-                "capacity": 1508.25,
+                "capacity": 2.579991489999827,
                 "houses": [
                     {
                         "location": "44,6",
@@ -12077,7 +12077,7 @@
         "batteries": [
             {
                 "location": "18,34",
-                "capacity": 1506.75,
+                "capacity": 4.932953009999828,
                 "houses": [
                     {
                         "location": "21,18",
@@ -13283,7 +13283,7 @@
             },
             {
                 "location": "32,11",
-                "capacity": 1506.75,
+                "capacity": 14.78216405999985,
                 "houses": [
                     {
                         "location": "21,18",
@@ -14489,7 +14489,7 @@
             },
             {
                 "location": "41,1",
-                "capacity": 1506.75,
+                "capacity": 22.40186383000001,
                 "houses": [
                     {
                         "location": "21,18",
@@ -15695,7 +15695,7 @@
             },
             {
                 "location": "3,35",
-                "capacity": 1506.75,
+                "capacity": 27.54354721999998,
                 "houses": [
                     {
                         "location": "21,18",
@@ -16901,7 +16901,7 @@
             },
             {
                 "location": "39,41",
-                "capacity": 1506.75,
+                "capacity": 11.828915829999922,
                 "houses": [
                     {
                         "location": "21,18",
