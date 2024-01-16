@@ -56,7 +56,7 @@ class District():
         for battery in self.batteries:
             for house in battery.houses:
                 # counting amount of segments based on list of cable coordinates
-                cablesegment_counter += len(house.cables) - 2
+                cablesegment_counter += len(house.cables) - 1
 
             # calculating price of district based on cablesegments and batteries
             self.district_price_seperate += cablesegment_counter * self.cablesegment_price + len(batteries) * battery.price
