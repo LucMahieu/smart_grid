@@ -1,4 +1,5 @@
 import tqdm # progress bar
+from algorithms.randomize import Random_algo
 from classes.district import District
 from export_json import export_json
 from visualization.visualizegrid import visualize_grid
@@ -13,7 +14,9 @@ if __name__ == "__main__":
     ]
     # connect houses with batteries in a district
     for district in districts:
-        random_assignment(district)
+        R = Random_algo
+        R.run(district)
+        # random_assignment(district)
     
     # # print the connections between batteries and houses 
     # for battery in district1.batteries:
@@ -27,4 +30,4 @@ if __name__ == "__main__":
     # call export_json function to get output
     output = export_json(districts)
 
-    visualize_grid(output)
+    #visualize_grid(output)
