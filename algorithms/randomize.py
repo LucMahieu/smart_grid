@@ -1,6 +1,6 @@
 import random
 
-class Random():
+class Random_algo():
     def __init__(self):
         pass
 
@@ -30,6 +30,7 @@ class Random():
 
         # keep selecting random battery until a battery with enough capacity is found
         while enough_capacity == False:
+            print(len(batteries_copy))
 
             if len(batteries_copy) == 0:
                 print("No battery has enough capacity")
