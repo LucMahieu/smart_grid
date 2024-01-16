@@ -6,12 +6,14 @@ from algorithms.randomize_connections import random_assignment
 
 if __name__ == "__main__":
     # create districts from files with batteries and houses
-    district1 = District("data/district_1/district-1_batteries.csv", "data/district_1/district-1_houses.csv")
-    district2 = District("data/district_2/district-2_batteries.csv", "data/district_2/district-2_houses.csv")
-    district3 = District("data/district_3/district-3_batteries.csv", "data/district_3/district-3_houses.csv")
-    
+    districts = [
+        District(1, "data/district_1/district-1_batteries.csv", "data/district_1/district-1_houses.csv"),
+        District(2, "data/district_2/district-2_batteries.csv", "data/district_2/district-2_houses.csv"),
+        District(3, "data/district_3/district-3_batteries.csv", "data/district_3/district-3_houses.csv")
+    ]
     # connect houses with batteries in a district
-    random_assignment(district1)
+    for district in districts:
+        random_assignment(district)
     
     # # print the connections between batteries and houses 
     # for battery in district1.batteries:
@@ -23,6 +25,6 @@ if __name__ == "__main__":
     #     print(battery, district1.battery_houses_connections[battery])
 
     # call export_json function to get output
-    # output = export_json(districts)
+    output = export_json(districts)
 
-    # visualize_grid(output)
+    visualize_grid(output)

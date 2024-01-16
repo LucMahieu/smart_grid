@@ -1,46 +1,51 @@
 import random
-from classes.district import District 
 
 class Random():
     def __init__(self):
-        ""
         pass
 
     def run(self, district):
         '''
-        Runs random algorithm; randomizes which battery a house is connected to and cableroute
+        Runs random algorithm; randomizes which battery a house is connected to and cableroute.
         '''
-        for house in houses:
-            house.battery = self.random_assignment(batteries, houses)
-            house.cables = self.random_cables(houses)
+        # add batteries to connections dict with empty list for connected houses
+        for battery in district.batteries:
+            district.battery_houses_connections[battery] = []
+
+        for house in district.houses:
+            house.battery = self.random_assignment(district.batteries, house)
+            house.cables = self.random_cables(house)
     
         return district 
-
-    def random_assignment(self, batteries, house):
+    
+    def random_assignment(self, district, batteries, house):
         '''
-        Assigns each house a battery that meets the requirements
+        Randomly assigns each house a battery that meets the requirements.
         '''
-        # Randomly select battery from list
-        selected_battery = random.choice(batteries)
-            
-        # If selected battery does not have capacityleft, keep selecting random battery from list
-        while self.capacity_check(selected_battery, house) == False:
-            selected_battery = random.choice(batteries)
+        # make copy of batteries list to keep track of batteries that have been tried
+        batteries_copy = batteries.copy()
 
-        return selected_battery
+        # set enough_capacity to False to start while loop
+        enough_capacity = False
 
+        # keep selecting random battery until a battery with enough capacity is found
+        while enough_capacity == False:
 
-    def capacity_check(self, battery, house):
-        '''
-        Checks if assigned battery has capacity left to be connected to new house based on its output
-        '''
-        if battery.capacity >= house.max_output:
-            # updating battery capacity
-            battery.capacity -= house.max_output
-            return True 
-        
-        else:
-            return False
+            if len(batteries_copy) == 0:
+                print("No battery has enough capacity")
+                break
+
+            # select random battery from shrinking list of batteries
+            selected_battery = random.choice(batteries_copy)
+
+            # check if battery has enough capacity
+            enough_capacity = selected_battery.capacity_check(house)
+
+            # remove battery from list of batteries because it doesn't have enough capacity
+            batteries_copy.remove(selected_battery)
+
+        # add current house to the list of houses that are connected to the selected battery
+        district.battery_houses_connections[selected_battery].append(house)
 
     def random_segment(self, current, end):
         '''
