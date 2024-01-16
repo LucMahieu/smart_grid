@@ -6,10 +6,11 @@ from algorithms.randomize_connections import random_assignment
 
 if __name__ == "__main__":
     # create districts from files with batteries and houses
-    district1 = District("data/district_1/district-1_batteries.csv", "data/district_1/district-1_houses.csv")
-    district2 = District("data/district_2/district-2_batteries.csv", "data/district_2/district-2_houses.csv")
-    district3 = District("data/district_3/district-3_batteries.csv", "data/district_3/district-3_houses.csv")
-    
+    districts = [
+        District("data/district_1/district-1_batteries.csv", "data/district_1/district-1_houses.csv"),
+        District("data/district_2/district-2_batteries.csv", "data/district_2/district-2_houses.csv"),
+        District("data/district_3/district-3_batteries.csv", "data/district_3/district-3_houses.csv")
+    ]
     # connect houses with batteries in a district
     random_assignment(district1)
     
