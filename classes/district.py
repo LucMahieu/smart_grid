@@ -12,7 +12,7 @@ class District():
         self.add_houses(house_file)
         self.add_batteries(battery_file)
         self.costs_shared = 0
-        self.cables = self.create_cables()
+        #self.cables = self.create_cables()
         self.battery_houses_connections = {battery: [] for battery in self.batteries}
 
     def add_houses(self, house_file):
@@ -45,27 +45,3 @@ class District():
                 capacity = row[1]
                 pos_x_batt, pos_y_batt = row[0].split(",")
                 self.batteries.append(Battery(int(pos_x_batt), int(pos_y_batt), float(capacity)))
-
-
-    def create_cables(self):
-        """
-        This function creates cables based on the connection between houses and batteries
-        """
-        cables = []
-        for house in self.houses:
-            # Check if the house has a battery
-            if house.battery:
-                cable = Cable(
-                    (house.pos_x, house.pos_y),
-                    (house.battery.pos_x, house.battery.pos_y)
-                )
-                cables.append(cable)
-
-                # Update connected_cables in Battery
-                house.battery.connected_cables.append(cable)
-
-        return cables
-
-
-if __name__ == "__main__":
-    pass

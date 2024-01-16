@@ -8,10 +8,6 @@ class Random_algo():
         '''
         Runs random algorithm; randomizes which battery a house is connected to and cableroute.
         '''
-        # add batteries to connections dict with empty list for connected houses
-        for battery in district.batteries:
-            district.battery_houses_connections[battery] = []
-
         for house in district.houses:
             house.battery = self.random_assignment(district.batteries, house)
             house.cables = self.random_cables(house)
@@ -50,7 +46,7 @@ class Random_algo():
 
     def random_segment(self, current, end):
         '''
-        Chooses randomly where to lay a single new cablesegment within 50 x 50 grid
+        Chooses randomly where to lay a single new cablesegment within 50 x 50 grid.
         '''
         if current == end:
             return 0
@@ -63,7 +59,7 @@ class Random_algo():
 
     def random_cables(self, house):
         '''
-        Lay cable from house to selected battery
+        Lay cable from house to selected battery.
         '''
 
         # Cable starts at house and ends at battery
