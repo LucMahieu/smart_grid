@@ -3,6 +3,7 @@ from classes.district import District
 
 class Random():
     def __init__(self):
+        ""
         pass
 
     def run(self, district):
