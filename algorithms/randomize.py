@@ -5,7 +5,6 @@ class Random_algo():
     def __init__(self):
         pass
 
-
     def run(self, district):
         '''
         Runs random algorithm; randomizes which battery a house is connected to and cableroute.
@@ -17,7 +16,6 @@ class Random_algo():
             house.cables = self.random_cables_v2(house)
     
         return district 
-    
 
     def random_assignment(self, district, house):
         '''
@@ -51,7 +49,6 @@ class Random_algo():
 
         return selected_battery
 
-
     def random_segment(self, current, end):
         '''
         Chooses randomly where to lay a single new cablesegment within 50 x 50 grid.
@@ -71,7 +68,6 @@ class Random_algo():
         # Move in any direction
         else:
             return random.choice([-1, 0, 1])
-
 
     def random_cables(self, house):
         '''
