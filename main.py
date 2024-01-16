@@ -23,6 +23,6 @@ if __name__ == "__main__":
     #     print(battery, district1.battery_houses_connections[battery])
 
     # call export_json function to get output
-    # output = export_json(districts)
+    output = export_json(districts)
 
-    # visualize_grid(output)
+    visualize_grid(output)
