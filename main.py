@@ -16,6 +16,7 @@ if __name__ == "__main__":
     for district in districts:
         R = Random_algo
         R.run(district)
+        print("hoi")
         # random_assignment(district)
     
     # # print the connections between batteries and houses 
