@@ -68,7 +68,7 @@ class District():
         '''
         cablecoordinates_list = []
 
-        for house in selfhouses:
+        for house in self.houses:
             # Adding segments to list, excluding final battery coordinate
             cablecoordinates_list.append(house.cables)
             
@@ -81,7 +81,7 @@ class District():
         # Calculating price of district based on cablesegments and batteries
         self.district_price_shared = cablesegment_counter * cable.price + len(self.batteries) * battery.price
 
-            return self.district_price_shared
+        return self.district_price_shared
 
     def total_costs(self):
         '''

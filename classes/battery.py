@@ -5,16 +5,19 @@ class Battery():
         self.pos_y = pos_y
         self.capacity = capacity
         self.price = 5000
+
+    def update_capacity(self, house):
+        '''
+        Updates capacity of battery after connecting house
+        '''
+        self.capacity -= house.max_output
     
-    def capacity_check(self, house):
+    def check_capacity(self, house):
         '''
         Checks if assigned battery has capacity left to be connected to new house
         '''
         if self.capacity >= house.max_output:
-            # updating battery capacity
-            self.capacity -= house.max_output
             return True 
-        
         else:
             return False
 
