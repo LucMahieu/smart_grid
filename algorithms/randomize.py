@@ -8,7 +8,6 @@ class Random_algo():
         self.current_pos = (grid_size // 2, grid_size // 2)
         self.options = set()
 
-
     def run(self, district):
         '''
         Runs random algorithm; randomizes which battery a house is connected to and cableroute.
@@ -36,52 +35,7 @@ class Random_algo():
             outer_grid.add((grid_size + 1, y))  # Points just right of the rightmost column
         
         return outer_grid
-    
 
-    # def determine_possible_positions(self, prev_x, prev_y, current_x, current_y):
-    #     '''
-    #     Determines possible positions for the next step.
-    #     '''
-    #     # possible movements
-    #     right = (1, 0)
-    #     left = (-1, 0)
-    #     up = (0, 1)
-    #     down = (0, -1)
-
-    #     # determine current pos (TEMPORARY LINE > REMOVE LATER when current_pos is an attribute of randomize.py)
-    #     self.current_pos = (current_x, current_y)
-
-    #     # define new position options based on current position
-    #     self.options = set()
-    #     for position in [right, left, up, down]:
-    #         self.options.add((self.current_pos[0] + position[0], self.current_pos[1] + position[1]))
-
-    #     # determine previous pos (TEMPORARY LINE > REMOVE LATER when prev_pos is an attribute of randomize.py)
-    #     self.prev_pos = (prev_x, prev_y)
-
-    #     # narrow down options to those that are within the grid and which are not its previous positions
-    #     print(f"Options: {self.options}")
-
-    #     # remove options that are in outer grid
-    #     for option in self.options.copy():
-    #         if option in self.outer_grid:
-    #             self.options.remove(option)
-    #         if option == self.prev_pos:
-    #             self.options.remove(option)
-
-    #     print(f"Options: {self.options}")
-
-    #     # randomly choose the next position from options
-    #     self.new_pos = random.choice(list(self.options))
-
-    #     print(f"New position: {self.new_pos}")
-
-    #     # NOT YET NECESSARY, BUT WILL BE LATER when the attributes of randomize.py are embedded in random_cables_v2
-    #     self.current_pos = self.new_pos
-
-    #     # return new position (TEMPORARY LINE > REMOVE LATER when new_pos is attribute of randomize.py and is embedded in random_cables_v2)
-    #     return self.new_pos[0], self.new_pos[1]
-    
 
     def determine_possible_positions(self, prev_x, prev_y, current_x, current_y):
         '''
@@ -124,13 +78,13 @@ class Random_algo():
         '''
         Randomly assigns each house to a battery that meets the requirements (e.g. enough capacity).
         '''
-        # make copy of batteries list to keep track of batteries that have been tried
+        # Make copy of batteries list to keep track of batteries that have been tried
         batteries_copy = district.batteries.copy()
 
-        # set enough_capacity to False to start while loop
+        # Set enough_capacity to False to start while loop
         enough_capacity = False
 
-        # keep selecting random battery until a battery with enough capacity is found
+        # Keep selecting random battery until a battery with enough capacity is found
         while enough_capacity == False:
 
             # stop if no battery has enough capacity
@@ -138,16 +92,16 @@ class Random_algo():
                 print("No battery has enough capacity")
                 break
 
-            # select random battery from shrinking list of batteries
+            # Select random battery from shrinking list of batteries
             selected_battery = random.choice(batteries_copy)
 
-            # check if battery has enough capacity
+            # Check if battery has enough capacity
             enough_capacity = selected_battery.capacity_check(house)
 
-            # remove battery from list of batteries because it doesn't have enough capacity
+            # Remove battery from list of batteries because it doesn't have enough capacity
             batteries_copy.remove(selected_battery)
 
-        # add current house to the list of houses that are connected to the selected battery
+        # Add current house to the list of houses that are connected to the selected battery
         district.battery_houses_connections[selected_battery].append(house)
 
         return selected_battery
