@@ -47,39 +47,41 @@ class District():
                 pos_x, pos_y = row[0].split(",")
                 self.batteries.append(Battery(int(pos_x), int(pos_y), float(capacity)))
 
-    def own_costs(self):
+    def own_costs(self, battery, cable):
         '''
         Calculates price when cables are not shared.
         '''
         cablesegment_counter = 0
 
-        for battery in self.batteries:
-            for house in battery.houses:
-                # Counting amount of segments based on list of cable coordinates
-                cablesegment_counter += len(house.cables) - 1
+        for house in self.houses:
+            # Counting amount of segments based on list of cable coordinates
+            cablesegment_counter += len(house.cables) - 1
 
-            # Calculating price of district based on cablesegments and batteries
-            self.district_price_seperate += cablesegment_counter * self.cablesegment_price + len(self.batteries) * battery.price
+        # Calculating price of district based on cablesegments and batteries
+        self.district_price_seperate = cablesegment_counter * cable.price + len(self.batteries) * battery.price
 
-    def shared_costs(self):
+        return self.district_price_seperate
+
+    def shared_costs(self, battery, cable):
         '''
         Calculates costs when cables are shared.
         '''
         cablecoordinates_list = []
 
-        for battery in self.batteries:
-            for house in battery.houses:
-                # Adding segments to list, excluding final battery coordinate
-                cablecoordinates_list.append(house.cables[:-1])
+        for house in selfhouses:
+            # Adding segments to list, excluding final battery coordinate
+            cablecoordinates_list.append(house.cables)
             
             # Turning list of cablecoordinates into list of cablesegments
             cablesegment_list = [cablecoordinates_list[i] + cablecoordinates_list[i+1] for i in range(len(cablecoordinates_list)-1)]
 
-            # Excluding duplicates where cable is shared
-            cablesegment_counter = len(set(cablesegment_list))
+        # Excluding duplicates where cable is shared
+        cablesegment_counter = len(set(cablesegment_list))
             
-            # Calculating price of district based on cablesegments and batteries
-            self.district_price_shared += cablesegment_counter * self.cablesegment_price + len(self.batteries) * battery.price
+        # Calculating price of district based on cablesegments and batteries
+        self.district_price_shared = cablesegment_counter * cable.price + len(self.batteries) * battery.price
+
+            return self.district_price_shared
 
     def total_costs(self):
         '''
