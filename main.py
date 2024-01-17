@@ -1,9 +1,7 @@
-import tqdm # progress bar
 from algorithms.randomize import Random_algo
 from classes.district import District
 from export_json import export_json
 from visualization.visualizegrid import visualize_grid
-from algorithms.randomize_connections import random_assignment
 
 if __name__ == "__main__":
     # create districts from files with batteries and houses
