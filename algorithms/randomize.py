@@ -43,17 +43,23 @@ class Random_algo():
         # make copy of batteries list to keep track of batteries that have been tried
         batteries = district.batteries.copy()
 
+        # create a new list to store batteries with enough capacity
+        batteries_with_capacity = []
+
         for battery in batteries:
             # check if battery has enough capacity
             enough_capacity = battery.check_capacity(house)
 
-            # remove battery from list of batteries if it doesn't have enough capacity
-            if not enough_capacity:
-                batteries.remove(battery)
-            else:
-                # add current house to the list of houses that are connected to the selected battery
-                district.battery_houses_connections[battery].append(house)
-                house.battery = battery
+            if enough_capacity:
+                batteries_with_capacity.append(battery)
+
+        if batteries_with_capacity:
+            # select random battery from the list of batteries with enough capacity
+            random_battery = random.choice(batteries_with_capacity)
+
+            # add current house to the list of houses that are connected to the selected battery
+            district.battery_houses_connections[random_battery].append(house)
+            house.battery = random_battery
 
 
     def determine_possible_steps(self):
