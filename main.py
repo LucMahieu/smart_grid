@@ -13,10 +13,14 @@ if __name__ == "__main__":
     R = Random_algo()
     R.run(district1)
     
-    # print the connections between batteries and houses 
+    # check if the cable routes indeed connect the houses with the batteries and if the cable stays on the grid
     # for battery in district1.batteries:
     #     for house in district1.battery_houses_connections[battery]:
-            # print(battery.pos_x, house.pos_x, battery.pos_y, house.pos_y)
+    #         # print house and battery positions and the cable route between them
+    #         print('\n\n\n')
+    #         print(f'House: {house.pos_x, house.pos_y} \nCable route: {house.cables}')
+    #         print(f'Battery: {battery.pos_x, battery.pos_y}')
+            
 
     # export the results to a json file
     output = export_json(district1)
