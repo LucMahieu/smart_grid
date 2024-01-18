@@ -30,7 +30,8 @@ class District():
             for row in csv_reader:
                 pos_x, pos_y, max_output = row
                 self.houses.append(House(int(pos_x), int(pos_y), float(max_output)))
-        
+
+
     def add_batteries(self, battery_file):
         """
         This function reads the given file, loads information about batteries, and creates a list
@@ -47,6 +48,7 @@ class District():
                 pos_x, pos_y = row[0].split(",")
                 self.batteries.append(Battery(int(pos_x), int(pos_y), float(capacity)))
 
+
     def own_costs(self, battery, cable):
         '''
         Calculates price when cables are not shared.
@@ -61,6 +63,7 @@ class District():
         self.district_price_seperate = cablesegment_counter * cable.price + len(self.batteries) * battery.price
 
         return self.district_price_seperate
+
 
     def shared_costs(self, battery, cable):
         '''
@@ -82,6 +85,7 @@ class District():
         self.district_price_shared = cablesegment_counter * cable.price + len(self.batteries) * battery.price
 
         return self.district_price_shared
+
 
     def total_costs(self):
         '''

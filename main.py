@@ -14,9 +14,9 @@ if __name__ == "__main__":
     R.run(district1)
     
     # print the connections between batteries and houses 
-    for battery in district1.batteries:
-        for house in district1.battery_houses_connections[battery]:
-            print(battery.pos_x, house.pos_x, battery.pos_y, house.pos_y)
+    # for battery in district1.batteries:
+    #     for house in district1.battery_houses_connections[battery]:
+            # print(battery.pos_x, house.pos_x, battery.pos_y, house.pos_y)
 
     # export the results to a json file
     output = export_json(district1)

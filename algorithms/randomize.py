@@ -27,12 +27,12 @@ class Random_algo():
         """
         self.outer_grid = set()
 
-        for x in range(1, self.grid_size + 1):
-            self.outer_grid.add((x, 0))  # points just above the top row
-            self.outer_grid.add((x, self.grid_size + 1))  # points just below the bottom row
+        for x in range(-1, self.grid_size + 1):
+            self.outer_grid.add((x, -1))  # points just below the bottom row
+            self.outer_grid.add((x, self.grid_size + 1))  # points just above the top row
         
-        for y in range(1, self.grid_size + 1):
-            self.outer_grid.add((0, y))  # points just left of the leftmost column
+        for y in range(-1, self.grid_size + 1):
+            self.outer_grid.add((-1, y))  # points just left of the leftmost column
             self.outer_grid.add((self.grid_size + 1, y))  # points just right of the rightmost column
 
 
@@ -77,11 +77,20 @@ class Random_algo():
         for position in [right, left, up, down]:
             self.options.add((self.current_pos[0] + position[0], self.current_pos[1] + position[1]))
 
+        # print(f'all options: {self.options}')
+        # print(f'current pos: {self.current_pos}')
+
         # remove step options that are in outer grid or that go back to previous position
         for option in self.options.copy():
             if option in self.outer_grid or option == self.prev_pos:
                 if option in self.options:
                     self.options.remove(option)
+
+        # check if there are still options left
+        if not self.options:
+            print(f'no netto options left at current position: {self.options}')
+
+        # print(f'netto options: {self.options}')
 
 
     def choose_step_randomly(self):
@@ -110,8 +119,22 @@ class Random_algo():
             # choose step from options
             self.choose_step_randomly()
 
+            # print new position if either one of the coordinates exceeds the grid size
+            if self.new_pos[0] > self.grid_size or self.new_pos[1] > self.grid_size or self.new_pos[0] < 0 or self.new_pos[1] < 0:
+                print(f'new pos: {self.new_pos}')
+                print(f'prev pos: {self.prev_pos}')
+                print(f'current pos: {self.current_pos}')
+                print(f'cable route: {cable_route}')
+                print(f'options: {self.options}')
+                print(f'outer grid: {self.outer_grid}')
+                print('-----------------------------------')
+                break
+
             # add new step (cable point coordinates) to cable route
             cable_route.append(self.new_pos)
+
+            # print last step of the cable route
+            print(f'last step: {cable_route[-1]}')
             
             # after the step, the current position becomes the previous position
             self.prev_pos = self.current_pos
