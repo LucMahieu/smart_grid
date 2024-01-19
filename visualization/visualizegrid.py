@@ -54,5 +54,5 @@ def visualize_grid(output):
 
     plt.show()
 
-
+# Call visualize_grid with the loaded data
 visualize_grid(output_data)
