@@ -43,6 +43,11 @@ if __name__ == "__main__":
     # export the results to a json file
     output = export_json(district1)
 
+<<<<<<< HEAD
     #visualize_grid(output)
             
     #print(District.own_costs())
+=======
+    visualize_grid()
+    
+>>>>>>> 6ac88a3 (update)
