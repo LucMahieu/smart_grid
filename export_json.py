@@ -24,7 +24,7 @@ def district_to_dict(district):
     output["costs-shared"] = district.district_cost_shared
     output["batteries"] = [battery_to_dict(battery, district) for battery in district.batteries]
     return output
-
+#
 def export_json(district):
     """Exports the districts to a json file."""
     output = district_to_dict(district)
