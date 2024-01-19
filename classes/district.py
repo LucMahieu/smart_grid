@@ -11,14 +11,15 @@ class District():
         self.batteries = []
         self.add_houses(house_file)
         self.add_batteries(battery_file)
-        self.district_price_seperate = 0
-        self.district_price_shared = 0
-        self.cablesegment_price = 9
+        self.district_cost_seperate = 0
+        self.district_cost_shared = 0
+        # self.district_cost_shared = self.shared_costs()
+        self.cable_price = 9 
         self.battery_houses_connections = {battery: [] for battery in self.batteries}
 
     def add_houses(self, house_file):
         """
-        This function reads the given file, loads the information about houses, and creates a list
+        This function reads the given file, and adds the house attributes to the list of houses.
         """
         with open(house_file, 'r') as input_file:
             # Read csv file and split 
@@ -27,14 +28,14 @@ class District():
             # Skipping header
             next(csv_reader, None)
             
+            # Add coordinates and output house
             for row in csv_reader:
                 pos_x, pos_y, max_output = row
                 self.houses.append(House(int(pos_x), int(pos_y), float(max_output)))
-
-
+        
     def add_batteries(self, battery_file):
         """
-        This function reads the given file, loads information about batteries, and creates a list
+        This function reads the given file, and adds the battery attributes to the list of battries.
         """        
         with open(battery_file, 'r') as input_file:
             # Read csv file and split 
@@ -43,51 +44,42 @@ class District():
             # Skipping header
             next(csv_reader, None)
             
+            # Add coordinates and capacity battery
             for row in csv_reader:
                 capacity = row[1]
                 pos_x, pos_y = row[0].split(",")
                 self.batteries.append(Battery(int(pos_x), int(pos_y), float(capacity)))
 
-
-    def own_costs(self, battery, cable):
+    def own_costs(self):
         '''
-        Calculates price when cables are not shared.
+        Calculates cost when cables are not shared.
         '''
         cablesegment_counter = 0
 
         for house in self.houses:
+
             # Counting amount of segments based on list of cable coordinates
             cablesegment_counter += len(house.cables) - 1
 
-        # Calculating price of district based on cablesegments and batteries
-        self.district_price_seperate = cablesegment_counter * cable.price + len(self.batteries) * battery.price
+        # Calculating price of district based on amount of cablesegments and batteries
+        self.district_cost_seperate = cablesegment_counter * self.cable_price + len(self.batteries) * house.battery.price
 
-        return self.district_price_seperate
-
-
-    def shared_costs(self, battery, cable):
+    def shared_costs(self):
         '''
-        Calculates costs when cables are shared.
+        Calculates cost when cables are shared.
         '''
         cablecoordinates_list = []
 
         for house in self.houses:
-            # Adding segments to list, excluding final battery coordinate
+
+            # Creating list of all cablecoordinates
             cablecoordinates_list.append(house.cables)
             
-            # Turning list of cablecoordinates into list of cablesegments
-            cablesegment_list = [cablecoordinates_list[i] + cablecoordinates_list[i+1] for i in range(len(cablecoordinates_list)-1)]
+        # Turning list of cablecoordinates into list of cablesegments
+        cablesegment_list = [tuple(cablecoordinates_list[i] + cablecoordinates_list[i+1]) for i in range(len(cablecoordinates_list)-1)]
 
         # Excluding duplicates where cable is shared
         cablesegment_counter = len(set(cablesegment_list))
             
-        # Calculating price of district based on cablesegments and batteries
-        self.district_price_shared = cablesegment_counter * cable.price + len(self.batteries) * battery.price
-
-        return self.district_price_shared
-
-
-    def total_costs(self):
-        '''
-        Calculates total cost.
-        '''
+        # Calculating price of district based on amount of cablesegments and batteries
+        self.district_cost_shared = cablesegment_counter * self.cable_price + len(self.batteries) * house.battery.price

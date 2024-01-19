@@ -1,4 +1,4 @@
-class House:
+class House():
     def __init__(self, pos_x, pos_y, max_output):
         self.pos_x = pos_x
         self.pos_y = pos_y

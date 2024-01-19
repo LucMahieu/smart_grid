@@ -90,7 +90,6 @@ class Random_algo():
         if not self.options:
             print(f'no netto options left at current position: {self.options}')
 
-        # print(f'netto options: {self.options}')
 
 
     def choose_step_randomly(self):
@@ -137,7 +136,7 @@ class Random_algo():
 
             # after the step, the new position becomes the current position
             self.current_pos = self.new_pos
-
+            
 
 #---------------------------------------------------------------------------------------------
 
