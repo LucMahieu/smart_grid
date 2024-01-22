@@ -16,6 +16,8 @@ class Greedy_algo():
             
             # Connect house to closest battery with capacity
             self.closest_connection(house, district)
+
+            # Lays cable route based on steps that minimize distance
             self.lay_cable_route(house)
 
         return district
@@ -33,22 +35,24 @@ class Greedy_algo():
     
     def min_distance(self, selected_batteries, house):
         '''
-        Saves dictionary with closest battery with capacity leftfor selected house.
+        Selects the battery closest to the selected house with enough capacity left.
         '''
         distance_dict = {}
+
+        # Calculate eucledian distance for all batteries with enough capacity
         for option in selected_batteries:
             distance = self.euclidean_distance(house, option)
             distance_dict[option] = distance
 
-        # Check if there are batteries left with enough capacity
+        # Check if there are any batteries left with enough capacity
         if distance_dict:
-
-            # Saving battery with the shortest distance to selected house
+            # Saving closest battery 
             best_battery = min(distance_dict, key = distance_dict.get)
 
             return best_battery
         
         else:
+            # Invalid solution; no batteries left
             print("No valid batteries found")
             
             return None
@@ -68,7 +72,6 @@ class Greedy_algo():
                 batteries_with_capacity.append(battery)
 
         if batteries_with_capacity:
-
             # Connecting to closest battery with capacity
             selected_battery = self.min_distance(batteries_with_capacity, house)
 
@@ -78,27 +81,23 @@ class Greedy_algo():
             # Add current house to the list of houses that are connected to the selected battery
             district.battery_houses_connections[selected_battery].append(house)
 
-            # Updating capacity
+            # Update battery capacity
             house.battery.update_capacity(house)
 
     def determine_possible_steps(self):
         '''
         Determines possible positions for the next step.
         '''
-        # possible absolute steps
+        # Possible absolute steps
         right = (1, 0)
         left = (-1, 0)
         up = (0, 1)
         down = (0, -1)
 
-        # define step options based on current position
+        # Define step options based on current position
         self.options = set()
         for position in [right, left, up, down]:
             self.options.add((self.current_pos[0] + position[0], self.current_pos[1] + position[1]))
-
-        # check if there are still options left
-        if not self.options:
-            print(f'no netto options left at current position: {self.options}')
 
 
     def choose_step_greedily(self, options, cable_end_pos):
@@ -142,8 +141,6 @@ class Greedy_algo():
             
             # after the step, the current position becomes the previous position
             self.prev_pos = self.current_pos
-            print(self.prev_pos)
-            print(cable_end_pos)
 
             # after the step, the new position becomes the current position
             self.current_pos = self.new_pos

@@ -2,8 +2,7 @@ from algorithms.randomize import Random_algo
 from algorithms.euclidean_distance import Greedy_algo
 from classes.district import District
 from export_json import export_json
-from visualization.visualizegrid import visualize_grid
-# from visualization.visualize_costs import visualize_costs
+#from visualization.visualizegrid import visualize_grid
 
 if __name__ == "__main__":
     #create districts from files with batteries and houses
@@ -12,8 +11,8 @@ if __name__ == "__main__":
     district3 = District(3, "data/district_3/district-3_batteries.csv", "data/district_3/district-3_houses.csv")
 
     # connect houses with batteries in a district
-    R = Random_algo()
-    R.run(district1)
+    # R = Random_algo()
+    # R.run(district1)
     
     # # check if the cable routes indeed connect the houses with the batteries and if the cable stays on the grid
     # for battery in district1.batteries:
@@ -24,8 +23,8 @@ if __name__ == "__main__":
     #         #print(f'Battery: {battery.pos_x, battery.pos_y}')
 
     # # connect houses with batteries in a district
-    # R = Greedy_algo()
-    # R.run(district1)
+    R = Greedy_algo()
+    R.run(district1)
     
     # # check if the cable routes indeed connect the houses with the batteries and if the cable stays on the grid
     # for battery in district1.batteries:
@@ -35,8 +34,8 @@ if __name__ == "__main__":
     #         print(f'House: {house.pos_x, house.pos_y} \nCable route: {house.cables}')
     #         print(f'Battery: {battery.pos_x, battery.pos_y}')
     
-    # district1.shared_costs()
-    # print(district1.district_cost_shared)
+    district1.shared_costs()
+    print(district1.district_cost_shared)
 
     # district1.own_costs()
     # print(district1.district_cost_seperate)
@@ -44,12 +43,5 @@ if __name__ == "__main__":
     # export the results to a json file
     output = export_json(district1)
 
-
-    #visualize_grid(output)
-            
-    #print(District.own_costs())
-
-    #visualize_grid(output)
-    #visualize_costs(output)    
+    #visualize_grid()
     
-

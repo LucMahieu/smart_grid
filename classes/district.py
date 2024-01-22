@@ -13,7 +13,6 @@ class District():
         self.add_batteries(battery_file)
         self.district_cost_seperate = 0
         self.district_cost_shared = 0
-        # self.district_cost_shared = self.shared_costs()
         self.cable_price = 9 
         self.battery_houses_connections = {battery: [] for battery in self.batteries}
 
@@ -69,17 +68,17 @@ class District():
         Calculates cost when cables are shared.
         '''
         cablecoordinates_list = []
-
         for house in self.houses:
-
+            for cable in house.cables:
             # Creating list of all cablecoordinates
-            cablecoordinates_list.append(house.cables)
+                cablecoordinates_list.append(cable)
             
         # Turning list of cablecoordinates into list of cablesegments
         cablesegment_list = [tuple(cablecoordinates_list[i] + cablecoordinates_list[i+1]) for i in range(len(cablecoordinates_list)-1)]
 
         # Excluding duplicates where cable is shared
         cablesegment_counter = len(set(cablesegment_list))
+        #print(len(cablecoordinates_list))
             
         # Calculating price of district based on amount of cablesegments and batteries
         self.district_cost_shared = cablesegment_counter * self.cable_price + len(self.batteries) * house.battery.price
