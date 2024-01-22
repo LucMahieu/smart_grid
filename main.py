@@ -3,6 +3,7 @@ from algorithms.euclidean_distance import Greedy_algo
 from classes.district import District
 from export_json import export_json
 from visualization.visualizegrid import visualize_grid
+# from visualization.visualize_costs import visualize_costs
 
 if __name__ == "__main__":
     #create districts from files with batteries and houses

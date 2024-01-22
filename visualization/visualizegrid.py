@@ -152,8 +152,7 @@ def visualize_grid(output):
 
             # connect house to its battery with one cable
             cables = house.get("cables", [])
-            if cables:
-                cable_point = cables[0]
+            for cable_point in cables[:10]:
                 cable_x, cable_y = map(float, cable_point)
 
                 # Draw horizontal and vertical cables only to the battery
@@ -167,12 +166,13 @@ def visualize_grid(output):
     ax.set_ylabel('Y-axis')
     ax.grid(True)
     plt.savefig('figure.png')
-    plt.show()
+    # plt.show()
 
 if __name__ == '__main__':
     # Load data from output.json in the parent directory
-    file_path = 'output.json'
+    file_path = '../output.json'
     with open(file_path, 'r') as file:
         output_data = json.load(file)
     # Call visualize_grid with the loaded data
     visualize_grid(output_data)
+update
