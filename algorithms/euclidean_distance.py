@@ -1,40 +1,31 @@
 import math
 import random
-import copy
 
 class Greedy_algo():
-    def __init__(self, grid_size=50):
-        self.grid_size = grid_size
-        self.create_outer_grid()
+    def __init__(self):
         self.prev_pos = ()
 
     def run(self, district):
         '''
         Makes connections between batteries and houses and lays cable routes between them.
         '''
-
-        # houses_copy = copy.deepcopy(district.houses)
-        # random.shuffle(houses_copy)
-        # random_house_order = houses_copy
-        # print(random_house_order)
+        # Random order of houses
+        random.shuffle(district.houses)
 
         for house in district.houses:
             
-            # connect house to closest battery with capacity
+            # Connect house to closest battery with capacity
             self.closest_connection(house, district)
-
-            #self.lay_cable_route(house)
-
-        print(district.battery_houses_connections)
+            self.lay_cable_route(house)
 
         return district
     
-    def euclidean_distance(self, house, battery):
+    def euclidean_distance(self, beginning, end):
         '''
-        Calculates Euclidean distance between battery and house.
+        Calculates Euclidean distance between two points.
         '''
-        x1, y1 = house.pos_x, house.pos_y
-        x2, y2 = battery.pos_x, battery.pos_y
+        x1, y1 = beginning.pos_x, beginning.pos_y
+        x2, y2 = end.pos_x, end.pos_y
 
         distance = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
         
@@ -66,11 +57,11 @@ class Greedy_algo():
         '''
         Connects a house to the closest battery with enough capacity left.
         '''
-        # create a new list to store batteries with enough capacity
+        # Create a new list to store batteries with enough capacity
         batteries_with_capacity = []
 
         for battery in district.batteries:
-            # check if battery has enough capacity
+            # Check if battery has enough capacity
             enough_capacity = battery.check_capacity(house)
 
             if enough_capacity:
@@ -90,21 +81,6 @@ class Greedy_algo():
             # Updating capacity
             house.battery.update_capacity(house)
 
-    def create_outer_grid(self):
-        """
-        Creates a set of points that are just outside the grid. These points are used to 
-        check if a step is within the grid or not.
-        """
-        self.outer_grid = set()
-
-        for x in range(-1, self.grid_size + 1):
-            self.outer_grid.add((x, -1))  # points just below the bottom row
-            self.outer_grid.add((x, self.grid_size + 1))  # points just above the top row
-        
-        for y in range(-1, self.grid_size + 1):
-            self.outer_grid.add((-1, y))  # points just left of the leftmost column
-            self.outer_grid.add((self.grid_size + 1, y))  # points just right of the rightmost column
-
     def determine_possible_steps(self):
         '''
         Determines possible positions for the next step.
@@ -120,26 +96,24 @@ class Greedy_algo():
         for position in [right, left, up, down]:
             self.options.add((self.current_pos[0] + position[0], self.current_pos[1] + position[1]))
 
-        # print(f'all options: {self.options}')
-        # print(f'current pos: {self.current_pos}')
-
-        # remove step options that are in outer grid or that go back to previous position
-        for option in self.options.copy():
-            if option in self.outer_grid or option == self.prev_pos:
-                if option in self.options:
-                    self.options.remove(option)
-
         # check if there are still options left
         if not self.options:
             print(f'no netto options left at current position: {self.options}')
 
 
-    def choose_step_randomly(self):
+    def choose_step_greedily(self, options, cable_end_pos):
         """
-        Chooses randomly where to lay a single new cablesegment within 50 x 50 grid.
+        Calculates Euclidean distance for each cablesegment option, selects the option that minimizes .
         """
-        self.new_pos = random.choice(list(self.options))
+        distances = {}
 
+        for option in options:
+            x1, y1 = option[0], option[1]
+            x2, y2 = cable_end_pos[0], cable_end_pos[1] 
+            distance = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+            distances[option] = distance
+
+        self.new_pos = min(distances, key = distances.get)
 
     def lay_cable_route(self, house):
         '''
@@ -161,23 +135,27 @@ class Greedy_algo():
             self.determine_possible_steps()
 
             # choose step from options
-            self.choose_step_randomly()
-
-            # print the log if the new pos exceeds the grid size
-            if self.new_pos[0] > self.grid_size or self.new_pos[1] > self.grid_size or self.new_pos[0] < 0 or self.new_pos[1] < 0:
-                print(f'new pos: {self.new_pos}')
-                print(f'prev pos: {self.prev_pos}')
-                print(f'current pos: {self.current_pos}')
-                print(f'cable route: {house.cables}')
-                print(f'options: {self.options}')
-                print(f'outer grid: {self.outer_grid}')
-                print('-----------------------------------')
+            self.choose_step_greedily(self.options, cable_end_pos)
 
             # add new step (cable point coordinates) to cable route
             house.cables.append(self.new_pos)
             
             # after the step, the current position becomes the previous position
             self.prev_pos = self.current_pos
+            print(self.prev_pos)
+            print(cable_end_pos)
 
             # after the step, the new position becomes the current position
             self.current_pos = self.new_pos
+
+
+    # def euclidean_distance(self, house, battery):
+    #     '''
+    #     Calculates Euclidean distance between battery and house.
+    #     '''
+    #     x1, y1 = house.pos_x, house.pos_y
+    #     x2, y2 = battery.pos_x, battery.pos_y
+
+    #     distance = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+        
+    #     return distance
