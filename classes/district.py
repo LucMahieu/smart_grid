@@ -64,33 +64,59 @@ class District():
     #     # Calculating price of district based on amount of cablesegments and batteries
     #     self.district_cost_seperate = cablesegment_counter * self.cable_price + len(self.batteries) * house.battery.price
 
-    def shared_costs(self):
-        '''
-        Calculates cost when cables are shared.
-        '''
-        cablecoordinates_list = []
+    # def shared_costs(self):
+    #     '''
+    #     Calculates cost when cables are shared.
+    #     '''
+    #     cablecoordinates_list = []
 
-        for house in self.houses:
-            # Only calculate cost when solution is valid
-            if house.battery == None:
-                self.invalid +=1 
-                self.district_cost_shared = None
+    #     for house in self.houses:
+    #         # Only calculate cost when solution is valid
+    #         if house.battery == None:
+    #             self.invalid +=1 
+    #             self.district_cost_shared = None
 
-                return False 
+    #             return False 
             
-            else:
+    #         else:
+
+    #             for cable in house.cables:
+    #                 # Creating list of all cablecoordinates
+    #                 cablecoordinates_list.append(cable)
+            
+    #     # Turning list of cablecoordinates into list of cablesegments
+    #     cablesegment_list = [tuple(cablecoordinates_list[i] + cablecoordinates_list[i+1]) for i in range(len(cablecoordinates_list)-1)]
+
+    #     # Excluding duplicates where cable is shared
+    #     cablesegment_counter = len(set(cablesegment_list))
+            
+    #     # Calculating price of district based on amount of cablesegments and batteries
+    #     self.district_cost_shared = cablesegment_counter * self.cable_price + len(self.batteries) * house.battery.price
+        
+    #     return self.district_cost_shared, self.invalid
+    
+    def shared_costs(self):
+            '''
+            Calculates cost when cables are shared.
+            '''
+            cablecoordinates_list = []
+
+            for house in self.houses:
+                if house.battery is None:
+                    self.invalid += 1
+                    return None  # Return None immediately if any house is not connected
 
                 for cable in house.cables:
-                    # Creating list of all cablecoordinates
                     cablecoordinates_list.append(cable)
-            
-        # Turning list of cablecoordinates into list of cablesegments
-        cablesegment_list = [tuple(cablecoordinates_list[i] + cablecoordinates_list[i+1]) for i in range(len(cablecoordinates_list)-1)]
 
-        # Excluding duplicates where cable is shared
-        cablesegment_counter = len(set(cablesegment_list))
-            
-        # Calculating price of district based on amount of cablesegments and batteries
-        self.district_cost_shared = cablesegment_counter * self.cable_price + len(self.batteries) * house.battery.price
-        
-        return self.district_cost_shared, self.invalid
+            cablesegment_list = [tuple(cablecoordinates_list[i] + cablecoordinates_list[i+1]) for i in range(len(cablecoordinates_list)-1)]
+            cablesegment_counter = len(set(cablesegment_list))
+            self.district_cost_shared = cablesegment_counter * self.cable_price + len(self.batteries) * self.batteries[0].price
+
+            return self.district_cost_shared
+
+    def reset_state(self):
+        for house in self.houses:
+            house.reset()  # Resets the house's connection and cable data
+        for battery in self.batteries:
+            battery.reset_capacity()
