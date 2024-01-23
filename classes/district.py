@@ -5,7 +5,7 @@ from classes.house import House
 
 
 class District():
-    def __init__(self, name, battery_file, house_file):
+    def __init__(self, name, battery_file, house_file, grid_size=50):
         self.name = name
         self.houses = []
         self.batteries = []
@@ -13,9 +13,9 @@ class District():
         self.add_batteries(battery_file)
         self.district_cost_seperate = 0
         self.district_cost_shared = 0
-        # self.district_cost_shared = self.shared_costs()
-        self.cable_price = 9 
-        self.battery_houses_connections = {battery: [] for battery in self.batteries}
+        self.cable_price = 9
+        self.grid_size = grid_size
+
 
     def add_houses(self, house_file):
         """

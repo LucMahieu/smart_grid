@@ -13,7 +13,6 @@ class Random_algo():
         '''
         # connect houses with batteries
         for house in district.houses:
-            district.battery_houses_connections
             self.assign_battery_to_house(district, house)
             self.lay_cable_route(house)
     
@@ -57,8 +56,7 @@ class Random_algo():
             # select random battery from the list of batteries with enough capacity
             random_battery = random.choice(batteries_with_capacity)
 
-            # add current house to the list of houses that are connected to the selected battery
-            district.battery_houses_connections[random_battery].append(house)
+            # add current battery to the house
             house.battery = random_battery
 
 
@@ -117,16 +115,6 @@ class Random_algo():
 
             # choose step from options
             self.choose_step_randomly()
-
-            # print the log if the new pos exceeds the grid size
-            if self.new_pos[0] > self.grid_size or self.new_pos[1] > self.grid_size or self.new_pos[0] < 0 or self.new_pos[1] < 0:
-                print(f'new pos: {self.new_pos}')
-                print(f'prev pos: {self.prev_pos}')
-                print(f'current pos: {self.current_pos}')
-                print(f'cable route: {house.cables}')
-                print(f'options: {self.options}')
-                print(f'outer grid: {self.outer_grid}')
-                print('-----------------------------------')
 
             # add new step (cable point coordinates) to cable route
             house.cables.append(self.new_pos)
