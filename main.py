@@ -1,10 +1,12 @@
 from algorithms.randomize import Random_algo
-from algorithms.euclidean_distance import Greedy_algo
+from algorithms.greedy import Greedy_algo
 from classes.district import District
 from export_json import export_json
-# from visualization.visualizegrid import visualize_grid
-from algorithms.hill_climber import HillClimber
-# from visualization.visualize_costs import visualize_costs
+from algorithms.experiments import run_experiment
+from algorithms.greedy2 import Greedy2_algo
+from visualization.plot_baseline import plot_experiment_costs
+
+#from visualization.visualizegrid import visualize_grid
 
 
 if __name__ == "__main__":
@@ -16,31 +18,51 @@ if __name__ == "__main__":
     # connect houses with batteries in a district
     # R = Random_algo()
     # R.run(district1)
-
-    hillclimber = HillClimber()
-    number_of_iterations = 1
-    hillclimber.run_experiment(district1, number_of_iterations)
+    
+    # # check if the cable routes indeed connect the houses with the batteries and if the cable stays on the grid
+    # for battery in district1.batteries:
+    #     for house in district1.battery_houses_connections[battery]:
+    #         # print house and battery positions and the cable route between them
+    #         print('\n\n\n')
+    #         # print(f'House: {house.pos_x, house.pos_y} \nCable route: {house.cables}')
+    #         #print(f'Battery: {battery.pos_x, battery.pos_y}')
 
     # # connect houses with batteries in a district
-    # R = Greedy_algo()
-    # R.run(district1)
+    R = Greedy_algo()
+    R.run(district1)
     
     
-    # district1.shared_costs()
-    # print(district1.district_cost_shared)
+    district1.shared_costs()
+    print(district1.district_cost_shared)
 
     # district1.own_costs()
     # print(district1.district_cost_seperate)
 
     # export the results to a json file
-    # output = export_json(district1)
+    output = export_json(district1)
+    for house in district1.houses:
+        if house.battery is None:
+            print(f"house at ({house.pos_x}, {house.pos_y}) does not have a battery assigned")
+        if not house.cables:
+            print(f"house at ({house.pos_x}, {house.pos_y}) does not have proper cable routes")
+    # Run experiments
+    num_experiments = 30
+    best_cost, worst_cost, experiment_costs = run_experiment(district1, Random_algo, num_experiments)
+
+    # Print the results from experiments
+    print(f"Best solution cost: {best_cost}")
+    print(f"Worst solution cost: {worst_cost}")
+    # print(f"All experiment scores: {scores}")
+
+    # plot for baseline
+    plot_experiment_costs(experiment_costs)
 
 
     #visualize_grid(output)
             
     #print(District.own_costs())
 
-    #visualize_grid(output)
+    # visualize_grid(output)
     #visualize_costs(output)    
     
 

@@ -1,32 +1,39 @@
+# import matplotlib.pyplot as plt
+
+# def plot_experiment_costs(experiment_costs):
+#     plt.figure(figsize=(12, 6))
+    
+#     # Create a list of experiment indices for the x-axis
+#     experiment_indices = range(1, len(experiment_costs) + 1)
+    
+#     plt.bar(experiment_indices, experiment_costs, color='skyblue', edgecolor='black')
+    
+#     plt.title('Costs of Each Experiment')
+#     plt.xlabel('Experiment Index')
+#     plt.ylabel('Costs')
+    
+#     plt.show()
+
 import matplotlib.pyplot as plt
-import json
 
-def visualize_baseline_scores(output):
-    district = output.get("district")
-    batteries = output.get("batteries", [])
+import matplotlib.pyplot as plt
 
-    battery_labels = [f'Battery {i+1}' for i in range(len(batteries))]
-    scores = [1000, 800, 1200, 900]
-    # Create a bar plot
-    plt.bar(battery_labels, scores, color='skyblue')
-    plt.xlabel('Batteries')
-    plt.ylabel('Scores')
-    plt.title(f'Baseline Scores - District {district}')
-    plt.ylim(0, max(scores) + 200)
-    plt.grid(axis='y')
-
-    # Display the scores on top of the bars
-    for i, score in enumerate(scores):
-        plt.text(i, score + 20, str(score), ha='center', va='bottom')
-
-    # Save the plot as an image
-    plt.savefig('baseline_scores.png')
+def plot_experiment_costs(experiment_costs):
+    plt.figure(figsize=(10, 6))
+    
+    # Count the frequency of each unique cost
+    from collections import Counter
+    cost_counts = Counter(experiment_costs)
+    
+    # Extract unique costs and their frequencies
+    unique_costs = list(cost_counts.keys())
+    frequencies = list(cost_counts.values())
+    
+    # Create the histogram
+    plt.bar(unique_costs, frequencies, color='skyblue', edgecolor='black')
+    
+    plt.title('Histogram of Experiment Costs')
+    plt.xlabel('Costs')
+    plt.ylabel('Frequency')
+    
     plt.show()
-
-if __name__ == '__main__':
-    # Load data from output.json
-    file_path = '../output.json'
-    with open(file_path, 'r') as file:
-        output_data = json.load(file)
-
-    visualize_baseline_scores(output_data)

@@ -5,3 +5,7 @@ class House():
         self.cables = []
         self.max_output = max_output
         self.battery = None
+
+    def reset(self):
+        self.battery = None
+        self.cables = []
