@@ -19,7 +19,7 @@ class Greedy_algo():
             # If no battery available with enough capacity
             if house.battery == None:
                 print("Invalid solution")
-
+                break 
                 return False 
             
             else:
@@ -85,9 +85,6 @@ class Greedy_algo():
 
             # Update the house's battery attribute
             house.battery = selected_battery
-
-            # Add current house to the list of houses that are connected to the selected battery
-            district.battery_houses_connections[selected_battery].append(house)
 
             # Update battery capacity
             house.battery.update_capacity(house)
