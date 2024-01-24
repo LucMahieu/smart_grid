@@ -1,6 +1,6 @@
 import random
 
-class Greedy_algo():
+class Baseline():
     def __init__(self):
         self.prev_pos = ()
 
@@ -13,13 +13,14 @@ class Greedy_algo():
 
         for house in district.houses:
             
-            # Connect house to closest battery with capacity
-            self.closest_connection(house, district)
+            # Connect house to random battery with capacity
+            self.random_connection(house, district)
             
             # If no battery available with enough capacity
             if house.battery == None:
                 print("Invalid solution")
-                break
+                break 
+                return False 
             
             else:
                 # Lays cable route based on steps that minimize distance
@@ -38,53 +39,29 @@ class Greedy_algo():
         
         return distance
     
-    def min_distance(self, selected_batteries, house):
+    def random_connection(self, house, district):
         '''
-        Selects the battery closest to the selected house with enough capacity left.
+        Assigns battery to current house and adds them to the list of connected houses.
         '''
-        distance_dict = {}
-        beginning = house.pos_x, house.pos_y
+        # make copy of batteries list to keep track of batteries that have been tried
+        batteries = district.batteries.copy()
 
-        # Calculate manhattan distance for all batteries with enough capacity
-        for option in selected_batteries:
-            end = option.pos_x, option.pos_y
-            distance = self.manhattan_distance(beginning, end)
-            distance_dict[option] = distance
-
-        # Check if there are any batteries left with enough capacity
-        if distance_dict:
-            # Saving closest battery 
-            best_battery = min(distance_dict, key = distance_dict.get)
-
-            return best_battery
-        
-        else:
-            # Invalid solution; no batteries left
-            print("No valid batteries found")
-            
-            return None
-
-    def closest_connection(self, house, district):
-        '''
-        Connects a house to the closest battery with enough capacity left.
-        '''
-        # Create a new list to store batteries with enough capacity
+        # create a new list to store batteries with enough capacity
         batteries_with_capacity = []
 
-        for battery in district.batteries:
-            # Check if battery has enough capacity
+        for battery in batteries:
+            # check if battery has enough capacity
             enough_capacity = battery.check_capacity(house)
 
             if enough_capacity:
                 batteries_with_capacity.append(battery)
 
         if batteries_with_capacity:
-            # Connecting to closest battery with capacity
-            selected_battery = self.min_distance(batteries_with_capacity, house)
+            # select random battery from the list of batteries with enough capacity
+            random_battery = random.choice(batteries_with_capacity)
 
-            # Update the house's battery attribute
-            house.battery = selected_battery
-            print(house.battery.pos_x)
+            # add current battery to the house
+            house.battery = random_battery
 
             # Update battery capacity
             house.battery.update_capacity(house)
@@ -105,7 +82,7 @@ class Greedy_algo():
             self.options.add((self.current_pos[0] + position[0], self.current_pos[1] + position[1]))
 
 
-    def choose_step_greedily(self, options, cable_end_pos):
+    def choose_step(self, options, cable_end_pos):
         """
         Calculates Manhattan distance for each cablesegment option, selects the option that minimizes .
         """
@@ -122,7 +99,6 @@ class Greedy_algo():
         '''
         Lays cable route from house to selected battery.
         '''
-        
         # Starting position of current pos and cable route is the house position
         self.current_pos = (house.pos_x, house.pos_y)
         house.cables = [self.current_pos]
@@ -136,7 +112,7 @@ class Greedy_algo():
             self.determine_possible_steps()
 
             # choose step from options
-            self.choose_step_greedily(self.options, cable_end_pos)
+            self.choose_step(self.options, cable_end_pos)
 
             # add new step (cable point coordinates) to cable route
             house.cables.append(self.new_pos)

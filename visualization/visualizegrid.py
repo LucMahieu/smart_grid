@@ -201,13 +201,13 @@ def draw_cables(ax, house_x, house_y, cable_points):
 
 def visualize_grid(output):
     fig, ax = plt.subplots(figsize=(8, 8))
-    house_icon = Image.open('house.png')
-    battery_icon = Image.open('battery.png')
+    house_icon = Image.open('visualization/house1.png')
+    battery_icon = Image.open('visualization/battery1.png')
 
     district = output.get("district")
     batteries = output.get("batteries", [])
 
-    for battery in batteries[:2]:
+    for battery in batteries:
         battery_location = battery.get("location", "0,0")
         x_battery, y_battery = map(float, battery_location.split(','))
 
@@ -215,7 +215,7 @@ def visualize_grid(output):
         ax.add_artist(battery_box)
 
         houses = battery.get("houses", [])
-        for house in houses[:10]:
+        for house in houses:
             house_location = house.get("location", "0,0")
             x, y = map(float, house_location.split(','))
 

@@ -3,21 +3,24 @@ from algorithms.greedy import Greedy_algo
 from classes.district import District
 from export_json import export_json
 from algorithms.experiments import run_experiment
-from algorithms.greedy2 import Greedy2_algo
+from algorithms.greedy2 import Greedy_algo2
 from visualization.plot_baseline import plot_experiment_costs
 from visualization.visualizegrid import visualize_grid
+from algorithms.baseline import Baseline
+from algorithms.baseline2 import Baseline2
+
 
 #from visualization.visualizegrid import visualize_grid
 
 
 if __name__ == "__main__":
     #create districts from files with batteries and houses
-    district1 = District(1, "data/district_1/district-1_batteries.csv", "data/district_1/district-1_houses.csv", grid_size=50)
+    district1 = District(1, "data/district_1/district-1_batteries.csv", "data/district_1/district-1_houses.csv")
     district2 = District(2, "data/district_2/district-2_batteries.csv", "data/district_2/district-2_houses.csv")
     district3 = District(3, "data/district_3/district-3_batteries.csv", "data/district_3/district-3_houses.csv")
 
     # connect houses with batteries in a district
-    R = Random_algo()
+    #R = Random_algo()
     # R.run(district1)
     
     # # check if the cable routes indeed connect the houses with the batteries and if the cable stays on the grid
@@ -29,7 +32,7 @@ if __name__ == "__main__":
     #         #print(f'Battery: {battery.pos_x, battery.pos_y}')
 
     # # connect houses with batteries in a district
-    #R = Greedy_algo()
+    R = Baseline2()
     R.run(district1)
     
     
