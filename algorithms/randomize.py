@@ -14,7 +14,7 @@ class Random_algo():
         # connect houses with batteries
         for house in district.houses:
             self.assign_battery_to_house(district, house)
-            self.lay_cable_route(house)
+            self.lay_cable_route(house, district)
     
         return district
     
@@ -60,7 +60,7 @@ class Random_algo():
             house.battery = random_battery
 
 
-    def determine_possible_steps(self):
+    def determine_possible_steps(self, district):
         '''
         Determines possible positions for the next step.
         '''
@@ -75,12 +75,12 @@ class Random_algo():
         for position in [right, left, up, down]:
             self.options.add((self.current_pos[0] + position[0], self.current_pos[1] + position[1]))
 
-        # print(f'all options: {self.options}')
-        # print(f'current pos: {self.current_pos}')
+        # determine battery positions that should be extracted from the options and put in set
+        battery_positions = set((battery.pos_x, battery.pos_y) for battery in district.batteries)
 
         # remove step options that are in outer grid or that go back to previous position
         for option in self.options.copy():
-            if option in self.outer_grid or option == self.prev_pos:
+            if option in self.outer_grid or option == self.prev_pos or option in battery_positions:
                 if option in self.options:
                     self.options.remove(option)
 
@@ -97,7 +97,7 @@ class Random_algo():
         self.new_pos = random.choice(list(self.options))
 
 
-    def lay_cable_route(self, house):
+    def lay_cable_route(self, house, district):
         '''
         Lays cable route from house to selected battery.
         '''
@@ -111,7 +111,7 @@ class Random_algo():
         # keep generating and adding cable segments untill battery is reached
         while self.current_pos != cable_end_pos:
             # determine possible steps
-            self.determine_possible_steps()
+            self.determine_possible_steps(district)
 
             # choose step from options
             self.choose_step_randomly()
