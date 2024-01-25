@@ -1,6 +1,6 @@
 import random
 
-class Greedy_algo2():
+class Greedy_algo4():
     def __init__(self):
         self.prev_pos = ()
 
@@ -88,6 +88,9 @@ class Greedy_algo2():
             # Update battery capacity
             house.battery.update_capacity(house)
 
+            # Add current house to the list of houses that are connected to the selected battery
+            district.battery_houses_connections[selected_battery].append(house)
+
     def lay_cable_route(self, house):
         '''
         Lays cable route from house to selected battery.
@@ -100,7 +103,8 @@ class Greedy_algo2():
         cable_end_pos = (house.battery.pos_x, house.battery.pos_y)
 
         # keep generating and adding cable segments until the battery is reached
-        for _ in range(abs(self.current_pos[0] - cable_end_pos[0])):
+        # for _ in range(abs(self.current_pos[0] - cable_end_pos[0])):
+        while self.current_pos[0] != cable_end_pos[0]:
             # If current position is to the left of the end, move right
             if self.current_pos[0] - cable_end_pos[0] < 0:
                 self.current_pos[0] += 1
@@ -112,7 +116,8 @@ class Greedy_algo2():
                 house.cables.append(tuple(self.current_pos))
 
         # Keep adding cable segments until the y-coordinate of the end position is reached
-        for _ in range(abs(self.current_pos[1] - cable_end_pos[1])):
+        # for _ in range(abs(self.current_pos[1] - cable_end_pos[1])):
+        while self.current_pos[1] != cable_end_pos[1]:
 
             # If current position is below the end, move up
             if self.current_pos[1] - cable_end_pos[1] < 0:

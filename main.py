@@ -3,11 +3,9 @@ from algorithms.greedy import Greedy_algo
 from classes.district import District
 from export_json import export_json
 from algorithms.experiments import run_experiment
-from algorithms.greedy2 import Greedy_algo2
 from visualization.plot_baseline import plot_experiment_costs
 from visualization.visualizegrid import visualize_grid
 from algorithms.baseline import Baseline
-from algorithms.baseline2 import Baseline2
 
 
 #from visualization.visualizegrid import visualize_grid
@@ -39,6 +37,12 @@ if __name__ == "__main__":
     district1.shared_costs()
     print(district1.district_cost_shared)
 
+    for battery in district1.batteries:
+        print(battery.capacity)
+
+    print(district1.houses[-1].max_output)
+    #print(district1.battery_houses_connections)
+
     # district1.own_costs()
     # print(district1.district_cost_seperate)
 
@@ -51,7 +55,7 @@ if __name__ == "__main__":
     #         print(f"house at ({house.pos_x}, {house.pos_y}) does not have proper cable routes")
     # # Run experiments
     # num_experiments = 30
-    # best_cost, worst_cost, experiment_costs = run_experiment(district1, Random_algo, num_experiments)
+    # best_cost, worst_cost, experiment_costs = run_experiment(district3, Greedy_algo, num_experiments)
 
     # # Print the results from experiments
     # print(f"Best solution cost: {best_cost}")
@@ -62,7 +66,7 @@ if __name__ == "__main__":
     # plot_experiment_costs(experiment_costs)
 
 
-    visualize_grid(output)
+    #visualize_grid(output)
             
 #     #print(District.own_costs())
 
