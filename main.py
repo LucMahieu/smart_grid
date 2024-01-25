@@ -6,7 +6,10 @@ from algorithms.experiments import run_experiment
 from visualization.plot_baseline import plot_experiment_costs
 from visualization.visualizegrid import visualize_grid
 from algorithms.baseline import Baseline
-
+from algorithms.baseline2 import Baseline2
+from algorithms.experiments import run_experiment
+from algorithms.experiments import plot_histogram
+from visualization.visualizecost import plot_smoothed_histogram
 
 #from visualization.visualizegrid import visualize_grid
 
@@ -30,7 +33,7 @@ if __name__ == "__main__":
     #         #print(f'Battery: {battery.pos_x, battery.pos_y}')
 
     # # connect houses with batteries in a district
-    R = Baseline2()
+    R = Greedy_algo()
     R.run(district1)
     
     
@@ -65,6 +68,23 @@ if __name__ == "__main__":
     # plot for baseline
     # plot_experiment_costs(experiment_costs)
 
+    num_experiments = 1000
+
+    # Run experiments for each algorithm
+    costs_greedy = [cost for cost in run_experiment(district1, Greedy_algo, num_experiments)[2] if cost > 0]
+    costs_greedy2 = [cost for cost in run_experiment(district1, Greedy_algo2, num_experiments)[2] if cost > 0]
+    costs_baseline = [cost for cost in run_experiment(district1, Baseline, num_experiments)[2] if cost > 0]
+    costs_baseline2 = [cost for cost in run_experiment(district1, Baseline2, num_experiments)[2] if cost > 0]
+
+    # plot_smoothed_histogram(
+    #     (costs_greedy, "Greedy Algo"),
+    #     (costs_greedy2, "Greedy Algo 2"),
+    #     (costs_baseline, "Baseline"),
+    #     (costs_baseline2, "Baseline 2")
+    # )
+
+    best_cost, worst_cost, scores, valid_count, invalid_count = run_experiment(district1, Greedy_algo, num_experiments)
+    plot_histogram(scores, valid_count, invalid_count, num_experiments)
 
     #visualize_grid(output)
             
