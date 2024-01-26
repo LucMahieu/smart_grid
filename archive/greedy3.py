@@ -1,6 +1,6 @@
 import random
 
-class Greedy_algo():
+class Greedy_algo3():
     def __init__(self):
         self.prev_pos = ()
 
@@ -8,13 +8,11 @@ class Greedy_algo():
         '''
         Makes connections between batteries and houses and lays cable routes between them.
         '''
-        # # Random order of houses
-        random.shuffle(district.houses)
-
+        sorted(district.houses, key=lambda x: x.max_output, reverse=True)
         for house in district.houses:
             
             # Connect house to closest battery with capacity
-            self.closest_connection(house, district)
+            self.random_connection(house, district)
             
             # If no battery available with enough capacity
             if house.battery == None:
@@ -64,32 +62,35 @@ class Greedy_algo():
             
             return None
 
-    def closest_connection(self, house, district):
+    def random_connection(self, house, district):
         '''
-        Connects a house to the closest battery with enough capacity left.
+        Assigns battery to current house and adds them to the list of connected houses.
         '''
-        # Create a new list to store batteries with enough capacity
+        # make copy of batteries list to keep track of batteries that have been tried
+        batteries = district.batteries.copy()
+
+        # create a new list to store batteries with enough capacity
         batteries_with_capacity = []
 
-        for battery in district.batteries:
-            # Check if battery has enough capacity
+        for battery in batteries:
+            # check if battery has enough capacity
             enough_capacity = battery.check_capacity(house)
 
             if enough_capacity:
                 batteries_with_capacity.append(battery)
 
         if batteries_with_capacity:
-            # Connecting to closest battery with capacity
-            selected_battery = self.min_distance(batteries_with_capacity, house)
+            # select random battery from the list of batteries with enough capacity
+            random_battery = random.choice(batteries_with_capacity)
 
-            # Update the house's battery attribute
-            house.battery = selected_battery
+            # add current battery to the house
+            house.battery = random_battery
 
             # Update battery capacity
             house.battery.update_capacity(house)
 
             # Add current house to the list of houses that are connected to the selected battery
-            district.battery_houses_connections[selected_battery].append(house)
+            district.battery_houses_connections[random_battery].append(house)
 
     def determine_possible_steps(self):
         '''

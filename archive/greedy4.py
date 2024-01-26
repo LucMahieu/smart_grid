@@ -1,6 +1,6 @@
 import random
 
-class Greedy_algo():
+class Greedy_algo4():
     def __init__(self):
         self.prev_pos = ()
 
@@ -8,21 +8,21 @@ class Greedy_algo():
         '''
         Makes connections between batteries and houses and lays cable routes between them.
         '''
-        # # Random order of houses
+        # Random order of houses
         random.shuffle(district.houses)
 
         for house in district.houses:
             
-            # Connect house to closest battery with capacity
+            # Connect house to random battery with capacity
             self.closest_connection(house, district)
             
             # If no battery available with enough capacity
             if house.battery == None:
                 print("Invalid solution")
-                break
+                break 
             
             else:
-                # Lays cable route based on steps that minimize distance
+                # Lays cable route based on manhattan distance 
                 self.lay_cable_route(house)
 
         return district
@@ -91,60 +91,41 @@ class Greedy_algo():
             # Add current house to the list of houses that are connected to the selected battery
             district.battery_houses_connections[selected_battery].append(house)
 
-    def determine_possible_steps(self):
-        '''
-        Determines possible positions for the next step.
-        '''
-        # Possible absolute steps
-        right = (1, 0)
-        left = (-1, 0)
-        up = (0, 1)
-        down = (0, -1)
-
-        # Define step options based on current position
-        self.options = set()
-        for position in [right, left, up, down]:
-            self.options.add((self.current_pos[0] + position[0], self.current_pos[1] + position[1]))
-
-
-    def choose_step_greedily(self, options, cable_end_pos):
-        """
-        Calculates Manhattan distance for each cablesegment option, selects the option that minimizes .
-        """
-        distances = {}
-
-        for option in options:
-            distance = self.manhattan_distance(option, cable_end_pos)
-
-            distances[option] = distance
-
-        self.new_pos = min(distances, key = distances.get)
-
     def lay_cable_route(self, house):
         '''
         Lays cable route from house to selected battery.
         '''
-        
         # Starting position of current pos and cable route is the house position
-        self.current_pos = (house.pos_x, house.pos_y)
-        house.cables = [self.current_pos]
+        self.current_pos = [house.pos_x, house.pos_y]
+        house.cables = [tuple(self.current_pos)]
 
         # end position of cable is the battery position
         cable_end_pos = (house.battery.pos_x, house.battery.pos_y)
 
-        # keep generating and adding cable segments untill battery is reached
-        while self.current_pos != cable_end_pos:
-            # determine possible steps
-            self.determine_possible_steps()
+        # keep generating and adding cable segments until the battery is reached
+        # for _ in range(abs(self.current_pos[0] - cable_end_pos[0])):
+        while self.current_pos[0] != cable_end_pos[0]:
+            # If current position is to the left of the end, move right
+            if self.current_pos[0] - cable_end_pos[0] < 0:
+                self.current_pos[0] += 1
+                house.cables.append(tuple(self.current_pos))
 
-            # choose step from options
-            self.choose_step_greedily(self.options, cable_end_pos)
+            # If current position is to the right of the end, move left
+            else:
+                self.current_pos[0] -= 1
+                house.cables.append(tuple(self.current_pos))
 
-            # add new step (cable point coordinates) to cable route
-            house.cables.append(self.new_pos)
+        # Keep adding cable segments until the y-coordinate of the end position is reached
+        # for _ in range(abs(self.current_pos[1] - cable_end_pos[1])):
+        while self.current_pos[1] != cable_end_pos[1]:
+
+            # If current position is below the end, move up
+            if self.current_pos[1] - cable_end_pos[1] < 0:
+                self.current_pos[1] += 1
+                house.cables.append(tuple(self.current_pos))
+
+            # If current position is above the end, move down
+            else:
+                self.current_pos[1] -= 1
+                house.cables.append(tuple(self.current_pos))
             
-            # after the step, the current position becomes the previous position
-            self.prev_pos = self.current_pos
-
-            # after the step, the new position becomes the current position
-            self.current_pos = self.new_pos

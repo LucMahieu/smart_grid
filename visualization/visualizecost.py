@@ -30,3 +30,42 @@
 #     output_data = json.load(infile)
 
 # visualize_costs(output_data)
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+from algorithms.randomize import Random_algo
+from algorithms.greedy import Greedy_algo
+from algorithms.greedy2 import Greedy_algo2
+from algorithms.baseline import Baseline
+from algorithms.baseline2 import Baseline2
+from classes.district import District
+from algorithms.experiments import run_experiment
+
+def plot_smoothed_histogram(*data):
+    for costs, label in data:
+        sns.kdeplot(costs, label=label, bw_adjust=0.5)
+    plt.title('Cost Distribution of Different Algorithms')
+    plt.xlabel('Cost')
+    plt.ylabel('Density')
+    plt.legend()
+    plt.show()
+    plt.ylim(0, 8)
+
+if __name__ == "__main__":
+    district1 = District(1, "data/district_1/district-1_batteries.csv", "data/district_1/district-1_houses.csv")
+    num_experiments = 10
+
+    # Run experiments for each algorithm and collect costs
+   
+    _, _, costs_greedy, _, _ = run_experiment(district1, Greedy_algo, num_experiments)
+    _, _, costs_greedy2, _, _ = run_experiment(district1, Greedy_algo2, num_experiments)
+    _, _, costs_baseline, _, _ = run_experiment(district1, Baseline, num_experiments)
+    _, _, costs_baseline2, _, _ = run_experiment(district1, Baseline2, num_experiments)
+
+    # Plot all results in one smoothed histogram
+    plot_smoothed_histogram(
+        (costs_greedy, "Greedy Algo"),
+        (costs_greedy2, "Greedy Algo 2"),
+        (costs_baseline, "Baseline"),
+        (costs_baseline2, "Baseline 2")
+    )
