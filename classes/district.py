@@ -77,7 +77,16 @@ class District():
         return self.district_cost_shared
 
     def reset_state(self):
+        print("Resetting district state")
         for house in self.houses:
-            house.reset()  # Resets the house's connection and cable data
+            house.reset()
+
         for battery in self.batteries:
             battery.reset_capacity()
+
+        # Reinitialize shared cost and battery-house connections
+        self.district_cost_shared = 0
+        self.battery_houses_connections = {battery: [] for battery in self.batteries}
+
+        # Reset invalid solution flag
+        self.invalid = 0
