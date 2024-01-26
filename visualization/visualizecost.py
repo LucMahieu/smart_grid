@@ -35,9 +35,9 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from algorithms.randomize import Random_algo
 from algorithms.greedy import Greedy_algo
-from algorithms.greedy2 import Greedy_algo2
+# from algorithms.greedy2 import Greedy_algo2
 from algorithms.baseline import Baseline
-from algorithms.baseline2 import Baseline2
+# from algorithms.baseline2 import Baseline2
 from classes.district import District
 from algorithms.experiments import run_experiment
 
@@ -58,14 +58,14 @@ if __name__ == "__main__":
     # Run experiments for each algorithm and collect costs
    
     _, _, costs_greedy, _, _ = run_experiment(district1, Greedy_algo, num_experiments)
-    _, _, costs_greedy2, _, _ = run_experiment(district1, Greedy_algo2, num_experiments)
+    # _, _, costs_greedy2, _, _ = run_experiment(district1, Greedy_algo2, num_experiments)
     _, _, costs_baseline, _, _ = run_experiment(district1, Baseline, num_experiments)
-    _, _, costs_baseline2, _, _ = run_experiment(district1, Baseline2, num_experiments)
+    # _, _, costs_baseline2, _, _ = run_experiment(district1, Baseline2, num_experiments)
 
     # Plot all results in one smoothed histogram
-    plot_smoothed_histogram(
-        (costs_greedy, "Greedy Algo"),
-        (costs_greedy2, "Greedy Algo 2"),
-        (costs_baseline, "Baseline"),
-        (costs_baseline2, "Baseline 2")
-    )
+    # plot_smoothed_histogram(
+    #     (costs_greedy, "Greedy Algo"),
+    #     (costs_greedy2, "Greedy Algo 2"),
+    #     (costs_baseline, "Baseline"),
+    #     (costs_baseline2, "Baseline 2")
+    # )
