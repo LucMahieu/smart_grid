@@ -8,6 +8,22 @@ from algorithms.baseline import Baseline
 from classes.district import District
 from algorithms.experiments import run_experiment
 import time
+import matplotlib.pyplot as plt
+
+# plots highest and lowest cost of an algorithm
+def plot_cost_range(costs, label):
+    highest_cost = max(costs)
+    lowest_cost = min(costs)
+    
+    # Plotting
+    plt.figure(figsize=(10, 6))
+    plt.bar([0, 1], [highest_cost, lowest_cost], color=['red', 'green'], alpha=0.7)
+    plt.xticks([0, 1], ['Highest Cost', 'Lowest Cost'])
+    plt.ylabel('Cost')
+    plt.title(f'Cost Range for {label}')
+    plt.ylim(0, highest_cost * 1.1)
+    plt.show()
+
 
 def plot_smoothed_histogram(*data):
     for costs, label in data:

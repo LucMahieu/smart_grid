@@ -11,7 +11,7 @@ from visualization.visualizecost import plot_smoothed_histogram
 from visualization.visualizecost import run_experiment_and_measure_time
 import time
 from visualization.visualizecost import plot_time_and_cost
-
+from visualization.visualizecost import plot_cost_range
 
 if __name__ == "__main__":
     #create districts from files with batteries and houses
@@ -77,6 +77,8 @@ if __name__ == "__main__":
     costs_greedy = [cost for cost in run_experiment(district1, Greedy_algo, num_experiments)[2] if cost > 0]
     costs_baseline = [cost for cost in run_experiment(district1, Baseline, num_experiments)[2] if cost > 0]
 
+    plot_cost_range(costs_greedy, "Greedy Algorithm")
+    plot_cost_range(costs_baseline, "Baseline Algorithm")
 
     num_experiments = 50
 
@@ -103,8 +105,7 @@ if __name__ == "__main__":
             
 #     #print(District.own_costs())
 
-
-#     #visualize_costs(output)    
+    visualize_costs(output)    
     
 
 # if __name__ == "__main__":
