@@ -8,36 +8,56 @@ from classes.house import House
 class HillClimber():
     def __init__(self, district):
         self.district = district
+        self.layed_cables = {}
+        self.clusters = []
+        self.all_cables = set()
 
 
     def run(self, houses):    
+        # Connect houses with shortest connections first
         shortest_connections = self.calculate_shortest_connections(houses)
         sorted_connections = self.sort_dict(shortest_connections)
         
-        # Lay cable routes between houses and batteries
-        layed_cables = {}
         for connection in sorted_connections:
-            cable_route = self.lay_cable_route(connection)
-            # Add cable route to dictionary of cable routes per connection
-            layed_cables[connection] = cable_route
-        # print(layed_cables)
-        clusters = self.cluster_connections(layed_cables)
-        # self.plot_clusters(clusters)
-        connection_points = self.find_shortest_connections_between_clusters(clusters) #TODO: remove connection points part
-        print(connection_points)
-        self.plot_clusters(clusters, custom_color="red")
-        self.plot_clusters(connection_points) #TODO: remove connection points part
-        # Show plot
-        plt.show()
+            self.layed_cables[connection] = self.lay_cable_route(connection)
+
+        self.collect_all_cables()
+        self.plot_clusters([self.all_cables])
+
+        # Make clusters of connected houses
+        self.cluster_connections(self.layed_cables)
+        print(self.clusters)
+        connections = self.find_shortest_connections_between_clusters() #TODO: The connections are not sorted in how big the distance is between the clusters. Maybe use a different data structure for the connections?
+        
+        # Lay cable routes between clusters
+        for connection in connections:
+            self.layed_cables[connection] = self.lay_cable_route(connection)
+
+        
+        while len(self.clusters) > 1:
+            self.cluster_connections(self.layed_cables)
+            connections = self.find_shortest_connections_between_clusters()
+            
+            for connection in connections:
+                self.layed_cables[connection] = self.lay_cable_route(connection)
+
+            self.collect_all_cables()
+            self.plot_clusters([self.all_cables])
     
 
-    def find_shortest_connections_between_clusters(self, clusters):
+    def collect_all_cables(self):
+        """Adds new cables to set with all cables and plots them"""
+        for cable_route in self.layed_cables.values():
+            self.all_cables.update(cable_route)
+
+
+    def find_shortest_connections_between_clusters(self):
         """Finds shortest connection to other cluster for each cluster."""
         shortest_connections = {}
-        connection_points = [set()]
-        for cluster in clusters:
+        # For each cluster, calculate the shortest connection to another cluster
+        for cluster in self.clusters:
             shortest_connection = float("inf")
-            for other_cluster in clusters:
+            for other_cluster in self.clusters:
                 if cluster != other_cluster:
                     for point1 in cluster:
                         for point2 in other_cluster:
@@ -48,16 +68,18 @@ class HillClimber():
                                 end_point = point2
 
             # Add shortest connection to dictionary
-            connection_points[0].update([begin_point, end_point])
-            shortest_connections[(begin_point, end_point)] = shortest_connection
+            if shortest_connection != float("inf"):
+                shortest_connections[(begin_point, end_point)] = shortest_connection
+            else:
+                print("No shortest connection found")
+                break
         
-        return connection_points
-    
+        return shortest_connections
+
 
     def plot_clusters(self, clusters, custom_color=None):
         """Plot all the clusters as points in a different color on a grid."""
 
-        # Create a list of colors for each cluster
         colors = ['green', 'blue', 'yellow', 'orange', 'purple', 'pink', 'black', 'grey', 'brown']
 
         # Iterate over each cluster and assign a color
@@ -69,7 +91,7 @@ class HillClimber():
             # Determines if the clusters are plotted in different colors or not
             if custom_color == None:
                 # Plot the cluster as points on a grid with the assigned color
-                plt.scatter(x, y, color=colors[i % len(colors)])
+                plt.scatter(x, y, color=colors[i % len(colors)], marker='.')
             else:
                 plt.scatter(x, y, color=custom_color)
 
@@ -77,6 +99,8 @@ class HillClimber():
         plt.xlabel('X Coordinate')
         plt.ylabel('Y Coordinate')
         plt.title('Cluster Plot')
+
+        plt.show()
 
 
     def manhatten_distance(self, point1, point2):
@@ -111,34 +135,32 @@ class HillClimber():
 
 
     def cluster_connections(self, connections):
-        clusters = []
-
         for connection, cables in connections.items():
             start_point = connection[0]
             end_point = connection[1]
             found_clusters = []
 
-            # Zoek de clusters waarin de begin- en eindpunten zich bevinden
-            for cluster in clusters:
-                if start_point in cluster or end_point in cluster:
+            # Find clusters where start and end point are in
+            for cluster in self.clusters:
+                if start_point in cluster or end_point in cluster: #TODO: check if cables are in cluster instead of start and end point only by using set.issubset() oid
                     found_clusters.append(cluster)
 
-            # Voeg de gevonden clusters samen, als er meerdere zijn
+            # Merge clusters if they have a shared point
             if found_clusters:
+                # Asterisk unpacks the list of found clusters and set.unions them into a set
                 merged_cluster = set.union(*found_clusters)
                 # Add starting and end point to merged cluster
                 merged_cluster.update([start_point, end_point])
                 # Add cable route to merged cluster
                 merged_cluster.update(cables)
-                clusters = [cluster for cluster in clusters if cluster not in found_clusters]
-                clusters.append(merged_cluster)
+                # Only keep clusters that are not merged
+                self.clusters = [cluster for cluster in self.clusters if cluster not in found_clusters]
+                # Add merged cluster to list of clusters
+                self.clusters.append(merged_cluster)
             else:
-                # Maak een nieuw cluster als geen van de punten in een bestaand cluster zit
+                # Make new cluster if start and end point are not in any cluster. Asterisk again unpacks the set of cables
                 new_cluster = {start_point, end_point, *cables}
-                clusters.append(new_cluster)
-
-
-        return clusters
+                self.clusters.append(new_cluster)
 
 
     def sort_dict(self, dictionary):
@@ -197,96 +219,9 @@ class HillClimber():
         cable_route = horizontal_cable.union(vertical_cable)
 
         return cable_route
-    
 
-class cable():
-    def __init__(self, connection, cable_route):
-        self.connection = connection
-        self.cable_route = cable_route
-        self.cluster = None
 
 if __name__ == "__main__":
     district1 = District(1, "data/district_1/district-1_batteries.csv", "data/district_1/district-1_houses.csv")
     hill_climber = HillClimber(district1)
-    # house1 = ((30, 4), (30, 2))
-    # house2 = ((4, 38), (5, 37))
-    # cable_route = hill_climber.lay_cable_route(house2)
-    
-    # Create list of house objects with random coordinates
-    # houses = []
-    # for i in range(10):
-    #     hill_climber.houses.append(House(random.randint(0, 50), random.randint(0, 50), 1))
-
     hill_climber.run(district1.houses)
-    # for i in range(3):
-    #     # Run hill climber algorithm
-    #     hill_climber.run(district1.houses)
-    
-    
-    
-
-    
-# ----------------- OLD CODE ----------------- #
-
-
-                        # # Check all clusters to see if one of them contains the begin_point and add if not so
-                        # found_cluster = False
-                        # for cluster in clusters:
-                        #     print(f"Current cluster: {cluster}")
-                        #     if cluster == set():
-                        #         # Print new points added to empty cluster
-                        #         print(f"Start the first cluster with points {begin_point} and {end_point}")
-                        #         cluster.add(begin_point)
-                        #         cluster.add(end_point)
-                        #         found_cluster = True
-                        #         break
-                            
-                        #     if begin_point in cluster:
-                        #         # Print new begin_point added to existing cluster
-                        #         print(f"New begin_point: {begin_point}")
-                        #         cluster.add(end_point)
-                        #         found_cluster = True
-                        #         break # break out of the for loop to prevent from adding the same point over and over again
-                            
-                        #     if end_point in cluster:
-                        #         # Print new end_point added to existing cluster
-                        #         print(f"New end_point: {end_point}")
-                        #         cluster.add(begin_point)
-                        #         found_cluster = True
-                        #         break
-
-                        #     # Merge clusters if they have a shared point
-                        #     for cluster2 in clusters:
-                        #         if begin_point in cluster and end_point in cluster2:
-                        #             # Print merge clusters
-                        #             print(f"Merge clusters {cluster} and {cluster2}")
-                        #             cluster.add(cluster2)
-                        #             clusters.remove(cluster2)
-                        #             break
-                        
-                        # if found_cluster == False:
-                        #     print(f"Found new cluster with points {begin_point} and {end_point}")
-                        #     clusters.append({begin_point, end_point})                           
-
-    # def cluster_connections(self, connections):
-    #     clusters = []
-
-    #     for start_point, end_point in connections:
-    #         found_clusters = []
-
-    #         # Zoek de clusters waarin de begin- en eindpunten zich bevinden
-    #         for cluster in clusters:
-    #             if start_point in cluster or end_point in cluster:
-    #                 found_clusters.append(cluster)
-
-    #         # Voeg de gevonden clusters samen, als er meerdere zijn
-    #         if found_clusters:
-    #             merged_cluster = set.union(*found_clusters)
-    #             merged_cluster.update([start_point, end_point])
-    #             clusters = [cluster for cluster in clusters if cluster not in found_clusters]
-    #             clusters.append(merged_cluster)
-    #         else:
-    #             # Maak een nieuw cluster als geen van de punten in een bestaand cluster zit
-    #             clusters.append({start_point, end_point})
-
-    #     return clusters
