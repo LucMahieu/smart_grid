@@ -12,6 +12,7 @@ from visualization.visualizecost import run_experiment_and_measure_time
 import time
 from visualization.visualizecost import plot_time_and_cost
 from visualization.visualizecost import plot_cost_range
+from algorithms.hill_climber_test import HillClimber
 
 if __name__ == "__main__":
     #create districts from files with batteries and houses
@@ -90,41 +91,41 @@ if __name__ == "__main__":
 
 
 
-    num_experiments = 10
+#     num_experiments = 10
 
-    # Run experiments for each algorithm
-    costs_greedy = [cost for cost in run_experiment(district1, Greedy_algo, num_experiments)[2] if cost > 0]
-    costs_baseline = [cost for cost in run_experiment(district1, Baseline, num_experiments)[2] if cost > 0]
+#     # Run experiments for each algorithm
+#     costs_greedy = [cost for cost in run_experiment(district1, Greedy_algo, num_experiments)[2] if cost > 0]
+#     costs_baseline = [cost for cost in run_experiment(district1, Baseline, num_experiments)[2] if cost > 0]
 
-    plot_cost_range(costs_greedy, "Greedy Algorithm")
-    plot_cost_range(costs_baseline, "Baseline Algorithm")
+#     plot_cost_range(costs_greedy, "Greedy Algorithm")
+#     plot_cost_range(costs_baseline, "Baseline Algorithm")
 
-    num_experiments = 50
+#     num_experiments = 50
 
-    # Run experiments and collect data
-    greedy_costs, greedy_times = run_experiment_and_measure_time(district1, Greedy_algo, num_experiments)
-    baseline_costs, baseline_times = run_experiment_and_measure_time(district1, Baseline, num_experiments)
+#     # Run experiments and collect data
+#     greedy_costs, greedy_times = run_experiment_and_measure_time(district1, Greedy_algo, num_experiments)
+#     baseline_costs, baseline_times = run_experiment_and_measure_time(district1, Baseline, num_experiments)
 
-    costs_data = [(sum(greedy_costs)/len(greedy_costs), 'Greedy Algo'), (sum(baseline_costs)/len(baseline_costs), 'Baseline')]
-    times_data = [(sum(greedy_times)/len(greedy_times), 'Greedy Algo'), (sum(baseline_times)/len(baseline_times), 'Baseline')]
+#     costs_data = [(sum(greedy_costs)/len(greedy_costs), 'Greedy Algo'), (sum(baseline_costs)/len(baseline_costs), 'Baseline')]
+#     times_data = [(sum(greedy_times)/len(greedy_times), 'Greedy Algo'), (sum(baseline_times)/len(baseline_times), 'Baseline')]
 
-    # Call the plotting function
-    plot_time_and_cost(costs_data, times_data)
+#     # Call the plotting function
+#     plot_time_and_cost(costs_data, times_data)
 
-    plot_smoothed_histogram(
-        (costs_greedy, "Greedy Algo"),
-        (costs_baseline, "Baseline"),
+#     plot_smoothed_histogram(
+#         (costs_greedy, "Greedy Algo"),
+#         (costs_baseline, "Baseline"),
         
-    )
+#     )
 
-    best_cost, worst_cost, scores, valid_count, invalid_count = run_experiment(district1, Greedy_algo, num_experiments)
-    plot_histogram(scores, valid_count, invalid_count, num_experiments)
+#     best_cost, worst_cost, scores, valid_count, invalid_count = run_experiment(district1, Greedy_algo, num_experiments)
+#     plot_histogram(scores, valid_count, invalid_count, num_experiments)
 
-    visualize_grid(output)
+#     visualize_grid(output)
             
-#     #print(District.own_costs())
+# #     #print(District.own_costs())
 
-    visualize_costs(output)    
+#     visualize_costs(output)
     
 
 # if __name__ == "__main__":

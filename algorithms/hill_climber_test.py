@@ -1,24 +1,34 @@
 import math
 import random
+from classes.district import District
 
 class HillClimber():
-    def __init__(self): #TODO: readd district as parameter
-        # self.district = district
+    def __init__(self, district):
+        self.district = district
         pass
 
     def run(self):
-        calculate_shortest_distances = self.calculate_shortest_distances(self.district.houses)
-        sorted_distances = self.sort_dict(calculate_shortest_distances)
-        layed_cables = self.lay_cables(sorted_distances)
+        shortest_connections = self.calculate_shortest_connections(self.district.houses)
+        sorted_connections = self.sort_dict(shortest_connections)
+        
+        # Lay cable routes between houses and batteries
+        layed_cables = []
+        for connection in sorted_connections:
+            cable_route = self.lay_cable_route(connection)
+            # print connection and cable cable_route
+            print(f"Connection between {connection[0]} and {connection[1]}: {cable_route}")
+            layed_cables.append(cable_route)
+        
+        print(layed_cables)
 
     def manhatten_distance(self, point1, point2):
         """Calculate manhatten distance between two points."""
         return abs(point1[0] - point2[0]) + abs(point1[1] - point2[1])
         
 
-    def calculate_shortest_distances(self, points):
-        """Calculate distances between coordinates (points on grid)."""
-        distances = {}
+    def calculate_shortest_connections(self, points):
+        """Calculate distances between coordinates (points on grid) and save ."""
+        connections = {}
 
         # Make combinations of all points and calculate distances
         for i in points:
@@ -37,19 +47,20 @@ class HillClimber():
                         begin_point = point1
                         end_point = point2
             
-            distances[(begin_point, end_point)] = shortest_distance
+            connections[(begin_point, end_point)] = shortest_distance
+            # Check if connection is not an empty set
+            print(f"Connection between {begin_point} and {end_point} is {shortest_distance}")
+            # if len(connections[(begin_point, end_point)]) == 0:
+            #     print(f"Empty set for connection between {begin_point} and {end_point}")
         
-        return distances
-    
-    def lay_cables(self, distances):
-        for cable in distances:
-            self.lay_cable_route(cable)
+        return connections
 
 
     def sort_dict(self, dictionary):
         """Sort dictionary by value."""
         return dict(sorted(dictionary.items(), key=lambda x: x[1]))
     
+
     def choose_x_y_lines(self, cable):
         """Determine what will be the y-line and x-line of cable route between points.
         These are the outer lines of the manhatten distance domain between the points.
@@ -69,14 +80,14 @@ class HillClimber():
 
 
     def lay_cable_route(self, cable):
-        """Lay cable routes between points."""
+        """Lays cable route between two points."""
         begin_point = cable[0]
         end_point = cable[1]
 
         y_line, x_line = self.choose_x_y_lines(cable)
         
         # Initialize horizontal cable route between points
-        horizontal_cable = set()
+        horizontal_cable = {begin_point}
 
         # Initialize vertical cable route between points
         delta_x = end_point[0] - begin_point[0]
@@ -87,7 +98,7 @@ class HillClimber():
                 horizontal_cable.add((begin_point[0] + x, y_line))
 
         # Initialize vertical cable route between points
-        vertical_cable = set()
+        vertical_cable = {begin_point}
 
         # Determine relative position of end point to begin point
         delta_y = end_point[1] - begin_point[1]
@@ -104,5 +115,7 @@ class HillClimber():
             
 
 if __name__ == "__main__":
-    hill_climber = HillClimber()
-    hill_climber.lay_cable_route(((1, 2), (3, 4)))
+    district1 = District(1, "data/district_1/district-1_batteries.csv", "data/district_1/district-1_houses.csv")
+    hill_climber = HillClimber(district1)
+    hill_climber.lay_cable_route((30, 4), (30, 2))
+
