@@ -5,6 +5,7 @@ from algorithms.greedy import Greedy_algo
 from classes.battery import Battery 
 import matplotlib.pyplot as plt
 import time 
+import subprocess
 
 
 def run_experiment(district, algorithm_class, num_experiments):
@@ -60,6 +61,19 @@ def plot_histogram(experiment_scores, valid_solutions_count, invalid_solutions_c
     plt.show()
 
 
+# run and time the experiments
+def run_timed_experiments(script_name, max_duration, max_run_time):
+    start = time.time()
+    n_runs = 0
+
+    while time.time() - start < max_duration:
+        print(f"Run {n_runs+1} in progress...")
+        subprocess.call(["timeout", str(max_run_time), "python3", script_name, str(n_runs)])
+        n_runs += 1
+        print(f"Run {n_runs} completed.")
+
+
+
 # parameter tuning
 def grid_search(parameter_combinations, district, num_runs):
     
@@ -83,7 +97,7 @@ def grid_search(parameter_combinations, district, num_runs):
     return best_parameters, best_cost
 
 def run_experiment_with_parameters(district, parameters, num_runs):
-    
+
 
 ### functie voor run experiment with parameters en functie set_parameters nog nodig ###
 

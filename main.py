@@ -13,6 +13,8 @@ import time
 from visualization.visualizecost import plot_time_and_cost
 from visualization.visualizecost import plot_cost_range
 from algorithms.hill_climber_test import HillClimber
+from algorithms.experiments import run_experiments_and_save_results
+from algorithms.experiments import run_timed_experiments
 
 if __name__ == "__main__":
     #create districts from files with batteries and houses
@@ -25,6 +27,23 @@ if __name__ == "__main__":
 
     # Run hill climber algorithm
     hill_climber.run()
+
+    
+
+    algorithms = {
+        'Greedy': Greedy_algo(),
+        'Random': Random_algo(),
+        'Baseline': Baseline(),
+        'HillClimber': HillClimber(district1)
+    }
+
+    script_name = "script.py" #add script of chosen algorithm
+    max_duration = 3600  
+    max_run_time = 60    
+
+    run_timed_experiments(script_name, max_duration, max_run_time)
+
+    run_experiments_and_save_results(algorithms, district1, 100, 'experiment_results.csv')
     
     # connect houses with batteries in a district
     #R = Random_algo()
