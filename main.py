@@ -1,7 +1,7 @@
-from code.algorithms import baseline as bs
+from archive import baseline as bs
 #from code.algorithms import greedy as gr
 from code.algorithms import hill_climber as hc
-from code.algorithms.algorithm import Greedy
+from code.algorithms.algorithm import Greedy, Baseline
 from code.classes.district import District
 from export_json import export_json
 # from code.visualization import visualizegrid as vg
@@ -19,7 +19,7 @@ if __name__ == "__main__":
     district2 = District(2, "data/district_2/district-2_batteries.csv", "data/district_2/district-2_houses.csv")
     district3 = District(3, "data/district_3/district-3_batteries.csv", "data/district_3/district-3_houses.csv")
 
-    R = Greedy()
+    R = Baseline()
     R.run(district1)
     # R = bs.Baseline()
     # R.run(district1)
