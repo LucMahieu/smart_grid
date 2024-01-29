@@ -2,18 +2,8 @@ from code.algorithms import baseline, greedy, hill_climber
 from code.classes import district
 from export_json import export_json
 from code.visualization import visualize_grid, visualize_cost
-# from code.algorithms.experiments import run_experiment
-# from code.visualization.visualizegrid import visualize_grid
-# from code.algorithms.experiments import run_experiment
-# from code.algorithms.experiments import plot_histogram
-# from code.visualization.visualizecost import plot_smoothed_histogram
-# from code.visualization.visualizecost import run_experiment_and_measure_time
+from experiments import experiment
 import time
-# from code.visualization.visualizecost import plot_time_and_cost
-# from code.visualization.visualizecost import plot_cost_range
-# from code.algorithms.hill_climber_test import HillClimber
-# from code.algorithms.experiments import run_experiments_and_save_results
-# from code.algorithms.experiments import run_timed_experiments
 
 if __name__ == "__main__":
     #create districts from files with batteries and houses
