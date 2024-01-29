@@ -20,7 +20,7 @@ if __name__ == "__main__":
     
 
     algorithms = {
-        'Greedy': gr.Greedy(),
+        'Greedy': Greedy(),
         'Random': Random_algo(),
         'Baseline': Baseline(),
         'HillClimber': HillClimber(district1)
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     # for battery in district1.batteries:
     #     print(battery.capacity)
 
-    R = gr.Greedy()
+    R = Greedy()
     R.run(district1)
     
     
