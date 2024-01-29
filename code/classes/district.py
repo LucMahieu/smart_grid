@@ -4,13 +4,12 @@ from code.classes.house import House
 
 
 class District():
-    def __init__(self, name, battery_file, house_file, grid_size=50):
+    def __init__(self, name, battery_file, house_file):
         self.name = name
         self.houses = []
         self.batteries = []
         self.add_houses(house_file)
         self.add_batteries(battery_file)
-        self.district_cost_seperate = 0
         self.district_cost_shared = 0
         self.cable_price = 9 
         self.battery_houses_connections = {battery: [] for battery in self.batteries}
@@ -54,18 +53,18 @@ class District():
         Calculates cost when cables are shared.
         """
         for battery in self.battery_houses_connections:
+            # Creating new list to store all cable coordinates per battery
             cablecoordinates_list = []
 
             for house in self.battery_houses_connections[battery]:
-                
                 if house.battery is None:
-                    
-                    return None  # Break immediately if any house is not connected
+                    # Exit immediately if any house is not connected to a battery
+                    return   
 
                 for cable in house.cables:
                     cablecoordinates_list.append(cable)
 
-            # Count shared cablesegments per battery by removing duplicates
+            # Count shared cablesegments per battery and remove duplicates
             cablesegment_list = [tuple(cablecoordinates_list[i] + cablecoordinates_list[i+1]) for i in range(len(cablecoordinates_list)-1)]
             cablesegment_counter = len(set(cablesegment_list))
 
@@ -74,14 +73,13 @@ class District():
         
         # Add battery price to calculated cost
         self.district_cost_shared += len(self.batteries) * self.batteries[0].price
-        print(self.district_cost_shared)
+
         return self.district_cost_shared
 
     def reset_state(self):
         """
         Resetting variables.
         """
-        print("Resetting district state")
         for house in self.houses:
             house.reset()
 
