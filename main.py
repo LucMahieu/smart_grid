@@ -2,8 +2,21 @@ from code.algorithms import baseline, greedy, hill_climber
 from code.classes import district
 from export_json import export_json
 from code.visualization import visualize_grid, visualize_cost
-from experiments import experiment
+from algorithms.experiments import experiment
 import time
+from algorithms.experiments import run_timed_experiments, save_experiment_results_to_csv
+import random
+from code.classes.district import District
+from code.algorithms.baseline import Baseline
+from code.algorithms.greedy import Greedy
+from code.classes.battery import Battery 
+import matplotlib.pyplot as plt
+import time 
+import subprocess
+import csv
+
+
+
 
 if __name__ == "__main__":
     #create districts from files with batteries and houses
@@ -12,29 +25,25 @@ if __name__ == "__main__":
     district3 = District(3, "data/district_3/district-3_batteries.csv", "data/district_3/district-3_houses.csv")
 
     # Create hill climber algorithm object
-    hill_climber = HillClimber(district1)
+    #hill_climber = HillClimber(district1)
 
     # Run hill climber algorithm
-    hill_climber.run(district1.houses)
+    #hill_climber.run(district1.houses)
 
     
 
     algorithms = {
-        'Greedy': Greedy(),
-        'Random': Random_algo(),
-        'Baseline': Baseline(),
-        'HillClimber': HillClimber(district1)
+        'Greedy': Greedy,
+        'Baseline': Baseline  
     }
 
-    script_name = "script.py" #add script of chosen algorithm
-    max_duration = 3600  
-    max_run_time = 60    
+    max_duration = 3600  # Maximale totale duur in seconden
+    num_experiments = 10  # Aantal experimenten per algoritme
 
-    run_timed_experiments(script_name, max_duration, max_run_time)
+    experiment_results, total_duration = run_timed_experiments(algorithms.values(), district, max_duration, num_experiments)
 
-    run_experiments_and_save_results(algorithms, district1, 100, 'experiment_results.csv')
-    
-    # connect houses with batteries in a district
+    csv_filename = "experiment_results.csv"
+    save_experiment_results_to_csv(experiment_results, total_duration, csv_filename)   # connect houses with batteries in a district
     #R = Random_algo()
     # R.run(district1)
     

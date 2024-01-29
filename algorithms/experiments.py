@@ -1,12 +1,71 @@
 import random
-from classes.district import District
-from algorithms.randomize import Random_algo
-from algorithms.greedy import Greedy_algo
-from classes.battery import Battery 
+from code.classes.district import District
+from code.algorithms.baseline import Baseline
+from code.algorithms.greedy import Greedy
+from code.classes.battery import Battery 
 import matplotlib.pyplot as plt
 import time 
 import subprocess
+import csv
 
+# # def run_experiment(district, algorithm_class, num_experiments):
+# #     best_solution_cost = float('inf')
+# #     worst_solution_cost = float('-inf')
+# #     experiment_scores = []
+
+# #     for _ in range(num_experiments):
+# #         # Reset the district to its initial state before each experiment
+# #         district.reset_state()
+
+# #         # Create an instance of the algorithm and run it
+# #         algorithm_instance = algorithm_class()
+# #         valid_solution = algorithm_instance.run(district)
+
+# #         if not valid_solution:
+# #             print("Invalid solution encountered, skipping this iteration.")
+# #             continue
+
+# #         # Calculate the shared cost for this iteration
+# #         current_cost = district.shared_costs()
+# #         if current_cost is not None:
+# #             best_solution_cost = min(best_solution_cost, current_cost)
+# #             worst_solution_cost = max(worst_solution_cost, current_cost)
+# #             experiment_scores.append(current_cost)
+# #         else:
+# #             print("Incomplete solution, skipping this iteration.")
+
+# #     return best_solution_cost, worst_solution_cost, experiment_scores
+
+# def run_experiment(district, algorithm_class, num_experiments):
+#     best_solution_cost = float('inf')
+#     worst_solution_cost = float('-inf')
+#     experiment_scores = []
+
+#     for _ in range(num_experiments):
+#         # Reset the district to its initial state before each experiment
+#         district.reset_state()
+
+#         # Create an instance of the algorithm and run it
+#         algorithm_instance = algorithm_class()
+#         valid_solution = algorithm_instance.run(district)
+
+#         # Calculate the shared cost for this iteration
+#         current_cost = district.shared_costs()
+#         if current_cost is not None:
+#             best_solution_cost = min(best_solution_cost, current_cost)
+#             worst_solution_cost = max(worst_solution_cost, current_cost)
+#         else:
+#             print("Incomplete solution encountered.")
+
+#         # Append the current cost to the experiment_scores list
+#         experiment_scores.append(current_cost)
+
+#     return best_solution_cost, worst_solution_cost, experiment_scores
+# # # Example usage:
+# # best_cost, worst_cost, scores = run_experiment(district1, Greedy_algo, 10)
+# # print(f"Best solution cost: {best_cost}")
+# # print(f"Worst solution cost: {worst_cost}")
+# # print(f"All experiment scores: {scores}")
 
 def run_experiment(district, algorithm_class, num_experiments):
     best_solution_cost = float('inf')
@@ -61,82 +120,104 @@ def plot_histogram(experiment_scores, valid_solutions_count, invalid_solutions_c
     plt.show()
 
 
-# run and time the experiments
-def run_timed_experiments(script_name, max_duration, max_run_time):
+def run_timed_experiments(algorithm_classes, district, max_duration, num_experiments):
     start = time.time()
-    n_runs = 0
+    total_experiment_duration = 0
+    experiment_results = []
 
-    while time.time() - start < max_duration:
-        print(f"Run {n_runs+1} in progress...")
-        subprocess.call(["timeout", str(max_run_time), "python3", script_name, str(n_runs)])
-        n_runs += 1
-        print(f"Run {n_runs} completed.")
+    for n_runs in range(num_experiments):
+        if total_experiment_duration >= max_duration:
+            break
+
+        for algorithm_class in algorithm_classes:
+            algorithm_instance = algorithm_class()
+            run_start_time = time.time()
+            algo_iterations = algorithm_instance.run(district)
+            run_end_time = time.time()
+
+            run_duration = run_end_time - run_start_time
+            total_experiment_duration += run_duration
+
+            experiment_results.append({
+                'algorithm': algorithm_class.__name__,
+                'run_number': n_runs + 1,
+                'run_duration': run_duration,
+                'iterations': algo_iterations,
+                'cost': district.shared_costs()
+            })
+
+            if total_experiment_duration >= max_duration:
+                break
+
+    total_duration = time.time() - start
+    return experiment_results, total_duration
 
 
 
-# parameter tuning
-def grid_search(parameter_combinations, district, num_runs):
+
+# # parameter tuning
+# def grid_search(parameter_combinations, district, num_runs):
     
-    best_cost = float('inf')
-    best_parameters = None  """Beste parameter combinatie bijhouden"""
+#     best_cost = float('inf')
+#     best_parameters = None  """Beste parameter combinatie bijhouden"""
 
-    """
-    Doorloopt elke parametercombinatie in de lijst
-    """
-    for parameters in parameter_combinations:
-        print(f"Testing parameters: {parameters}")
+#     """
+#     Doorloopt elke parametercombinatie in de lijst
+#     """
+#     for parameters in parameter_combinations:
+#         print(f"Testing parameters: {parameters}")
 
-        cost = run_experiment_with_parameters(district, parameters, num_runs)
+#         cost = run_experiment_with_parameters(district, parameters, num_runs)
 
-        """Controleert of de kosten van deze run lager zijn dan de beste kosten die we tot nu toe hebben gevonden"""
-        if cost < best_cost:
-            best_cost = cost
-            best_parameters = parameters
+#         """Controleert of de kosten van deze run lager zijn dan de beste kosten die we tot nu toe hebben gevonden"""
+#         if cost < best_cost:
+#             best_cost = cost
+#             best_parameters = parameters
 
-    """ Geeft beste parameters en hun kosten terug """
-    return best_parameters, best_cost
-
-
-
-### functie voor run experiment with parameters en functie set_parameters nog nodig ###
-def set_parameters(algorithm_instance, parameters):
-    for parameter, value in parameters.items():
-        if hasattr(algorithm_instance, parameter):
-            setattr(algorithm_instance, parameter, value)
+#     """ Geeft beste parameters en hun kosten terug """
+#     return best_parameters, best_cost
 
 
-def run_experiment_with_parameters(district, algorithm_class, parameters, num_runs):
-    best_solution_cost = float('inf')
-    total_cost = 0
 
-    for _ in range(num_runs):
-        district.reset_state()
-        algorithm_instance = algorithm_class(*parameters)
-        algorithm_instance.run(district)
-        current_cost = district.shared_costs()
+# ### functie voor run experiment with parameters en functie set_parameters nog nodig ###
+# def set_parameters(algorithm_instance, parameters):
+#     for parameter, value in parameters.items():
+#         if hasattr(algorithm_instance, parameter):
+#             setattr(algorithm_instance, parameter, value)
 
-        if current_cost is not None:
-            best_solution_cost = min(best_solution_cost, current_cost)
-            total_cost += current_cost
 
-    average_cost = total_cost / num_runs if num_runs > 0 else None
-    return best_solution_cost, average_cost
+# def run_experiment_with_parameters(district, algorithm_class, parameters, num_runs):
+#     best_solution_cost = float('inf')
+#     total_cost = 0
+
+#     for _ in range(num_runs):
+#         district.reset_state()
+#         algorithm_instance = algorithm_class(*parameters)
+#         algorithm_instance.run(district)
+#         current_cost = district.shared_costs()
+
+#         if current_cost is not None:
+#             best_solution_cost = min(best_solution_cost, current_cost)
+#             total_cost += current_cost
+
+#     average_cost = total_cost / num_runs if num_runs > 0 else None
+#     return best_solution_cost, average_cost
 
 
 
 # run experiments and save results
-def run_experiments_and_save_results(algorithms, district, num_runs, filename):
-    with open(filename, 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(['algorithm', 'run', 'cost'])
+def save_experiment_results_to_csv(experiment_results, total_duration, csv_filename):
+    with open(csv_filename, mode='w', newline='') as csv_file:
+        fieldnames = ['algorithm', 'run_number', 'run_duration', 'iterations', 'cost']
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
-        for algo_name, algorithm in algorithms.items():
-            for run in range(num_runs):
-                print(f"Running {algo_name}, run {run+1}/{num_runs}")
-                district.reset_state()
-                algorithm.run(district)
-                cost = district.shared_costs()
-                writer.writerow([algo_name, run+1, cost])
+        writer.writeheader()
+
+        for result in experiment_results:
+            writer.writerow(result)
+
+    print(f"Totaal experiment duurde: {total_duration} seconden")
+
 
 
 
