@@ -1,26 +1,16 @@
 from code.algorithms import baseline as bs
 from code.algorithms import greedy as gr
 from code.algorithms import hill_climber as hc
-
 from code.classes.district import District
 from export_json import export_json
-from code.visualization import visualize_grid as vg
-from code.visualization import visualize_cost as vc
-from experiments import experiment
-import time
-from algorithms.experiments import run_timed_experiments, save_experiment_results_to_csv
+from code.visualization import visualizegrid as vg
+from code.visualization import visualizecost as vc
+from experiments.experiments import run_timed_experiments, save_experiment_results_to_csv
 import random
-from code.classes.district import District
-from code.algorithms.baseline import Baseline
-from code.algorithms.greedy import Greedy
-from code.classes.battery import Battery 
 import matplotlib.pyplot as plt
 import time 
 import subprocess
 import csv
-
-
-
 
 if __name__ == "__main__":
     #create districts from files with batteries and houses
@@ -48,8 +38,6 @@ if __name__ == "__main__":
 
     csv_filename = "experiment_results.csv"
     save_experiment_results_to_csv(experiment_results, total_duration, csv_filename)   # connect houses with batteries in a district
-    #R = Random_algo()
-    # R.run(district1)
     
     # # check if the cable routes indeed connect the houses with the batteries and if the cable stays on the grid
     # for battery in district1.batteries:
