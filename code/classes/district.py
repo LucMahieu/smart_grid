@@ -1,5 +1,4 @@
 import csv
-from classes.cable import Cable
 from classes.battery import Battery
 from classes.house import House
 

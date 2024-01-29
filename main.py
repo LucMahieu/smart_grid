@@ -1,14 +1,14 @@
-from code.algorithms import greedy
+from code.algorithms import baseline, greedy, hill_climber
 from code.classes import district
 from export_json import export_json
+from code.visualization import visualize_grid, visualize_cost
 # from code.algorithms.experiments import run_experiment
 # from code.visualization.visualizegrid import visualize_grid
-# from code.algorithms.baseline import Baseline
 # from code.algorithms.experiments import run_experiment
 # from code.algorithms.experiments import plot_histogram
 # from code.visualization.visualizecost import plot_smoothed_histogram
 # from code.visualization.visualizecost import run_experiment_and_measure_time
-# import time
+import time
 # from code.visualization.visualizecost import plot_time_and_cost
 # from code.visualization.visualizecost import plot_cost_range
 # from code.algorithms.hill_climber_test import HillClimber
