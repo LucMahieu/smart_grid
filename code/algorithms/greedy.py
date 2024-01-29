@@ -1,13 +1,13 @@
 import random
 
-class Greedy_algo():
+class Greedy():
     def __init__(self):
         self.prev_pos = ()
 
     def run(self, district):
-        '''
+        """
         Makes connections between batteries and houses and lays cable routes between them.
-        '''
+        """
         # Random order of houses
         random.shuffle(district.houses)
 

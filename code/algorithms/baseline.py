@@ -8,8 +8,8 @@ class Baseline():
         '''
         Makes connections between batteries and houses and lays cable routes between them.
         '''
-        # # # Ordering houses based on output
-        # sorted(district.houses, key=lambda x: x.max_output, reverse=True)
+        # Random order of houses
+        random.shuffle(district.houses)
 
         for house in district.houses:
             

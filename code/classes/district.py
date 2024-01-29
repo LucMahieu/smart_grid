@@ -35,7 +35,7 @@ class District():
         
     def add_batteries(self, battery_file):
         """
-        This function reads the given file, and adds the battery attributes to the list of battries.
+        This function reads the given file, and adds the battery attributes to the list of batteries.
         """        
         with open(battery_file, 'r') as input_file:
             # Read csv file and split 
@@ -51,32 +51,37 @@ class District():
                 self.batteries.append(Battery(int(pos_x), int(pos_y), float(capacity)))
     
     def shared_costs(self):
-        '''
+        """
         Calculates cost when cables are shared.
-        '''
-        count = 0
+        """
         for battery in self.battery_houses_connections:
             cablecoordinates_list = []
 
             for house in self.battery_houses_connections[battery]:
-                count +=1
+                
                 if house.battery is None:
-                    self.invalid += 1
+                    
                     return None  # Break immediately if any house is not connected
 
                 for cable in house.cables:
                     cablecoordinates_list.append(cable)
 
-            # Calculate shared cablesegments per battery by removing duplicate segments from count
+            # Count shared cablesegments per battery by removing duplicates
             cablesegment_list = [tuple(cablecoordinates_list[i] + cablecoordinates_list[i+1]) for i in range(len(cablecoordinates_list)-1)]
             cablesegment_counter = len(set(cablesegment_list))
+
+            # Calculate price of shared cablesegments 
             self.district_cost_shared += cablesegment_counter * self.cable_price 
         
+        # Add battery price to calculated cost
         self.district_cost_shared += len(self.batteries) * self.batteries[0].price
-        print(count)
+        
         return self.district_cost_shared
 
     def reset_state(self):
+        """
+        Resetting variables.
+        """
         print("Resetting district state")
         for house in self.houses:
             house.reset()

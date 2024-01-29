@@ -1,20 +1,19 @@
-from algorithms.randomize import Random_algo
-from algorithms.greedy import Greedy_algo
-from classes.district import District
+from code.algorithms import greedy
+from code.classes import district
 from export_json import export_json
-from algorithms.experiments import run_experiment
-from visualization.visualizegrid import visualize_grid
-from algorithms.baseline import Baseline
-from algorithms.experiments import run_experiment
-from algorithms.experiments import plot_histogram
-from visualization.visualizecost import plot_smoothed_histogram
-from visualization.visualizecost import run_experiment_and_measure_time
-import time
-from visualization.visualizecost import plot_time_and_cost
-from visualization.visualizecost import plot_cost_range
-from algorithms.hill_climber_test import HillClimber
-from algorithms.experiments import run_experiments_and_save_results
-from algorithms.experiments import run_timed_experiments
+# from code.algorithms.experiments import run_experiment
+# from code.visualization.visualizegrid import visualize_grid
+# from code.algorithms.baseline import Baseline
+# from code.algorithms.experiments import run_experiment
+# from code.algorithms.experiments import plot_histogram
+# from code.visualization.visualizecost import plot_smoothed_histogram
+# from code.visualization.visualizecost import run_experiment_and_measure_time
+# import time
+# from code.visualization.visualizecost import plot_time_and_cost
+# from code.visualization.visualizecost import plot_cost_range
+# from code.algorithms.hill_climber_test import HillClimber
+# from code.algorithms.experiments import run_experiments_and_save_results
+# from code.algorithms.experiments import run_timed_experiments
 
 if __name__ == "__main__":
     #create districts from files with batteries and houses
@@ -31,7 +30,7 @@ if __name__ == "__main__":
     
 
     algorithms = {
-        'Greedy': Greedy_algo(),
+        'Greedy': gr.Greedy(),
         'Random': Random_algo(),
         'Baseline': Baseline(),
         'HillClimber': HillClimber(district1)
@@ -59,10 +58,10 @@ if __name__ == "__main__":
 
     # # connect houses with batteries in a district
 
-    for battery in district1.batteries:
-        print(battery.capacity)
+    # for battery in district1.batteries:
+    #     print(battery.capacity)
 
-    R = Baseline()
+    R = gr.Greedy()
     R.run(district1)
     
     

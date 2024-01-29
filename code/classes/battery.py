@@ -7,21 +7,21 @@ class Battery():
         self.price = 5000
 
     def reset_capacity(self):
-        '''
+        """
         Resets the battery's capacity to its original capacity.
-        '''
+        """
         self.capacity = self.original_capacity
 
     def update_capacity(self, house):
-        '''
-        Updates capacity of battery after connecting house
-        '''
+        """
+        Updates capacity of battery after connecting house.
+        """
         self.capacity -= house.max_output
     
     def check_capacity(self, house):
-        '''
-        Checks if assigned battery has capacity left to be connected to new house
-        '''
+        """
+        Checks if assigned battery has capacity left to be connected to new house.
+        """
         return self.capacity >= house.max_output
 
             

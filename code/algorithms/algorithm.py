@@ -31,54 +31,54 @@ class BaseAlgorithm():
             house.battery = selected_battery
 
     
-    def select_battery(self, batteries_with_capacity):
+    # def select_battery(self, batteries_with_capacity):
 
-        # Default implementation: Select the first battery with capacity
+    #     # Default implementation: Select the first battery with capacity
 
-        if batteries_with_capacity:
+    #     if batteries_with_capacity:
 
-            return batteries_with_capacity[0]
+    #         return batteries_with_capacity[0]
         
-        else:
-            return None
+    #     else:
+    #         return None
 
     def determine_possible_steps(self):
         '''
         Determines possible positions for the next step.
         '''
-        # possible absolute steps
+        # Possible absolute steps
         right = (1, 0)
         left = (-1, 0)
         up = (0, 1)
         down = (0, -1)
 
-        # define step options based on current position
+        # Define step options based on current position
         self.options = set()
         for position in [right, left, up, down]:
             self.options.add((self.current_pos[0] + position[0], self.current_pos[1] + position[1]))
 
-        # remove step options that are in outer grid or that go back to previous position
-        for option in self.options.copy():
-            if option in self.outer_grid or option == self.prev_pos:
-                if option in self.options:
-                    self.options.remove(option)
+        # # Remove step options that are in outer grid or that go back to previous position
+        # for option in self.options.copy():
+        #     if option in self.outer_grid or option == self.prev_pos:
+        #         if option in self.options:
+        #             self.options.remove(option)
 
-        # check if there are still options left
-        if not self.options:
-            print(f'no netto options left at current position: {self.options}')
+        # # check if there are still options left
+        # if not self.options:
+        #     print(f'no netto options left at current position: {self.options}')
 
-    def lay_cable_route(self, house):
-        self.current_pos = (house.pos_x, house.pos_y)
-        house.cables = [self.current_pos]
+    # def lay_cable_route(self, house):
+    #     self.current_pos = (house.pos_x, house.pos_y)
+    #     house.cables = [self.current_pos]
 
-        cable_end_pos = (house.battery.pos_x, house.battery.pos_y)
+    #     cable_end_pos = (house.battery.pos_x, house.battery.pos_y)
 
-        while self.current_pos != cable_end_pos:
-            self.determine_possible_steps()
-            self.choose_step(house, cable_end_pos)
-            house.cables.append(self.new_pos)
-            self.prev_pos = self.current_pos
-            self.current_pos = self.new_pos
+    #     while self.current_pos != cable_end_pos:
+    #         self.determine_possible_steps()
+    #         self.choose_step(house, cable_end_pos)
+    #         house.cables.append(self.new_pos)
+    #         self.prev_pos = self.current_pos
+    #         self.current_pos = self.new_pos
 
 
 class GreedyAlgorithm(BaseAlgorithm):
@@ -130,9 +130,6 @@ class GreedyAlgorithm(BaseAlgorithm):
         # Update the house's battery attribute
         house.battery = selected_battery
 
-        # Add current house to the list of houses that are connected to the selected battery
-        district.battery_houses_connections[selected_battery].append(house)
-
         # Update battery capacity
         house.battery.update_capacity(house)
     
@@ -154,7 +151,7 @@ class RandomAlgorithm(BaseAlgorithm):
     def __init__(self, grid_size=50):
         self.grid_size = grid_size
         self.create_outer_grid()
-        
+
     def select_battery(self):
         random_battery = random.choice(batteries_with_capacity)
         house.battery = random_battery

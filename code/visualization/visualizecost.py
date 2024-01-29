@@ -2,7 +2,7 @@
 
 import seaborn as sns
 import matplotlib.pyplot as plt
-from algorithms.randomize import Random_algo
+from archive.randomize import Random_algo
 from algorithms.greedy import Greedy_algo
 from algorithms.baseline import Baseline
 from classes.district import District
