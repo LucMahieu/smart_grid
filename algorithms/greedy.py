@@ -8,7 +8,7 @@ class Greedy_algo():
         '''
         Makes connections between batteries and houses and lays cable routes between them.
         '''
-        # # Random order of houses
+        # Random order of houses
         random.shuffle(district.houses)
 
         for house in district.houses:
