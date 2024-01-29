@@ -1,8 +1,12 @@
-from code.algorithms import baseline, greedy, hill_climber
-from code.classes import district
+from code.algorithms import baseline as bs
+from code.algorithms import greedy as gr
+from code.algorithms import hill_climber as hc
+
+from code.classes.district import District
 from export_json import export_json
-from code.visualization import visualize_grid, visualize_cost
-from algorithms.experiments import experiment
+from code.visualization import visualize_grid as vg
+from code.visualization import visualize_cost as vc
+from experiments import experiment
 import time
 from algorithms.experiments import run_timed_experiments, save_experiment_results_to_csv
 import random
@@ -25,22 +29,22 @@ if __name__ == "__main__":
     district3 = District(3, "data/district_3/district-3_batteries.csv", "data/district_3/district-3_houses.csv")
 
     # Create hill climber algorithm object
-    #hill_climber = HillClimber(district1)
+    hill_climber = hc.HillClimber(district1)
 
     # Run hill climber algorithm
-    #hill_climber.run(district1.houses)
-
-    
+    hill_climber.run(district1.houses)
 
     algorithms = {
-        'Greedy': Greedy,
-        'Baseline': Baseline  
+        'Greedy': gr.Greedy(),
+        'Baseline': bs.Baseline(),
+        'HillClimber': hc.HillClimber(district1)
     }
 
-    max_duration = 3600  # Maximale totale duur in seconden
-    num_experiments = 10  # Aantal experimenten per algoritme
+    script_name = "script.py" #add script of chosen algorithm
+    max_duration = 3600  
+    max_run_time = 60    
 
-    experiment_results, total_duration = run_timed_experiments(algorithms.values(), district, max_duration, num_experiments)
+    run_timed_experiments(script_name, max_duration, max_run_time)
 
     csv_filename = "experiment_results.csv"
     save_experiment_results_to_csv(experiment_results, total_duration, csv_filename)   # connect houses with batteries in a district
@@ -59,18 +63,6 @@ if __name__ == "__main__":
 
     # for battery in district1.batteries:
     #     print(battery.capacity)
-
-    R = Greedy()
-    R.run(district1)
-    
-    
-    # district1.shared_costs()
-    # print(district1.district_cost_shared)
-
-    # for battery in district1.batteries:
-    #     print(battery.capacity)
-
-    # print(district1.houses[-1].max_output)
 
 
     # export the results to a json file
