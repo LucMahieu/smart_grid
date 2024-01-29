@@ -30,14 +30,13 @@ if __name__ == "__main__":
         'HillClimber': hc.HillClimber(district1)
     }
 
-    script_name = "script.py" #add script of chosen algorithm
     max_duration = 3600  
     max_run_time = 60    
 
-    run_timed_experiments(script_name, max_duration, max_run_time)
+    experiment_results, total_duration = run_timed_experiments(algorithms.values(), district, max_duration, num_experiments)
 
     csv_filename = "experiment_results.csv"
-    save_experiment_results_to_csv(experiment_results, total_duration, csv_filename)   # connect houses with batteries in a district
+    save_experiment_results_to_csv(experiment_results, total_duration, csv_filename)    # connect houses with batteries in a district
     
     # # check if the cable routes indeed connect the houses with the batteries and if the cable stays on the grid
     # for battery in district1.batteries:
