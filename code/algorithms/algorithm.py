@@ -8,20 +8,32 @@ class Algorithm():
         """
         Makes connections between batteries and houses and lays cable routes between them based on Manhattan distance.
         """
-        # Random order of houses
-        random.shuffle(district.houses)
+        # Keep trying until valid solution is found
+        while True:
 
-        for house in district.houses:
-            # Connect house to battery
-            self.assign_battery_to_house(district, house)
-            
-            # If no battery available with enough capacity
-            if house.battery == None:
-                print("Invalid solution")
+            # Resetting district if solution is not found
+            district.reset_state()
+            valid_solution = True
+
+            # Random order of houses
+            random.shuffle(district.houses)
+
+            for house in district.houses:
+                # Connect house to battery
+                self.assign_battery_to_house(district, house)
+                
+                # If no battery available with enough capacity, solution is not valid
+                if house.battery == None:
+                    valid_solution = False
+                    print("Invalid solution")
+                    break
+                
+                # Lays cable route based on steps that minimize distance
+                self.lay_cable_route(house)
+
+            # if a valid solution is found and the for loop is completed, exit while loop
+            if valid_solution:
                 break
-            
-            # Lays cable route based on steps that minimize distance
-            self.lay_cable_route(house)
 
         return district
 
