@@ -1,6 +1,6 @@
 import csv
-from classes.battery import Battery
-from classes.house import House
+from code.classes.battery import Battery
+from code.classes.house import House
 
 
 class District():
@@ -74,7 +74,7 @@ class District():
         
         # Add battery price to calculated cost
         self.district_cost_shared += len(self.batteries) * self.batteries[0].price
-        
+        print(self.district_cost_shared)
         return self.district_cost_shared
 
     def reset_state(self):
