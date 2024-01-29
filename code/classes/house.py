@@ -7,5 +7,8 @@ class House():
         self.battery = None
 
     def reset(self):
+        """
+        Resets variables.
+        """
         self.battery = None
         self.cables = []

@@ -1,17 +1,15 @@
 import csv
-from classes.cable import Cable
-from classes.battery import Battery
-from classes.house import House
+from code.classes.battery import Battery
+from code.classes.house import House
 
 
 class District():
-    def __init__(self, name, battery_file, house_file, grid_size=50):
+    def __init__(self, name, battery_file, house_file):
         self.name = name
         self.houses = []
         self.batteries = []
         self.add_houses(house_file)
         self.add_batteries(battery_file)
-        self.district_cost_seperate = 0
         self.district_cost_shared = 0
         self.cable_price = 9 
         self.battery_houses_connections = {battery: [] for battery in self.batteries}
@@ -35,7 +33,7 @@ class District():
         
     def add_batteries(self, battery_file):
         """
-        This function reads the given file, and adds the battery attributes to the list of battries.
+        This function reads the given file, and adds the battery attributes to the list of batteries.
         """        
         with open(battery_file, 'r') as input_file:
             # Read csv file and split 
@@ -51,33 +49,37 @@ class District():
                 self.batteries.append(Battery(int(pos_x), int(pos_y), float(capacity)))
     
     def shared_costs(self):
-        '''
+        """
         Calculates cost when cables are shared.
-        '''
-        count = 0
+        """
         for battery in self.battery_houses_connections:
+            # Creating new list to store all cable coordinates per battery
             cablecoordinates_list = []
 
             for house in self.battery_houses_connections[battery]:
-                count +=1
                 if house.battery is None:
-                    self.invalid += 1
-                    return None  # Break immediately if any house is not connected
+                    # Exit immediately if any house is not connected to a battery
+                    return   
 
                 for cable in house.cables:
                     cablecoordinates_list.append(cable)
 
-            # Calculate shared cablesegments per battery by removing duplicate segments from count
+            # Count shared cablesegments per battery and remove duplicates
             cablesegment_list = [tuple(cablecoordinates_list[i] + cablecoordinates_list[i+1]) for i in range(len(cablecoordinates_list)-1)]
             cablesegment_counter = len(set(cablesegment_list))
+
+            # Calculate price of shared cablesegments 
             self.district_cost_shared += cablesegment_counter * self.cable_price 
         
+        # Add battery price to calculated cost
         self.district_cost_shared += len(self.batteries) * self.batteries[0].price
-        print(count)
+
         return self.district_cost_shared
 
     def reset_state(self):
-        print("Resetting district state")
+        """
+        Resetting variables.
+        """
         for house in self.houses:
             house.reset()
 

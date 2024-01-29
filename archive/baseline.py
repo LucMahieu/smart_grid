@@ -4,16 +4,17 @@ class Baseline():
     def __init__(self):
         pass
 
+
     def run(self, district):
-        '''
-        Makes connections between batteries and houses and lays cable routes between them.
-        '''
-        # # # Ordering houses based on output
-        # sorted(district.houses, key=lambda x: x.max_output, reverse=True)
+        """
+        Makes connections between random batteries and houses and lays cable routes between them based on Manhattan distance.
+        """
+        # Random order of houses
+        random.shuffle(district.houses)
 
         for house in district.houses:
             
-            # Connect house to random battery with capacity
+            # Connect house to random battery with enough capacity left
             self.random_connection(district, house)
             
             # If no battery available with enough capacity, break
@@ -21,21 +22,21 @@ class Baseline():
                 print("Invalid solution")
                 break 
             
-            # If solution is valid, start laying cable route based on manhattan distance 
-            else:
-                self.lay_cable_route(house)
+            # If solution is valid, start laying cable route based on Manhattan distance 
+            self.lay_cable_route(house)
 
         return district
     
+
     def random_connection(self, district, house):
-        '''
-        Assigns battery to current house and adds them to the list of connected houses.
-        '''
+        """
+        Assigns random battery to current house and adds it to the connections dictionary.
+        """
         # Create a new list to store batteries with enough capacity
         batteries_with_capacity = []
 
         for battery in district.batteries:
-            # Check if battery has enough capacity to connect to hous
+            # Check if battery has enough capacity to connect to house
             enough_capacity = battery.check_capacity(house)
 
             if enough_capacity:
@@ -45,7 +46,7 @@ class Baseline():
             # Select random battery from the list of batteries with enough capacity
             random_battery = random.choice(batteries_with_capacity)
 
-            # Add current battery to the house
+            # Connect selected battery to the current house
             house.battery = random_battery
 
             # Update battery capacity
@@ -54,11 +55,12 @@ class Baseline():
             # Add current house to the list of houses that are connected to the selected battery
             district.battery_houses_connections[random_battery].append(house)
 
+
     def lay_cable_route(self, house):
-        '''
-        Lays cable route from house to selected battery.
-        '''
-        # Starting current position of at the house coordinates
+        """
+        Lays cable route from current house to randomly selected battery.
+        """
+        # Starting of the current position at the house coordinates
         self.current_pos = [house.pos_x, house.pos_y]
         house.cables = [tuple(self.current_pos)]
 
@@ -89,5 +91,3 @@ class Baseline():
             else:
                 self.current_pos[1] -= 1
                 house.cables.append(tuple(self.current_pos))
-            
-                    # while self.current_pos[0] != cable_end_pos[0]:

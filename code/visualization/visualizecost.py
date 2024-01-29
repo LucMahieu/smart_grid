@@ -1,14 +1,10 @@
-
-
 import seaborn as sns
 import matplotlib.pyplot as plt
-from algorithms.randomize import Random_algo
-from algorithms.greedy import Greedy_algo
+from algorithms.greedy import Greedy
 from algorithms.baseline import Baseline
 from classes.district import District
 from algorithms.experiments import run_experiment
 import time
-import matplotlib.pyplot as plt
 
 # plots highest and lowest cost of an algorithm
 def plot_cost_range(costs, label):
