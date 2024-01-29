@@ -27,13 +27,13 @@ if __name__ == "__main__":
     algorithms = {
         'Greedy': gr.Greedy(),
         'Baseline': bs.Baseline(),
-        'HillClimber': hc.HillClimber(district1)
+        'HillClimber': hc.HillClimber()
     }
 
     max_duration = 3600  
     max_run_time = 60    
 
-    experiment_results, total_duration = run_timed_experiments(algorithms.values(), district, max_duration, num_experiments)
+    experiment_results, total_duration = run_timed_experiments(algorithms.values(), district1, max_duration, num_experiments)
 
     csv_filename = "experiment_results.csv"
     save_experiment_results_to_csv(experiment_results, total_duration, csv_filename)    # connect houses with batteries in a district
