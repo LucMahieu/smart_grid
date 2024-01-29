@@ -96,10 +96,31 @@ def grid_search(parameter_combinations, district, num_runs):
     """ Geeft beste parameters en hun kosten terug """
     return best_parameters, best_cost
 
-def run_experiment_with_parameters(district, parameters, num_runs):
 
 
 ### functie voor run experiment with parameters en functie set_parameters nog nodig ###
+def set_parameters(algorithm_instance, parameters):
+    for parameter, value in parameters.items():
+        if hasattr(algorithm_instance, parameter):
+            setattr(algorithm_instance, parameter, value)
+
+
+def run_experiment_with_parameters(district, algorithm_class, parameters, num_runs):
+    best_solution_cost = float('inf')
+    total_cost = 0
+
+    for _ in range(num_runs):
+        district.reset_state()
+        algorithm_instance = algorithm_class(*parameters)
+        algorithm_instance.run(district)
+        current_cost = district.shared_costs()
+
+        if current_cost is not None:
+            best_solution_cost = min(best_solution_cost, current_cost)
+            total_cost += current_cost
+
+    average_cost = total_cost / num_runs if num_runs > 0 else None
+    return best_solution_cost, average_cost
 
 
 
