@@ -3,6 +3,7 @@ class Battery():
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.capacity = capacity
+        self.max_capacity = capacity # Added to keep track of original capacity to create export_json output
         self.original_capacity = capacity
         self.price = 5000
 

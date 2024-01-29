@@ -11,10 +11,9 @@ import json
 class HillClimber():
     def __init__(self, district):
         self.district = district
-        self.layed_cables = {battery: {} for battery in self.district.batteries}
-        self.clusters = {battery: [] for battery in self.district.batteries}
-        self.current_battery = None
-        self.all_cables = set()
+        self.layed_cables = {}
+        self.clusters = []
+        self.all_cables = []
 
 
     def run(self):
@@ -25,104 +24,57 @@ class HillClimber():
             greedy = Greedy_algo()
             greedy.closest_connection(house, self.district)
 
-        # Setup plot so it can be updated while running
-        self.setup_plot()
-
         # Lay cable routes between houses for each battery
         for battery in district1.batteries:
-            # Save current battery for later use
-            self.current_battery = battery
+            houses = district1.battery_houses_connections[battery]
 
-            # Select houses assigned to current battery
-            self.current_houses = district1.battery_houses_connections[battery]
+            # Connect houses with shortest connections first
+            shortest_connections = self.calculate_shortest_connections(houses)
+            sorted_connections = self.sort_dict(shortest_connections)
             
-            self.cluster_houses()
+            for connection in sorted_connections:
+                self.layed_cables[connection] = self.lay_cable_route(connection)
 
-            self.connect_points()
-            self.lay_multiple_cable_routes()
+            # Make clusters of connected houses
+            self.cluster_connections(self.layed_cables)
+            connections = self.find_shortest_connections_between_clusters() #TODO: The connections are not sorted in how big the distance is between the clusters. Maybe use a different data structure for the connections?
             
-            while len(self.clusters[self.current_battery]) > 1:
-                self.connect_points()
+            # Lay cable routes between clusters
+            for connection in connections:
+                self.layed_cables[connection] = self.lay_cable_route(connection)
 
-            # Collect and save all cable routes for this battery in one set
-            self.collect_all_cables()
-            # Add all cable routes to first house of battery (for export_json to work)
-            self.houses[0].cables = self.all_cables
-
-            # Update de plot
-            self.plot_network()
-
-        # Show plot after it is finished
-        plt.show()
-
-        # Calculate cost of shared cables
-        self.calculate_cost_shared()
-
-
-    def connect_points(self):
-        """Connects two points"""
-        self.cluster_connections()
-        self.shortest_connection = self.find_shortest_connections_between_clusters()
-
-
-    def lay_multiple_cable_routes(self):
-        # Lay cable routes between clusters
-        for connection in self.connections:
-            self.layed_cables[self.current_battery][connection] = self.lay_cable_connection(connection)
-
-
-    def calculate_cost_shared(self):
-        """Calculates the cost of the shared cables."""
-        self.district.district_cost_shared = (len(self.all_cables) - 1) * 9 + 5000 * len(self.district.batteries)
             
-    def setup_plot(self):
-        # Initialiseer de plot buiten de loop
-        plt.figure(figsize=(6, 6))
-        self.ax = plt.gca()
+            while len(self.clusters) > 1:
+                self.cluster_connections(self.layed_cables)
+                connections = self.find_shortest_connections_between_clusters()
+                
+                for connection in connections:
+                    self.layed_cables[connection] = self.lay_cable_route(connection)
 
-        # Stel het grid in
-        self.ax.set_xticks(range(50))
-        self.ax.set_yticks(range(50))
-        self.ax.grid(True)
+            # # Collect and save all cable routes in one set
+            # self.collect_all_cables()
+            # # Add all cable routes that belong to one battery to only one house
+            # houses[-1].cables = self.all_cables
+
+                # Collect and save all cable routes in one set
+                self.collect_all_cables()
+                self.plot_clusters([self.all_cables])
+            
     
-
-    def plot_network(self):
-        """PLots all cables, houses and batteries on the grid and is used to update it while running."""
-        # Extract x and y coordinates of each point in the whole cable route
-        x = [point[0] for point in self.all_cables]
-        y = [point[1] for point in self.all_cables]
-
-        self.ax.plot(x, y, marker='o', linestyle='None', color='black', markersize=4)
-        # plt.scatter(x, y, color='black', marker='.')
-        
-        all_battery_coordinates = [(battery.pos_x, battery.pos_y) for battery in district1.batteries]
-        for battery_coordinates in all_battery_coordinates:
-            self.ax.plot(*battery_coordinates, marker='s', color="#fa4242", markersize=12)
-        
-        all_house_coordinates = [(house.pos_x, house.pos_y) for house in district1.houses]
-        for house_coordinates in all_house_coordinates:
-            self.ax.plot(*house_coordinates, marker='o', color="green", markersize=8)
-
-        plt.draw()
-        plt.pause(1.5)
-
 
     def collect_all_cables(self):
         """Adds new cables to set with all cables and plots them"""
-        for cable_route in self.layed_cables[self.current_battery].values():
-            self.all_cables.update(cable_route)
+        for cable_route in self.layed_cables.values():
+            self.all_cables.append(cable_route)
 
 
     def find_shortest_connections_between_clusters(self):
         """Finds shortest connection to other cluster for each cluster."""
         shortest_connections = {}
-        # For convenience, store clusters in variable
-        clusters = self.clusters[self.current_battery]
-
         # For each cluster, calculate the shortest connection to another cluster
-        for cluster in clusters:
+        for cluster in self.clusters:
             shortest_connection = float("inf")
-            for other_cluster in clusters:
+            for other_cluster in self.clusters:
                 if cluster != other_cluster:
                     for point1 in cluster:
                         for point2 in other_cluster:
@@ -132,11 +84,11 @@ class HillClimber():
                                 begin_point = point1
                                 end_point = point2
 
-            # For each cluster add shortest connection to dictionary
+            # Add shortest connection to dictionary
             if shortest_connection != float("inf"):
                 shortest_connections[(begin_point, end_point)] = shortest_connection
             else:
-                print("No shortest connection found")
+                print("No connection found")
                 break
         
         return shortest_connections
@@ -199,18 +151,18 @@ class HillClimber():
         return connections
 
 
-    def cluster_connections(self):
-        for connection, cables in self.layed_cables[self.current_battery].items():
+    def cluster_connections(self, connections):
+        """Clusters cables together if their clusters have a shared point."""
+        for connection, cables in connections.items():
             start_point = connection[0]
             end_point = connection[1]
             found_clusters = []
-            # For convenience, store clusters in variable
-            clusters = self.clusters[self.current_battery]
 
             # Find clusters where start and end point are in
-            for cluster in clusters:
-                if start_point in cluster or end_point in cluster: #TODO: check if cables are in cluster instead of start and end point only by using set.issubset() oid
-                    found_clusters.append(cluster)
+            for cluster in self.clusters:
+                for point in cluster:
+                    if start_point in cluster or end_point in cluster: #TODO: check if cables are in cluster instead of start and end point only by using set.issubset() oid
+                        found_clusters.append(cluster)
 
             # Merge clusters if they have a shared point
             if found_clusters:
@@ -221,13 +173,13 @@ class HillClimber():
                 # Add cable route to merged cluster
                 merged_cluster.update(cables)
                 # Only keep clusters that are not merged
-                clusters = [cluster for cluster in clusters if cluster not in found_clusters]
+                self.clusters = [cluster for cluster in self.clusters if cluster not in found_clusters]
                 # Add merged cluster to list of clusters
-                clusters.append(merged_cluster)
+                self.clusters.append(merged_cluster)
             else:
                 # Make new cluster if start and end point are not in any cluster. Asterisk again unpacks the set of cables
                 new_cluster = {start_point, end_point, *cables}
-                clusters.append(new_cluster)
+                self.clusters.append(new_cluster)
 
 
     def sort_dict(self, dictionary):
@@ -253,7 +205,7 @@ class HillClimber():
         return y_line, x_line
 
 
-    def lay_cable_connection(self, connection):
+    def lay_cable_route(self, connection):
         """Lays cable route between two points."""
         begin_point = connection[0]
         end_point = connection[1]
@@ -261,40 +213,40 @@ class HillClimber():
         y_line, x_line = self.choose_x_y_lines(connection)
         
         # Initialize horizontal cable route between points
-        horizontal_cable = set()
+        horizontal_cable = []
 
         # Initialize vertical cable route between points
         delta_x = end_point[0] - begin_point[0]
         for x in range(abs(delta_x) + 1):
             if delta_x < 0:
-                horizontal_cable.add((begin_point[0] - x, y_line))
+                horizontal_cable.append((begin_point[0] - x, y_line))
             else:
-                horizontal_cable.add((begin_point[0] + x, y_line))
+                horizontal_cable.append((begin_point[0] + x, y_line))
 
         # Initialize vertical cable route between points
-        vertical_cable = set()
+        vertical_cable = []
 
         # Determine relative position of end point to begin point
         delta_y = end_point[1] - begin_point[1]
         for y in range(abs(delta_y) + 1):
             if delta_y < 0:
-                vertical_cable.add((x_line, begin_point[1] - y))
+                vertical_cable.append((x_line, begin_point[1] - y))
             else:
-                vertical_cable.add((x_line, begin_point[1] + y))
+                vertical_cable.append((x_line, begin_point[1] + y))
 
         # Merge vertical and horizontal cable routes
-        cable_route = horizontal_cable.union(vertical_cable)
+        cable_route = vertical_cable.extend(horizontal_cable)
 
         return cable_route
 
 
 if __name__ == "__main__":
     district1 = District(1, "data/district_1/district-1_batteries.csv", "data/district_1/district-1_houses.csv")
-    hill_climber = HillClimber(district1)
-    hill_climber.run()
+    # hill_climber = HillClimber(district1)
+    # hill_climber.run()
 
-    # file_path = './output.json'
-    # with open(file_path, 'r') as file:
-    #     output_data = json.load(file)
+    file_path = './output.json'
+    with open(file_path, 'r') as file:
+        output_data = json.load(file)
 
-    # visualize_grid(output_data)
+    visualize_grid(output_data)
