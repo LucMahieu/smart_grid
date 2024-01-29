@@ -24,7 +24,7 @@ if __name__ == "__main__":
     hill_climber = HillClimber(district1)
 
     # Run hill climber algorithm
-    hill_climber.run()
+    hill_climber.run(district1.houses)
     
     # connect houses with batteries in a district
     #R = Random_algo()
