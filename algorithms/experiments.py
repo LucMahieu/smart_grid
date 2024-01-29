@@ -5,6 +5,7 @@ from algorithms.greedy import Greedy_algo
 from classes.battery import Battery 
 import matplotlib.pyplot as plt
 import time 
+import subprocess
 
 
 def run_experiment(district, algorithm_class, num_experiments):
@@ -58,6 +59,65 @@ def plot_histogram(experiment_scores, valid_solutions_count, invalid_solutions_c
 
     # Show the plot
     plt.show()
+
+
+# run and time the experiments
+def run_timed_experiments(script_name, max_duration, max_run_time):
+    start = time.time()
+    n_runs = 0
+
+    while time.time() - start < max_duration:
+        print(f"Run {n_runs+1} in progress...")
+        subprocess.call(["timeout", str(max_run_time), "python3", script_name, str(n_runs)])
+        n_runs += 1
+        print(f"Run {n_runs} completed.")
+
+
+
+# parameter tuning
+def grid_search(parameter_combinations, district, num_runs):
+    
+    best_cost = float('inf')
+    best_parameters = None  """Beste parameter combinatie bijhouden"""
+
+    """
+    Doorloopt elke parametercombinatie in de lijst
+    """
+    for parameters in parameter_combinations:
+        print(f"Testing parameters: {parameters}")
+
+        cost = run_experiment_with_parameters(district, parameters, num_runs)
+
+        """Controleert of de kosten van deze run lager zijn dan de beste kosten die we tot nu toe hebben gevonden"""
+        if cost < best_cost:
+            best_cost = cost
+            best_parameters = parameters
+
+    """ Geeft beste parameters en hun kosten terug """
+    return best_parameters, best_cost
+
+def run_experiment_with_parameters(district, parameters, num_runs):
+
+
+### functie voor run experiment with parameters en functie set_parameters nog nodig ###
+
+
+
+# run experiments and save results
+def run_experiments_and_save_results(algorithms, district, num_runs, filename):
+    with open(filename, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['algorithm', 'run', 'cost'])
+
+        for algo_name, algorithm in algorithms.items():
+            for run in range(num_runs):
+                print(f"Running {algo_name}, run {run+1}/{num_runs}")
+                district.reset_state()
+                algorithm.run(district)
+                cost = district.shared_costs()
+                writer.writerow([algo_name, run+1, cost])
+
+
 
 
 

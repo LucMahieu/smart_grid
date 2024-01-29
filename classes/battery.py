@@ -22,9 +22,6 @@ class Battery():
         '''
         Checks if assigned battery has capacity left to be connected to new house
         '''
-        if self.capacity >= house.max_output:
-            return True 
-        else:
-            return False
+        return self.capacity >= house.max_output
 
             
