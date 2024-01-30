@@ -1,12 +1,9 @@
 import matplotlib.pyplot as plt
-import time
 import random
-from classes.district import District
-from classes.house import House
-from .greedy import Greedy_algo
+from ..classes.district import District
+from .algorithm import Greedy
 from export_json import export_json
-from visualization.visualizegrid import visualize_grid
-import json
+from ..visualization.visualizegrid import visualize_grid
 
 class HillClimber():
     def __init__(self, district):
@@ -22,8 +19,8 @@ class HillClimber():
         
         # Assign houses to batteries with the greedy algorithm
         for house in self.district.houses:
-            greedy = Greedy_algo()
-            greedy.closest_connection(house, self.district)
+            greedy = Greedy()
+            greedy.assign_battery_to_house(self.district, house)
 
         # Setup plot so it can be updated while running
         self.setup_plot()
@@ -42,15 +39,24 @@ class HillClimber():
             
             for connection in sorted_connections:
                 self.layed_cables[self.current_battery][connection] = self.lay_cable_connection(connection)
+
+
+            # Make clusters of connected houses
+            self.cluster_connections()
+            self.find_shortest_connections_between_clusters()
             
-            for _ in range(100):
-                self.connect_points()
-                self.lay_multiple_cable_routes()
+            # Lay cable routes between clusters
+            for connection in self.connections:
+                self.layed_cables[self.current_battery][connection] = self.lay_cable_connection(connection)
+
             
-            # while len(self.clusters[self.current_battery]) > 1:
-            #     print(len(self.clusters[self.current_battery]))
-            #     self.connect_points()
-            #     self.lay_multiple_cable_routes()
+            while len(self.clusters[self.current_battery]) > 1:
+                self.cluster_connections()
+                self.find_shortest_connections_between_clusters()
+                
+                for connection in self.connections:
+                    self.layed_cables[self.current_battery][connection] = self.lay_cable_connection(connection)
+        
 
             shortest_connection = self.calculate_shortest_distance_to_battery()
             self.layed_cables[self.current_battery][connection] = self.lay_cable_connection(shortest_connection)
@@ -66,8 +72,9 @@ class HillClimber():
         # Show plot after it is finished
         plt.show()
 
-        # Calculate cost of shared cables
+        # # Calculate cost of shared cables
         self.calculate_cost_shared()
+        print(self.district.district_cost_shared)
 
 
     def calculate_shortest_distance_to_battery(self):
@@ -85,18 +92,6 @@ class HillClimber():
                 end_point = battery_point
 
         return (begin_point, end_point)
-        
-
-    def connect_points(self):
-        """Connects two points"""
-        self.cluster_connections()
-        self.find_shortest_connections_between_clusters()
-
-
-    def lay_multiple_cable_routes(self):
-        """Lays cable routes between all new connections."""
-        for connection in self.connections:
-            self.layed_cables[self.current_battery][connection] = self.lay_cable_connection(connection)
 
 
     def calculate_cost_shared(self):
@@ -143,7 +138,7 @@ class HillClimber():
             self.ax.plot(battery.pos_x, battery.pos_y, color=chosen_color, marker='s', markersize=12)
 
         plt.draw()
-        plt.pause(1.5)
+        plt.pause(3)
 
 
     def collect_all_cables(self):
@@ -176,32 +171,6 @@ class HillClimber():
             else:
                 print("No shortest connection found")
                 break
-
-
-    def plot_clusters(self, clusters, custom_color=None):
-        """Plot all the clusters as points in a different color on a grid."""
-
-        colors = ['green', 'blue', 'yellow', 'orange', 'purple', 'pink', 'black', 'grey', 'brown']
-
-        # Iterate over each cluster and assign a color
-        for i, cluster in enumerate(clusters):
-            # Extract x and y coordinates of each point in the cluster
-            x = [point[0] for point in cluster]
-            y = [point[1] for point in cluster]
-            
-            # Determines if the clusters are plotted in different colors or not
-            if custom_color == None:
-                # Plot the cluster as points on a grid with the assigned color
-                plt.scatter(x, y, color=colors[i % len(colors)], marker='.')
-            else:
-                plt.scatter(x, y, color=custom_color)
-
-        # Set labels and title
-        plt.xlabel('X Coordinate')
-        plt.ylabel('Y Coordinate')
-        plt.title('Cluster Plot')
-
-        plt.show()
 
 
     def manhatten_distance(self, point1, point2):
@@ -237,7 +206,6 @@ class HillClimber():
 
     def cluster_connections(self):
         """Connects cables with eachother to make a bigger cluster if possible."""
-        print(self.layed_cables[self.current_battery])
         for connection, cables in self.layed_cables[self.current_battery].items():
             start_point = connection[0]
             end_point = connection[1]
@@ -259,13 +227,13 @@ class HillClimber():
                 # Add cable route to merged cluster
                 merged_cluster.update(cables)
                 # Only keep clusters that are not merged
-                clusters = [cluster for cluster in clusters if cluster not in found_clusters]
+                self.clusters[self.current_battery] = [cluster for cluster in clusters if cluster not in found_clusters]
                 # Add merged cluster to list of clusters
-                clusters.append(merged_cluster)
+                self.clusters[self.current_battery].append(merged_cluster)
             else:
                 # Make new cluster if start and end point are not in any cluster. Asterisk again unpacks the set of cables
                 new_cluster = {start_point, end_point, *cables}
-                clusters.append(new_cluster)
+                self.clusters[self.current_battery].append(new_cluster)
 
 
     def sort_dict(self, dictionary):
@@ -330,9 +298,3 @@ if __name__ == "__main__":
     district1 = District(1, "data/district_1/district-1_batteries.csv", "data/district_1/district-1_houses.csv")
     hill_climber = HillClimber(district1)
     hill_climber.run()
-
-    # file_path = './output.json'
-    # with open(file_path, 'r') as file:
-    #     output_data = json.load(file)
-
-    # visualize_grid(output_data)
