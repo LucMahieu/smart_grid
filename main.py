@@ -97,11 +97,14 @@ for algorithm in [Greedy, Baseline]:
     # for battery in district1.batteries:
     #     print(battery.capacity)
 
-    R = Baseline()
+    R = Greedy()
     R.run(district1)
     # R = bs.Baseline()
     # R.run(district1)
     print(district1.shared_costs())
+    output = export_json(district1)
+
+    #vg.visualize_grid(output)
 
     # # Create hill climber algorithm object
     # hill_climber = hc.HillClimber(district1)
