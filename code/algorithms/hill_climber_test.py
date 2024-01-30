@@ -1,11 +1,11 @@
 import matplotlib.pyplot as plt
 import time
 import random
-from classes.district import District
-from classes.house import House
-from .greedy import Greedy_algo
+from code.classes.district import District
+from code.classes.house import House
+from code.algorithms.algorithm import Greedy
 from export_json import export_json
-from visualization.visualizegrid import visualize_grid
+#from visualization.visualizegrid import visualize_grid
 import json
 
 class HillClimber():
@@ -22,7 +22,7 @@ class HillClimber():
         
         # Assign houses to batteries with the greedy algorithm
         for house in self.district.houses:
-            greedy = Greedy_algo()
+            greedy = Greedy()
             greedy.closest_connection(house, self.district)
 
         # Setup plot so it can be updated while running

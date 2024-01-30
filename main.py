@@ -1,12 +1,14 @@
 from archive import baseline as bs
 #from code.algorithms import greedy as gr
-# from code.algorithms.hill_climber import HillClimber as hc
+#from code.algorithms.hill_climber import HillClimber as hc
 from code.algorithms.algorithm import Greedy, Baseline
 from code.classes.district import District
 from export_json import export_json
-#from code.visualization import visualizegrid as vg
+from code.visualization.visualizegrid import visualize_grid as vg
 #from code.visualization import visualizecost as vc
 from experiments.experiments import run_timed_experiments, save_experiment_results_to_csv
+from code.visualization.visualize_results import load_scores_from_csv, plot_score_distribution, plot_histogram_valid_solutions
+from code.algorithms.hill_climber_test import HillClimber
 import random
 import matplotlib.pyplot as plt
 import time 
@@ -40,39 +42,45 @@ if __name__ == "__main__":
 
 
 
-    # Maximale duur van de experimenten in seconden
-    # algorithms = [gr.Greedy, bs.Baseline]
 
-    # # Maximum duration of the experiments in seconds
-    # max_duration = 10
+max_duration = 20
 
-    # # Run experiments and save the results to a CSV file
-    # experiment_results, total_duration, all_scores, best_score = run_timed_experiments(algorithms, district1, max_duration)
-    # csv_filename = "scores.csv"
-    # save_experiment_results_to_csv('Greedy', greedy_results, total_duration_greedy, all_scores_greedy)
-    # save_experiment_results_to_csv('Baseline', baseline_results, total_duration_baseline, all_scores_baseline)
-# max_duration = 20
 
-# for algorithm in [Greedy, Baseline]:
-#     algorithm_name = algorithm.__name__
-#     print(f"Uitvoeren van {algorithm_name}")
 
-#     experiment_results, total_duration, all_scores, best_score = run_timed_experiments([algorithm], district1, max_duration)   
-#     csv_filename = f"resultaten_{algorithm_name}.csv"
-#     save_experiment_results_to_csv(algorithm_name, experiment_results, total_duration, all_scores, csv_filename)
+for algorithm in [Greedy, Baseline]:
+    algorithm_name = algorithm.__name__
+    print(f"Uitvoeren van {algorithm_name}")
 
-#     # Lees de scores in vanuit het CSV-bestand
-#     scores = []
-#     with open(csv_filename, mode='r') as csv_file:
-#         csv_reader = csv.reader(csv_file)
-#         next(csv_reader, None)
+    experiment_results, total_duration, all_scores, best_score = run_timed_experiments([algorithm], district1, max_duration)   
+    csv_filename = f"resultaten_{algorithm_name}.csv"
+    save_experiment_results_to_csv(algorithm_name, experiment_results, total_duration, all_scores, csv_filename)
 
-#         for row in csv_reader:
-#             try:
-#                 score = float(row[4])
-#                 scores.append(score)
-#             except ValueError:
-#                 continue
+    # Lees de scores in vanuit het CSV-bestand
+    scores = []
+    with open(csv_filename, mode='r') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        next(csv_reader, None)
+
+        for row in csv_reader:
+            try:
+                score = float(row[4])
+                scores.append(score)
+            except ValueError:
+                continue
+
+    csv_filename = "resultaten_Greedy.csv"
+    csv_filename = "resultaten_Baseline.csv"
+
+    algorithm_name = csv_filename.split("_")[1].split(".")[0]  # Haal de naam van het algoritme uit het bestand
+
+    scores = load_scores_from_csv(csv_filename)
+    plot_score_distribution(scores, algorithm_name)
+
+   
+
+
+   
+
 
 
 
@@ -101,19 +109,8 @@ if __name__ == "__main__":
     # # Run hill climber algorithm
     # hill_climber.run(district1.houses)
 
-    # algorithms = {
-    #     'Greedy': gr.Greedy(),
-    #     'Baseline': bs.Baseline(),
-    #     'HillClimber': hc.HillClimber()
-    # }
 
-#     max_duration = 3600  
-#     max_run_time = 60    
 
-#     experiment_results, total_duration = run_timed_experiments(algorithms.values(), district1, max_duration, num_experiments)
-
-#     csv_filename = "experiment_results.csv"
-#     save_experiment_results_to_csv(experiment_results, total_duration, csv_filename)    # connect houses with batteries in a district
 
 #     # # check if the cable routes indeed connect the houses with the batteries and if the cable stays on the grid
 #     # for battery in district1.batteries:
@@ -134,7 +131,8 @@ if __name__ == "__main__":
 
 
     output = export_json(district1)
-
+    
+    vg(output)
     # district1.shared_costs()
     # print(district1.district_cost_shared)
 
