@@ -32,7 +32,7 @@ class Algorithm():
                 if self.crossed_battery == True:
                     valid_solution = False
                     break
-
+                
             # If a valid solution is found, exit while loop
             if valid_solution:
                 break
@@ -69,67 +69,59 @@ class Algorithm():
 
     def lay_cable_route(self, district, house):
         """
-        Lays cable route from current house to randomly selected battery, breaks if batteries are accidentally connected.
+        Lays cable route from current house to selected battery.
         """
-        self.crossed_battery = False
         # Starting of the current position at the house coordinates
         current_pos = [house.pos_x, house.pos_y]
         house.cables = [tuple(current_pos)]
+        self.crossed_battery = False
 
         # End position of cable is the battery position
         cable_end_pos = (house.battery.pos_x, house.battery.pos_y)
 
         # Coordinates of other batteries to avoid
         avoid_coordinates = [(battery.pos_x, battery.pos_y) for battery in district.batteries if battery != house.battery]
+        
+        # X an y-coordinate of position
+        x_and_y = [0, 1]
+        for x_or_y in x_and_y: 
+            # Adding cable segments 
+            self.add_segments(current_pos, cable_end_pos, x_or_y, avoid_coordinates, house)
 
-        # Keep adding cable segments until the x-coordinate of the end position is reached
-        while current_pos[0] != cable_end_pos[0]:
 
-            # If current position is to the left of the end, move right
-            if current_pos[0] - cable_end_pos[0] < 0:
-                current_pos[0] += 1
+    def add_segments(self, current_pos, cable_end_pos, x_or_y, avoid_coordinates, house):
+        """
+        Adds cable segments from starting until end position based on Manhattan Distance. Breaks when cable crosses another battery than 
+        the one the house is connected to.
+        """
+        # Keep adding cable segments until the end position is reached
+        while current_pos[x_or_y] != cable_end_pos[x_or_y]:
 
-            # If current position is to the right of the end, move left
+            # Y-coordinate: if current position is below the end, move up
+            # X-coordinate: if current position is left from the end, move right
+            if current_pos[x_or_y] - cable_end_pos[x_or_y] < 0:
+                current_pos[x_or_y] += 1
+
+            # Y-coordinate: if current position is above the end, move down
+            # X-coordinate: if current position is right from the end, move left
             else:
-                current_pos[0] -= 1
+                current_pos[x_or_y] -= 1
             
-            # If incorrect battery is reached, break
+            # If incorrect battery is crossed by cable, break
             if tuple(current_pos) in avoid_coordinates:
                 self.crossed_battery = True
                 return
 
-            house.cables.append(tuple(current_pos))
-
-        # Keep adding cable segments until the y-coordinate of the end position is reached
-        while current_pos[1] != cable_end_pos[1]:
-
-            # If current position is below the end, move up
-            if current_pos[1] - cable_end_pos[1] < 0:
-                current_pos[1] += 1
-
-            # If current position is above the end, move down
-            else:
-                current_pos[1] -= 1
-            
-            # If incorrect battery is reached, break
-            if tuple(current_pos) in avoid_coordinates:
-                self.crossed_battery = True
-                return
-
+            # Add coordinate to cablecoordinate list
             house.cables.append(tuple(current_pos))
 
 
 class Greedy(Algorithm):
-    def manhattan_distance(self, beginning, end):
+    def manhattan_distance(self, house, battery):
         """
-        Calculates Manhattan distance between two points.
+        Calculates Manhattan distance between house and battery.
         """
-        x1, y1 = beginning[0], beginning[1]
-        x2, y2 = end[0], end[1]
-
-        distance = abs(x1 - x2) + abs(y1 - y2)
-        
-        return distance
+        return abs(house.pos_x - battery.pos_x) + abs(house.pos_y - battery.pos_y)
 
 
     def select_battery(self, batteries_with_capacity, house):
@@ -140,22 +132,20 @@ class Greedy(Algorithm):
         distance_dict = {}
 
         # Calculate manhattan distance for all batteries with enough capacity
-        for option in batteries_with_capacity:
-            beginning = house.pos_x, house.pos_y
-            end = option.pos_x, option.pos_y
-            distance = self.manhattan_distance(beginning, end)
+        for battery in batteries_with_capacity:
+            distance = self.manhattan_distance(house, battery)
             
             # Add calculated distance to dictionary
-            distance_dict[option] = distance
+            distance_dict[battery] = distance
 
-        # Saving closest battery 
+        # Selecting closest battery from dictionary
         best_battery = min(distance_dict, key = distance_dict.get)
 
         return best_battery
     
 
 class Baseline(Algorithm):
-    def select_battery(self, batteries_with_capacity, house):
+    def select_battery(self, batteries_with_capacity, _):
         """
         Assigns random battery to current house.
         """
