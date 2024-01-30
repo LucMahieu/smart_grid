@@ -76,8 +76,8 @@ def generate_unique_colors(num_colors):
 def visualize_grid(output):
     fig, ax = plt.subplots(figsize=(8, 8))
     # Load house and battery icons
-    house_icon = Image.open('visualization/house1.png')
-    battery_icon = Image.open('visualization/battery1.png')
+    house_icon = Image.open('code/visualization/house1.png')
+    battery_icon = Image.open('code/visualization/battery1.png')
 
     district = output.get("district")
     batteries = output.get("batteries", [])
