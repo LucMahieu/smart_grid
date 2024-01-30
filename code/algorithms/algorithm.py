@@ -84,6 +84,40 @@ class Algorithm():
         # Coordinates of other batteries to avoid
         avoid_coordinates = [(battery.pos_x, battery.pos_y) for battery in district.batteries if battery != house.battery]
 
+        # Randomly choose whether to start with x or y
+        order = random.choice(["x", "y"])
+
+        # # Keep generating and adding cable segments until the battery is reached
+        # while current_pos[0] != cable_end_pos[0] or current_pos[1] != cable_end_pos[1]:
+        #     if order == "x":
+        #         # Update x coordinate
+        #         current_pos[0] += 1 if current_pos[0] < cable_end_pos[0] else -1
+
+        #         # Update y coordinate
+        #         current_pos[1] += 1 if current_pos[1] < cable_end_pos[1] else -1
+                
+        #         if tuple(current_pos) in avoid_coordinates:
+        #             self.crossed_battery = True
+        #             print("help")
+        #             break
+
+        #         # Add the new cable point coordinates
+        #         house.cables.append(tuple(current_pos))
+        #     else:
+        #         # Update y coordinate
+        #         current_pos[1] += 1 if current_pos[1] < cable_end_pos[1] else -1
+
+        #         # Update x coordinate
+        #         current_pos[0] += 1 if current_pos[0] < cable_end_pos[0] else -1
+
+        #         if tuple(current_pos) in avoid_coordinates:
+        #             self.crossed_battery = True
+        #             print("help")
+        #             break
+
+        #         # Add the new cable point coordinates
+        #         house.cables.append(tuple(current_pos))
+
         # Keep adding cable segments until the x-coordinate of the end position is reached
         while current_pos[0] != cable_end_pos[0]:
 
