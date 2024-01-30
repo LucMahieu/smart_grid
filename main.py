@@ -30,11 +30,11 @@ if __name__ == "__main__":
 
 
 
-max_duration = 20
+max_duration = 200
 
 
 
-for algorithm in [Greedy, Baseline]:
+for algorithm in [Greedy]:
     algorithm_name = algorithm.__name__
     print(f"Uitvoeren van {algorithm_name}")
 
@@ -55,8 +55,7 @@ for algorithm in [Greedy, Baseline]:
             except ValueError:
                 continue
 
-    csv_filename = "resultaten_Greedy.csv"
-    csv_filename = "resultaten_Baseline.csv"
+    csv_filename = f"resultaten_{algorithm_name}.csv"
 
     algorithm_name = csv_filename.split("_")[1].split(".")[0]  # Haal de naam van het algoritme uit het bestand
 
@@ -122,7 +121,7 @@ for algorithm in [Greedy, Baseline]:
 
     output = export_json(district1)
     
-    vg(output)
+    #vg(output)
     # district1.shared_costs()
     # print(district1.district_cost_shared)
 
