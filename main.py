@@ -1,12 +1,14 @@
 from archive import baseline as bs
 #from code.algorithms import greedy as gr
-from code.algorithms import hill_climber as hc
+#from code.algorithms.hill_climber import HillClimber as hc
 from code.algorithms.algorithm import Greedy, Baseline
 from code.classes.district import District
 from export_json import export_json
-# from code.visualization import visualizegrid as vg
-# from code.visualization import visualizecost as vc
-# from experiments.experiments import run_timed_experiments, save_experiment_results_to_csv
+from code.visualization.visualizegrid import visualize_grid as vg
+#from code.visualization import visualizecost as vc
+from experiments.experiments import run_timed_experiments, save_experiment_results_to_csv
+from code.visualization.visualize_results import load_scores_from_csv, plot_score_distribution, plot_histogram_valid_solutions
+from code.algorithms.hill_climber_test import HillClimber
 import random
 import matplotlib.pyplot as plt
 import time 
@@ -19,36 +21,56 @@ if __name__ == "__main__":
     district2 = District(2, "data/district_2/district-2_batteries.csv", "data/district_2/district-2_houses.csv")
     district3 = District(3, "data/district_3/district-3_batteries.csv", "data/district_3/district-3_houses.csv")
 
-    # # Create hill climber algorithm object
-    # hill_climber = HillClimber(district1)
+    # Create hill climber algorithm object
+    #hill_climber = hc.HillClimber(district1)
 
-    # # Run hill climber algorithm
-    # hill_climber.run(district1.houses)
+    # Run hill climber algorithm
+    #hill_climber.run(district1.houses)
 
-    
 
-    # algorithms = {
-    #     'Greedy': Greedy_algo(),
-    #     'Random': Random_algo(),
-    #     'Baseline': Baseline(),
-    #     'HillClimber': HillClimber(district1)
-    # }
 
-    # script_name = "script.py" #add script of chosen algorithm
-    # max_duration = 3600  
-    # max_run_time = 60    
 
-    # run_timed_experiments(script_name, max_duration, max_run_time)
+max_duration = 20
 
-    # run_experiments_and_save_results(algorithms, district1, 100, 'experiment_results.csv')
-    
-    # connect houses with batteries in a district
-    # R = Random_algo()
-    # R.run(district1)
-    # # export the results to a json file
-    # output = export_json(district1)
 
-    
+
+for algorithm in [Greedy, Baseline]:
+    algorithm_name = algorithm.__name__
+    print(f"Uitvoeren van {algorithm_name}")
+
+    experiment_results, total_duration, all_scores, best_score = run_timed_experiments([algorithm], district1, max_duration)   
+    csv_filename = f"resultaten_{algorithm_name}.csv"
+    save_experiment_results_to_csv(algorithm_name, experiment_results, total_duration, all_scores, csv_filename)
+
+    # Lees de scores in vanuit het CSV-bestand
+    scores = []
+    with open(csv_filename, mode='r') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        next(csv_reader, None)
+
+        for row in csv_reader:
+            try:
+                score = float(row[4])
+                scores.append(score)
+            except ValueError:
+                continue
+
+    csv_filename = "resultaten_Greedy.csv"
+    csv_filename = "resultaten_Baseline.csv"
+
+    algorithm_name = csv_filename.split("_")[1].split(".")[0]  # Haal de naam van het algoritme uit het bestand
+
+    scores = load_scores_from_csv(csv_filename)
+    plot_score_distribution(scores, algorithm_name)
+
+   
+
+
+   
+
+
+
+
     # # check if the cable routes indeed connect the houses with the batteries and if the cable stays on the grid
     # for battery in district1.batteries:
     #     for house in district1.battery_houses_connections[battery]:
@@ -62,11 +84,14 @@ if __name__ == "__main__":
     # for battery in district1.batteries:
     #     print(battery.capacity)
 
-    R = Baseline()
+    R = Greedy()
     R.run(district1)
     # R = bs.Baseline()
     # R.run(district1)
     print(district1.shared_costs())
+    output = export_json(district1)
+
+    #vg.visualize_grid(output)
 
     # # Create hill climber algorithm object
     # hill_climber = hc.HillClimber(district1)
@@ -74,20 +99,9 @@ if __name__ == "__main__":
     # # Run hill climber algorithm
     # hill_climber.run(district1.houses)
 
-    # algorithms = {
-    #     'Greedy': gr.Greedy(),
-    #     'Baseline': bs.Baseline(),
-    #     'HillClimber': hc.HillClimber()
-    # }
 
-#     max_duration = 3600  
-#     max_run_time = 60    
 
-#     experiment_results, total_duration = run_timed_experiments(algorithms.values(), district1, max_duration, num_experiments)
 
-#     csv_filename = "experiment_results.csv"
-#     save_experiment_results_to_csv(experiment_results, total_duration, csv_filename)    # connect houses with batteries in a district
-    
 #     # # check if the cable routes indeed connect the houses with the batteries and if the cable stays on the grid
 #     # for battery in district1.batteries:
 #     #     for house in district1.battery_houses_connections[battery]:
@@ -108,6 +122,7 @@ if __name__ == "__main__":
 
     output = export_json(district1)
     
+    vg(output)
     # district1.shared_costs()
     # print(district1.district_cost_shared)
 
@@ -147,11 +162,11 @@ if __name__ == "__main__":
 #     # plot for baseline
 #     # plot_experiment_costs(experiment_costs)
 
-#     num_experiments = 1000
+    # num_experiments = 1000
 
-#     # Run experiments for each algorithm
-#     #costs_greedy = [cost for cost in run_experiment(district3, Greedy_algo, num_experiments)[2] if cost > 0]
-#     costs_baseline = [cost for cost in run_experiment(district1, Baseline, num_experiments)[2] if cost > 0]
+    # Run experiments for each algorithm
+    #costs_greedy = [cost for cost in run_experiment(district3, Greedy_algo, num_experiments)[2] if cost > 0]
+    #costs_baseline = [cost for cost in run_experiment(district1, Baseline, num_experiments)[2] if cost > 0]
 
 #     # plot_smoothed_histogram(
 #     #     (costs_greedy, "Greedy Algo"),
@@ -160,15 +175,15 @@ if __name__ == "__main__":
 #     #     (costs_baseline2, "Baseline 2")
 #     # )
 
-#     best_cost, worst_cost, scores, valid_count, invalid_count = run_experiment(district1, Baseline, num_experiments)
-#     plot_histogram(scores, valid_count, invalid_count, num_experiments)
+    # best_cost, worst_cost, scores, valid_count, invalid_count = run_experiment(district1, Baseline, num_experiments)
+    # plot_histogram(scores, valid_count, invalid_count, num_experiments)
 
 # #     visualize_grid(output)
-            
+
 # # #     #print(District.own_costs())
 
 # #     visualize_costs(output)
-    
+
 
 # # if __name__ == "__main__":
 # #     # Create districts

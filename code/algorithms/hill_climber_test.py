@@ -3,7 +3,8 @@ import random
 from ..classes.district import District
 from .algorithm import Greedy
 from export_json import export_json
-from ..visualization.visualizegrid import visualize_grid
+#from visualization.visualizegrid import visualize_grid
+import json
 
 class HillClimber():
     def __init__(self, district):

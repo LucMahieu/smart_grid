@@ -30,21 +30,9 @@ def plot_smoothed_histogram(*data):
     plt.legend()
     plt.show()
     plt.ylim(0, 8)
+    plt.savefig('smoothedhistogram.png')
 
-if __name__ == "__main__":
-    district1 = District(1, "data/district_1/district-1_batteries.csv", "data/district_1/district-1_houses.csv")
-    num_experiments = 10
 
-    # Run experiments for each algorithm and collect costs
-   
-    _, _, costs_greedy, _, _ = run_experiment(district1, Greedy_algo, num_experiments)
-    _, _, costs_baseline, _, _ = run_experiment(district1, Baseline, num_experiments)
-
-    # Plot all results in one smoothed histogram
-    plot_smoothed_histogram(
-        (costs_greedy, "Greedy Algo"),
-        (costs_baseline, "Baseline"),
-    )
 
 
 
@@ -106,3 +94,4 @@ def plot_time_and_cost(costs_data, times_data):
 
     plt.tight_layout()
     plt.show()
+    plt.savefig('timeandcost.png')
