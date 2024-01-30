@@ -1,7 +1,7 @@
 import random
 from code.classes.district import District
-from code.algorithms.baseline import Baseline
-from code.algorithms.greedy import Greedy
+from code.algorithms.algorithm import Baseline
+from code.algorithms.algorithm import Greedy
 from code.classes.battery import Battery 
 import matplotlib.pyplot as plt
 import time 
@@ -262,6 +262,40 @@ def run_timed_experiments(algorithm_classes, district, max_duration):
     # Bereken de beste score
     best_score = min(all_scores)
 
+    results_dict = {}
+    
+    for result in experiment_results:
+        algorithm_name = result['algorithm']
+        if algorithm_name not in results_dict:
+            results_dict[algorithm_name] = {'scores': [], 'iterations': []}
+        
+        results_dict[algorithm_name]['scores'].append(result['cost'])
+        results_dict[algorithm_name]['iterations'].append(result['iterations'])
+    
+    # Genereer plots en statistieken
+    for algorithm_name, data in results_dict.items():
+        print(f"Uitvoeren van {algorithm_name}")
+
+        scores = data['scores']
+        iterations = data['iterations']
+
+        print(f"Aantal experimenten: {len(scores)}")
+        if scores:
+            print(f"Gemiddelde score: {np.mean(scores)}")
+            print(f"Standaarddeviatie van scores: {np.std(scores)}")
+            print(f"Minimale score: {np.min(scores)}")
+            print(f"Maximale score: {np.max(scores)}")
+
+            # Maak een histogram van de scores
+            plt.hist(scores, bins=30, color='blue', alpha=0.7)
+            plt.title(f'Distributie van behaalde scores {algorithm_name}')
+            plt.xlabel('Score')
+            plt.ylabel('Frequentie')
+            plt.show()
+            plt.savefig(f'distributie_van_{algorithm_name}.png')
+        else:
+            print("Geen geldige scores")
+
     return experiment_results, total_duration, all_scores, best_score
 
 def save_experiment_results_to_csv(algorithm_name, experiment_results, total_duration, all_scores, csv_filename):
@@ -273,40 +307,3 @@ def save_experiment_results_to_csv(algorithm_name, experiment_results, total_dur
             writer.writerow(result)
     
     print(f"Resultaten opgeslagen in {csv_filename}")
-
-
-
-    # Specificeer het volledige pad naar het scores CSV-bestand
-    scores_csv_filename = "scores.csv"
-    with open(scores_csv_filename, mode='w', newline='') as scores_csv:
-        scores_writer = csv.writer(scores_csv)
-        scores_writer.writerow(["score"])
-        scores_writer.writerows([[score] for score in all_scores])
-
-    print(f"Totaal experiment duurde: {total_duration} seconden")
-
-
-
-
-# Lees de scores in vanuit het scores CSV-bestand
-    scores = []
-    with open(csv_filename, mode='r') as scores_csv:
-        csv_reader = csv.reader(scores_csv)
-        next(csv_reader, None)  # Overslaan van de kopregel
-        for row in csv_reader:
-            score = float(row[0])  # Zet de eerste kolom van de rij om in float
-            scores.append(score)
-
-    # Bereken en toon statistieken
-    print(f"Aantal experimenten: {len(scores)}")
-    print(f"Gemiddelde score: {np.mean(scores)}")
-    print(f"Standaarddeviatie van scores: {np.std(scores)}")
-    print(f"Minimale score: {np.min(scores)}")
-    print(f"Maximale score: {np.max(scores)}")
-
-    # Maak een histogram van de scores
-    plt.hist(scores, bins=30, color='blue', alpha=0.7)
-    plt.title('Distributie van behaalde scores')
-    plt.xlabel('Score')
-    plt.ylabel('Frequentie')
-    plt.show()
