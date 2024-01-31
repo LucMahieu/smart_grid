@@ -33,17 +33,16 @@ De code wordt gerund door het aanroepen van:
 python main.py
 ```
 
-Het bestand geeft een voorbeeld voor gebruik van de verschillende functies.
-
 ### Structuur
 
-- **/code**: bevat alle code die geschreven is voor het oplossen van de case
+- **/code**: bevat code die geschreven is voor het oplossen van de case
   - **/code/algorithms**: bevat de algoritme classes; greedy, baseline en hillclimber
   - **/code/classes**: bevat de classes batterij, huis en grid
   - **/code/visualisation**: bevat de visualisatie van het grid en de kosten
 - **/data**: bevat de data van de huizen en batterijen in de drie districten
-- **/docs**: 
-- **/experiments**: 
+- **/docs**: UML van de case
+- **/experiments**: code om experimenten uit te voeren
+- **/eresults**: resultaten van de verschillende experimenten
 
 ## Auteurs
 - Luc Mahieu
