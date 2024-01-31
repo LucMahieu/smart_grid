@@ -24,8 +24,10 @@ def run_experiments(algorithm_instance, algorithm_name, district, iterations):
             district.reset_state()
             # Reset HillClimber attributes
             algorithm_instance.__init__(district)
+
+        # Greedy and Baseline
         else:
-            algorithm_instance.run(district) # Greedy and Baseline
+            algorithm_instance.run(district) 
             cost = district.shared_costs()
         
         all_scores.append(cost)
