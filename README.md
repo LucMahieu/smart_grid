@@ -50,5 +50,5 @@ python main.py
 
 ## Auteurs
 - Luc Mahieu
-- Ayse Acar
 - Dita van Leeuwen
+- Ayse Acar
