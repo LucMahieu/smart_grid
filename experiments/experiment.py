@@ -281,6 +281,8 @@ def run_timed_experiments(algorithm_instance, algorithm_name, district, max_dura
             cost = district.district_cost_shared
             # Reset state of district after each run
             district.reset_state()
+            # Reset HillClimber attributes
+            algorithm_instance.__init__(district)
         else:
             algorithm_instance.run(district) # Greedy and Baseline
             cost = district.shared_costs()

@@ -38,9 +38,6 @@ if __name__ == "__main__":
     # max_duration = 20
 
 
-
-
-
     # for district in districts:
     #     for algorithm_class in [HillClimber]:
     #         algorithm_name = algorithm_class.__name__
