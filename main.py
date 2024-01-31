@@ -25,8 +25,13 @@ if __name__ == "__main__":
     output = export_json(district1)
     vg(output)
 
+    # kosten vergelijken, attributes van hillclimber opslaan en tweede run doen, vergelijken --> lage kost saven--> dit runnen met visualizegrid
+    # bij greedy en baseline beste kosten eruit halen wat al kan met visualizegrid en runtimedexperiment
+    # allebei in runtimed experiment 
+    # 1 functie voor plot en 1 functie voor run
 
-    max_duration = 20
+
+    max_duration = 10
 
 
 
