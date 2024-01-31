@@ -170,7 +170,7 @@ class HillClimber():
             if shortest_connection != float("inf"):
                 self.connections[(begin_point, end_point)] = shortest_connection
             else:
-                print("No shortest connection found")
+                #print("No shortest connection found")
                 break
 
 
