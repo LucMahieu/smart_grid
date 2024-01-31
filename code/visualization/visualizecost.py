@@ -5,7 +5,10 @@ from code.classes.district import District
 from experiments.experiment import run_experiment
 import time
 
-# plots highest and lowest cost of an algorithm
+"""
+plots highest and lowest cost of an algorithm
+"""
+
 def plot_cost_range(costs, label):
     highest_cost = max(costs)
     lowest_cost = min(costs)
@@ -19,7 +22,9 @@ def plot_cost_range(costs, label):
     plt.ylim(0, highest_cost * 1.1)
     plt.show()
 
-
+""" 
+plots smoothed histogram of cost distribution of each algorithm in one plot
+"""
 def plot_smoothed_histogram(*data):
     for costs, label in data:
         sns.kdeplot(costs, label=label, bw_adjust=0.5)

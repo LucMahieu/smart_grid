@@ -16,30 +16,35 @@ def load_scores_from_csv(csv_filename):
                 continue
 
     return scores
-
+"""
+plots the distribution of costs of eeach algorithm
+"""
 def plot_score_distribution(scores, algorithm_name):
     if scores:
-        print(f"Aantal experimenten: {len(scores)}")
-        print(f"Gemiddelde score: {np.mean(scores)}")
-        print(f"Standaarddeviatie van scores: {np.std(scores)}")
-        print(f"Minimale score: {np.min(scores)}")
-        print(f"Maximale score: {np.max(scores)}")
+        print(f"Number of experiments: {len(scores)}")
+        print(f"Mean score: {np.mean(scores)}")
+        print(f"Standard deviation: {np.std(scores)}")
+        print(f"Min score: {np.min(scores)}")
+        print(f"Max score: {np.max(scores)}")
 
         # Maak een histogram van de scores
         plt.hist(scores, bins=30, color='blue', alpha=0.7)
-        plt.title(f'Distributie van behaalde scores {algorithm_name}')
-        plt.xlabel('Score')
+        plt.title(f'Distribution of costs {algorithm_name}')
+        plt.xlabel('Cost')
         plt.ylabel('Frequentie')
         plt.show()
         plt.savefig(f'Distributie_van_{algorithm_name}')
 
     else:
-        print("Geen geldige scores")
+        print("no valid solution")
 
 
 
 import matplotlib.pyplot as plt
 
+""" 
+counts and plots valid/invalid solutions in a histogram
+"""
 def plot_histogram_valid_solutions(algorithm_instance, num_experiments):
     # Run the algorithm and collect the experiment scores
     experiment_scores = []

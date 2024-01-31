@@ -19,16 +19,10 @@ De resultaten staan in output.json
 
 ### Vereisten
 
-Voor het schrijven van de code hebben we Python 3.7 gebruikt. In requirements.txt staan alle benodigde packages. Deze kunnen geinstalleerd worden via pip dmv. de volgende instructie:
+Voor het schrijven van de code hebben we Python 3.9.18 gebruikt. Alle benodigde packages staan genoemd in requirements.txt en kunnen geïnstalleerd worden d.m.v het volgende commando: 
 
 ```
 pip install -r requirements.txt
-```
-
-Of via conda:
-
-```
-conda install --file requirements.txt
 ```
 
 ### Gebruik
