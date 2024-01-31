@@ -17,19 +17,18 @@ class HillClimber():
 
 
     def run(self, plot_results=False):
-        """Runs all steps involved in the hill climber algorithm."""
-        
+        """
+        Runs all steps involved in the hill climber algorithm.
+        """
         # Assign houses to batteries with the greedy algorithm
         for house in self.district.houses:
             greedy = Greedy()
             greedy.assign_battery_to_house(self.district, house)
 
-        # Setup plot so it can be updated while running
-        self.setup_plot()
-
-        # Lay cable routes between houses for each battery
+        # Lay cable network for each battery
         for battery in self.district.batteries:
-            # Save current battery for later use
+
+            # Save current battery as attribute for later use
             self.current_battery = battery
   
             # Select houses assigned to current battery
@@ -42,10 +41,6 @@ class HillClimber():
             for connection in sorted_connections:
                 self.hill_climber(connection)
 
-                # self.collect_all_cables()
-                # self.plot_network()
-
-
             # Make clusters of connected houses
             self.cluster_connections()
             self.find_shortest_connections_between_clusters()
@@ -54,10 +49,6 @@ class HillClimber():
             for connection in self.connections:
                 # self.layed_cables[self.current_battery][connection] = self.lay_cable_connection(connection)
                 self.hill_climber(connection)
-                
-                # self.collect_all_cables()
-                # self.plot_network()
-
             
             while len(self.clusters[self.current_battery]) > 1:
                 self.cluster_connections()
@@ -66,9 +57,6 @@ class HillClimber():
                 for connection in self.connections:
                     # self.layed_cables[self.current_battery][connection] = self.lay_cable_connection(connection)
                     self.hill_climber(connection)
-
-                    # self.collect_all_cables()
-                    # self.plot_network()
 
             shortest_connection = self.calculate_shortest_distance_to_battery()
             self.layed_cables[self.current_battery][connection] = self.lay_cable_connection(shortest_connection)
@@ -83,27 +71,26 @@ class HillClimber():
             self.district.district_cost_shared += self.calculate_network_cost(self.cable_networks[self.current_battery])
         
         if plot_results == True:
-            self.collect_all_cables()
-            self.all_cables
+            self.setup_plot()
             self.plot_network()
 
-        print(f'Total costs: {self.district.district_cost_shared}')
 
     def collect_all_cables(self):
-        """Collects all cables from all battery networks in order to plot function."""
+        """
+        Collects all cables from all battery networks in order to plot function.
+        """
         for battery in self.district.batteries:
             self.all_cables.update(self.cable_networks[battery])
 
 
     def hill_climber(self, connection):
-        """Tries to lay two possible cable routes between clusters and chooses the 
-        best one in terms of lowest costs."""
-        # Lay two possible cable routes between clusters
+        """
+        Tries to lay two possible cable routes between houses, clusters or batteries 
+        and chooses the best one in terms of lowest costs.
+        """
+        # Lay two possible cable routes between entities
         cable_route1 = self.lay_cable_connection(connection, "beginpoint_y_route")
         cable_route2 = self.lay_cable_connection(connection, "endpoint_y_route")
-
-        # Collect all cables that are already layed and add new cable routes to it
-        self.collect_all_cables()
 
         possible_cable_network1 = self.cable_networks[self.current_battery].copy()
         possible_cable_network1.update(cable_route1)
@@ -114,27 +101,25 @@ class HillClimber():
         # Calculate cost of both cable networks
         cost_network1 = self.calculate_network_cost(possible_cable_network1)
         cost_network2 = self.calculate_network_cost(possible_cable_network2)
-        # if cost_network1 != cost_network2:
-        #     print(f"cost network 1: {cost_network1} with cable route: {cable_route1}")
-        #     print(f"cost network 2: {cost_network2} with cable route: {cable_route2}\n")
 
-        # Choose cable route with lowest cost
+        # Choose cable route that results in lowest cable network cost
         if cost_network1 < cost_network2:
             self.layed_cables[self.current_battery][connection] = cable_route1
-            # shared_cable_segments1 = cable_route1.intersection(self.all_cables)
-            # print(f"shared cable segments 1: {shared_cable_segments1}")
         else:
             self.layed_cables[self.current_battery][connection] = cable_route2
 
 
     def calculate_shortest_distance_to_battery(self):
-        """Calculates shortest way to connect a battery and then lay cable from cable to battery."""
+        """
+        Calculates shortest way to connect a battery and then lay cable from 
+        cable to battery.
+        """
         shortest_distance = float("inf")
         connection = {}
         for cable_point in self.layed_cables[self.current_battery]:
             battery_point = (self.current_battery.pos_x, self.current_battery.pos_y)
 
-            distance = self.manhatten_distance(cable_point[0], battery_point)
+            distance = self.manhattan_distance(cable_point[0], battery_point)
 
             if distance < shortest_distance:
                 shortest_distance = distance
@@ -145,18 +130,22 @@ class HillClimber():
 
 
     def calculate_network_cost(self, cable_route):
-        """Calculates the cost of the shared cables."""
+        """
+        Calculates the cost of the shared cables.
+        """
         return (len(cable_route) - 1) * 9 + 5000
             
 
     def setup_plot(self, max_x_value=50, max_y_value=50):
-        """Initialise the plot out of loop so plot gets updated."""
+        """
+        Initialise the plot out of loop so plot gets updated.
+        """
         plt.figure(figsize=(6, 6))
         self.ax = plt.gca()
 
         # Create grid lines with 5 interval spacing
-        self.ax.set_xticks(range(0, max_x_value + 1, 5))
-        self.ax.set_xticks(range(0, max_x_value + 1, 5))
+        self.ax.set_xticks(range(0, max_x_value + 1, 5)) # major
+        self.ax.set_xticks(range(0, max_x_value + 1, 5)) # major
 
         # Create gridlines with 1 interval spacing
         self.ax.set_xticks(range(0, max_x_value + 1), minor=True)
@@ -164,18 +153,28 @@ class HillClimber():
         self.ax.grid(True)
         
         # Adjust transparancy of gridlines with alpha
-        self.ax.grid(which='major', alpha=0.5) # gridlines with interval of 5
+        self.ax.grid(which='major', alpha=0.5) # the gridlines with interval of 5
         self.ax.grid(which='minor', alpha=0.2)
     
 
     def plot_network(self):
-        """Plots all cables, houses and batteries on the grid and is used to update it while running."""
+        """
+        Plots end result of the algorithm including all cables, houses, and 
+        batteries on the grid.
+        """
+        # Collect all cables from all battery networks to plot
+        self.collect_all_cables()
+
         # Extract x and y coordinates of each point in the whole cable route
         x = [point[0] for point in self.all_cables]
         y = [point[1] for point in self.all_cables]
 
-        self.ax.plot(x, y, marker='o', linestyle='None', color='black', markersize=3)
-        # plt.scatter(x, y, color='black', marker='.')
+        self.ax.plot(
+            x, y, marker='o', 
+            linestyle='None', 
+            color='black', 
+            markersize=3
+        )
 
         colors = ['orange', 'purple', 'grey', 'red', 'green']
         
@@ -190,25 +189,38 @@ class HillClimber():
             chosen_color = colors[i]
 
             # Plot the house cluster as points on a grid with the assigned color
-            self.ax.plot(x, y, color=chosen_color, marker='o', linestyle='None', markersize=6)
+            self.ax.plot(
+                x, y, 
+                color=chosen_color, 
+                marker='o', 
+                linestyle='None', 
+                markersize=6
+            )
 
-            # Also plot the batteries in corresponding color
-            self.ax.plot(battery.pos_x, battery.pos_y, color=chosen_color, marker='s', markersize=15)
+            # Plot the batteries in color corresponding to houses
+            self.ax.plot(
+                battery.pos_x, 
+                battery.pos_y, 
+                color=chosen_color, 
+                marker='s', 
+                markersize=15)
 
         plt.show()
 
 
     def collect_network_cables(self):
-        """Adds new cables to set with all cables for this battery."""
+        """Collects all cables that belong to the current battery (network)."""
         for cable_route in self.layed_cables[self.current_battery].values():
             self.cable_networks[self.current_battery].update(cable_route)
 
 
     def find_shortest_connections_between_clusters(self):
-        """Finds shortest connection to other cluster for each cluster."""
-        # For convenience, store clusters in variable
+        """
+        Finds shortest connection to other cluster for each cluster.
+        """
+        # Store clusters in variable for cleaner code
         clusters = self.clusters[self.current_battery]
-        self.connections = {}
+
         # For each cluster, calculate the shortest connection to another cluster
         for cluster in clusters:
             shortest_connection = float("inf")
@@ -216,20 +228,21 @@ class HillClimber():
                 if cluster != other_cluster:
                     for point1 in cluster:
                         for point2 in other_cluster:
-                            manhatten_distance = self.manhatten_distance(point1, point2)
-                            if manhatten_distance < shortest_connection:
-                                shortest_connection = manhatten_distance
+                            manhattan_distance = self.manhattan_distance(point1, point2)
+                            if manhattan_distance < shortest_connection:
+                                shortest_connection = manhattan_distance
                                 begin_point = point1
                                 end_point = point2
 
             # For each cluster add shortest connection to dictionary
             if shortest_connection != float("inf"):
+                self.connections = {}
                 self.connections[(begin_point, end_point)] = shortest_connection
             else:
                 break
 
 
-    def manhatten_distance(self, point1, point2):
+    def manhattan_distance(self, point1, point2):
         """Calculate manhatten distance between two points."""
         return abs(point1[0] - point2[0]) + abs(point1[1] - point2[1])
         
@@ -247,7 +260,7 @@ class HillClimber():
                     point1 = (i.pos_x, i.pos_y)
                     point2 = (j.pos_x, j.pos_y)
 
-                    distance = self.manhatten_distance(point1, point2)
+                    distance = self.manhattan_distance(point1, point2)
             
                     # Keep track of shortest distance
                     if distance < shortest_distance:
