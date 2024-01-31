@@ -71,7 +71,7 @@ class HillClimber():
             self.plot_network()
 
         # Show plot after it is finished
-        plt.show()
+        #plt.show()
 
         # # Calculate cost of shared cables
         self.calculate_cost_shared()
@@ -102,44 +102,44 @@ class HillClimber():
 
     def setup_plot(self):
         """Initialise the plot out of loop so plot gets updated."""
-        plt.figure(figsize=(6, 6))
-        self.ax = plt.gca()
+        # #plt.figure(figsize=(6, 6))
+        # self.ax = plt.gca()
 
-        # Fill in grid
-        self.ax.set_xticks(range(50))
-        self.ax.set_yticks(range(50))
-        self.ax.grid(True)
+        # # Fill in grid
+        # self.ax.set_xticks(range(50))
+        # self.ax.set_yticks(range(50))
+        # self.ax.grid(True)
     
 
     def plot_network(self):
         """Plots all cables, houses and batteries on the grid and is used to update it while running."""
         # Extract x and y coordinates of each point in the whole cable route
-        x = [point[0] for point in self.all_cables]
-        y = [point[1] for point in self.all_cables]
+        # x = [point[0] for point in self.all_cables]
+        # y = [point[1] for point in self.all_cables]
 
-        self.ax.plot(x, y, marker='o', linestyle='None', color='black', markersize=4)
-        # plt.scatter(x, y, color='black', marker='.')
+        # self.ax.plot(x, y, marker='o', linestyle='None', color='black', markersize=4)
+        # # plt.scatter(x, y, color='black', marker='.')
 
-        colors = ['orange', 'purple', 'grey', 'red', 'green']
+        # colors = ['orange', 'purple', 'grey', 'red', 'green']
         
-        # Plot each battery with its assigned houses in a different color
-        for i, battery in enumerate(self.district.batteries):
-            houses = self.district.battery_houses_connections[battery]
+        # # Plot each battery with its assigned houses in a different color
+        # for i, battery in enumerate(self.district.batteries):
+        #     houses = self.district.battery_houses_connections[battery]
             
-            # Extract x and y coordinates of each point in the cluster
-            x = [house.pos_x for house in houses]
-            y = [house.pos_y for house in houses]
+        #     # Extract x and y coordinates of each point in the cluster
+        #     x = [house.pos_x for house in houses]
+        #     y = [house.pos_y for house in houses]
 
-            chosen_color = colors[i]
+        #     chosen_color = colors[i]
 
-            # Plot the cluster as points on a grid with the assigned color
-            self.ax.plot(x, y, color=chosen_color, marker='o', linestyle='None')
+        #     # Plot the cluster as points on a grid with the assigned color
+        #     self.ax.plot(x, y, color=chosen_color, marker='o', linestyle='None')
 
-            # Also plot the batteries in corresponding color
-            self.ax.plot(battery.pos_x, battery.pos_y, color=chosen_color, marker='s', markersize=12)
+        #     # Also plot the batteries in corresponding color
+        #     self.ax.plot(battery.pos_x, battery.pos_y, color=chosen_color, marker='s', markersize=12)
 
-        plt.draw()
-        plt.pause(3)
+        # plt.draw()
+        # plt.pause(3)
 
 
     def collect_all_cables(self):
