@@ -4,7 +4,7 @@ import numpy as np
 
 def load_scores_from_csv(csv_filename):
     """
-    Read given csv file and save cost   .
+    Read given csv file and save cost.
     """
     scores = []
     with open(csv_filename, mode='r') as csv_file:
