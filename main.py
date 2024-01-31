@@ -26,62 +26,56 @@ if __name__ == "__main__":
     vg(output)
 
 
-    max_duration = 10
+    max_duration = 20
 
 
+
+
+
+    for district in districts:
+        for algorithm_class in [HillClimber]:
+            algorithm_name = algorithm_class.__name__
+            print(f"Uitvoeren van {algorithm_name} op district {district.name}")
+
+            if algorithm_class == HillClimber:
+                algorithm_instance = algorithm_class(district)
+            else:
+                algorithm_instance = algorithm_class()
+                
+            experiment_results, total_duration, all_scores, best_score = run_timed_experiments(algorithm_instance, algorithm_name, district, max_duration)
+
+            csv_filename = f"resultaten_{algorithm_name}_district{district.name}.csv"
+            save_experiment_results_to_csv(algorithm_name, experiment_results, total_duration, all_scores, csv_filename)
+
+            scores = []
+            with open(csv_filename, mode='r') as csv_file:
+                csv_reader = csv.reader(csv_file)
+                next(csv_reader, None)
+                for row in csv_reader:
+                    try:
+                        score = float(row[4])
+                        scores.append(score)
+                    except ValueError:
+                        continue
+
+
+        algorithm_name = csv_filename.split("_")[1].split(".")[0]  # Haal de naam van het algoritme uit het bestand
+
+        scores = load_scores_from_csv(csv_filename)
+        plot_score_distribution(scores, algorithm_name)
 
 
 
 # for district in districts:
-#     for algorithm_class in [Greedy, Baseline]:
-#         algorithm_name = algorithm_class.__name__
-#         print(f"Uitvoeren van {algorithm_name} op district {district.name}")
-
-#         if algorithm_class == HillClimber:
-#             algorithm_instance = algorithm_class(district)
-#         else:
-#             algorithm_instance = algorithm_class()
-            
-#         experiment_results, total_duration, all_scores, best_score = run_timed_experiments(algorithm_instance, algorithm_name, district, max_duration)
-
+#     for algorithm_name in ["Greedy", "Baseline", "HillClimber"]:
 #         csv_filename = f"resultaten_{algorithm_name}_district{district.name}.csv"
-#         save_experiment_results_to_csv(algorithm_name, experiment_results, total_duration, all_scores, csv_filename)
 
-#         scores = []
-#         with open(csv_filename, mode='r') as csv_file:
-#             csv_reader = csv.reader(csv_file)
-#             next(csv_reader, None)
-#             for row in csv_reader:
-#                 try:
-#                     score = float(row[4])
-#                     scores.append(score)
-#                 except ValueError:
-#                     continue
+#         try:
+#             scores = load_scores_from_csv(csv_filename)
+#             plot_score_distribution(scores, algorithm_name)
+#         except FileNotFoundError:
+#             print(f"Bestand {csv_filename} niet gevonden, overslaan van dit bestand.")
 
-
-#     algorithm_name = csv_filename.split("_")[1].split(".")[0]  # Haal de naam van het algoritme uit het bestand
-
-#     scores = load_scores_from_csv(csv_filename)
-    #plot_score_distribution(scores, algorithm_name)
-
-for district in districts:
-    for algorithm_name in ["Greedy", "Baseline", "HillClimber"]:
-        csv_filename = f"resultaten_{algorithm_name}_district{district.name}.csv"
-
-        try:
-            scores = load_scores_from_csv(csv_filename)
-            plot_score_distribution(scores, algorithm_name)
-        except FileNotFoundError:
-            print(f"Bestand {csv_filename} niet gevonden, overslaan van dit bestand.")
-
-
-
-    #vg.visualize_grid(output)
-
-
-
-
-#    
 
 
 
