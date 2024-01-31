@@ -2,14 +2,14 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from code.algorithms.algorithm import Greedy, Baseline
 from code.classes.district import District
-#from experiments.experiment import run_experiment
 import time
+import numpy as np 
 
-"""
-plots highest and lowest cost of an algorithm
-"""
 
 def plot_cost_range(costs, label):
+    """
+    Plots highest and lowest cost of an algorithm.
+    """
     highest_cost = max(costs)
     lowest_cost = min(costs)
     
@@ -22,12 +22,14 @@ def plot_cost_range(costs, label):
     plt.ylim(0, highest_cost * 1.1)
     plt.show()
 
-""" 
-plots smoothed histogram of cost distribution of each algorithm in one plot
-"""
+
 def plot_smoothed_histogram(*data):
+    """ 
+    Plots a smoothed histogram of cost distribution of each algorithm in one plot.
+    """
     for costs, label in data:
         sns.kdeplot(costs, label=label, bw_adjust=0.5)
+
     plt.title('Cost Distribution of Different Algorithms')
     plt.xlabel('Cost')
     plt.ylabel('Density')
@@ -37,10 +39,10 @@ def plot_smoothed_histogram(*data):
     plt.savefig('smoothedhistogram.png')
 
 
-
-
-
 def run_experiment_and_measure_time(district, algorithm_class, num_experiments):
+    """
+    Runs experiment and measures the duration and the cost.
+    """
     costs = []
     times = []
 
@@ -67,10 +69,11 @@ def run_experiment_and_measure_time(district, algorithm_class, num_experiments):
 
     return costs, times
 
-import matplotlib.pyplot as plt
-import numpy as np 
 
 def plot_time_and_cost(costs_data, times_data):
+    """
+    Plots a comparison of the duration and the cost of the algorithms.
+    """
     n_groups = len(costs_data)
     fig, ax = plt.subplots()
 

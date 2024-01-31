@@ -3,6 +3,9 @@ import csv
 import numpy as np
 
 def load_scores_from_csv(csv_filename):
+    """
+    Read given csv file and save cost   .
+    """
     scores = []
     with open(csv_filename, mode='r') as csv_file:
         csv_reader = csv.reader(csv_file)
@@ -16,10 +19,12 @@ def load_scores_from_csv(csv_filename):
                 continue
 
     return scores
-"""
-plots the distribution of costs of eeach algorithm
-"""
+
+
 def plot_score_distribution(scores, algorithm_name):
+    """
+    Plots the distribution of costs of each algorithm.
+    """
     if scores:
         print(f"Number of experiments: {len(scores)}")
         print(f"Mean score: {np.mean(scores)}")
@@ -31,21 +36,19 @@ def plot_score_distribution(scores, algorithm_name):
         plt.hist(scores, bins=30, color='blue', alpha=0.7)
         plt.title(f'Distribution of costs {algorithm_name}')
         plt.xlabel('Cost')
-        plt.ylabel('Frequentie')
+        plt.ylabel('Frequency')
         plt.show()
-        plt.savefig(f'Distributie_van_{algorithm_name}')
+        plt.savefig(f'Cost distribution_of_{algorithm_name}')
 
     else:
-        print("no valid solution")
+        print("No valid solution")
 
 
-
-import matplotlib.pyplot as plt
-
-""" 
-counts and plots valid/invalid solutions in a histogram
-"""
 def plot_histogram_valid_solutions(algorithm_instance, num_experiments):
+    """ 
+    Creates two plots, one showing the cost distribution for valid solutions, 
+    and one showing the count of valid and invalid solutions.
+    """
     # Run the algorithm and collect the experiment scores
     experiment_scores = []
     valid_solutions_count = 0
