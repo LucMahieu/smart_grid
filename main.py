@@ -25,7 +25,6 @@ if __name__ == "__main__":
     result.run()
     output = export_json(district1)
     plot_network(district1, result)
-    hh
 
 
     # vg(output)
