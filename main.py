@@ -59,8 +59,7 @@ for district in districts:
             algorithm_instance = algorithm_class(district)
         else:
             algorithm_instance = algorithm_class()
-
-        run_timed_experiments(algorithm_classes, district, max_duration, num_experiments)
+            
         experiment_results, total_duration, all_scores, best_score = run_timed_experiments(algorithm_instance, algorithm_name, district, max_duration)
 
         csv_filename = f"resultaten_{algorithm_name}_district{district.name}.csv"
