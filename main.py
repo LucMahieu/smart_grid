@@ -1,6 +1,6 @@
 from code.algorithms.algorithm import Greedy, Baseline
 from code.classes.district import District
-from export_json import export_json
+from archive.export_json import export_json
 from code.visualization.visualizegrid import visualize_grid as vg
 from code.visualization import visualizecost as vc
 from experiments.experiment import run_timed_experiments, save_experiment_results_to_csv
@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import time 
 import subprocess
 import csv
-from check50_export_json import export_json
+from export_json import export_json
 
 if __name__ == "__main__":
     # Create districts from files with batteries and houses

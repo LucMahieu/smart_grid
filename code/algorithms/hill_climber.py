@@ -86,7 +86,7 @@ class HillClimber():
         self.collect_all_cables()
         self.all_cables
         self.plot_network()
-        print(f'ALL CABLES: {self.all_cables}')
+        
         # Show plot after it is finished
         plt.show()
 
