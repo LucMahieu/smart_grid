@@ -1,11 +1,8 @@
-from archive import baseline as bs
-#from code.algorithms import greedy as gr
-#from code.algorithms.hill_climber import HillClimber as hc
 from code.algorithms.algorithm import Greedy, Baseline
 from code.classes.district import District
 from export_json import export_json
 from code.visualization.visualizegrid import visualize_grid as vg
-#from code.visualization import visualizecost as vc
+from code.visualization import visualizecost as vc
 from experiments.experiments import run_timed_experiments, save_experiment_results_to_csv
 from code.visualization.visualize_results import load_scores_from_csv, plot_score_distribution, plot_histogram_valid_solutions
 from code.algorithms.hill_climber_test import HillClimber
@@ -14,6 +11,7 @@ import matplotlib.pyplot as plt
 import time 
 import subprocess
 import csv
+from check50_export_json import export_json
 
 if __name__ == "__main__":
     # Create districts from files with batteries and houses
@@ -99,44 +97,16 @@ for district in districts:
 
 
 
-    # # check if the cable routes indeed connect the houses with the batteries and if the cable stays on the grid
-    # for battery in district1.batteries:
-    #     for house in district1.battery_houses_connections[battery]:
-    #         # print house and battery positions and the cable route between them
-    #         print('\n\n\n')
-    #         # xprint(f'House: {house.pos_x, house.pos_y} \nCable route: {house.cables}')
-    #         #print(f'Battery: {battery.pos_x, battery.pos_y}')
-
-    # # connect houses with batteries in a district
-
-    # for battery in district1.batteries:
-    #     print(battery.capacity)
-
     R = Greedy()
     R.run(district1)
-    # R = bs.Baseline()
-    # R.run(district1)
+    # # R = bs.Baseline()
+    # # R.run(district1)
     print(district1.shared_costs())
     output = export_json(district1)
 
     #vg.visualize_grid(output)
 
-    # # Create hill climber algorithm object
-    # hill_climber = hc.HillClimber(district1)
 
-    # # Run hill climber algorithm
-    # hill_climber.run(district1.houses)
-
-
-
-
-#     # # check if the cable routes indeed connect the houses with the batteries and if the cable stays on the grid
-#     # for battery in district1.batteries:
-#     #     for house in district1.battery_houses_connections[battery]:
-#     #         # print house and battery positions and the cable route between them
-#     #         print('\n\n\n')
-#     #         # xprint(f'House: {house.pos_x, house.pos_y} \nCable route: {house.cables}')
-#     #         #print(f'Battery: {battery.pos_x, battery.pos_y}')
 
 #     # # connect houses with batteries in a district
 
@@ -148,8 +118,9 @@ for district in districts:
     # output = export_json(district1)
 
 
-    output = export_json(district1)
+    #output = export_json(district1)
     
+    #vg(output)
     #vg(output)
     # district1.shared_costs()
     # print(district1.district_cost_shared)
@@ -244,3 +215,17 @@ for district in districts:
 # #         plot_experiment_costs(experiment_costs)
 
 # #     print(f"Total cost for all districts: {total_cost}")
+    
+    #from visualization.visualizegrid import visualize_grid
+# from algorithms.experiments import run_experiment
+# from algorithms.experiments import plot_histogram
+# from visualization.visualizecost import plot_smoothed_histogram
+# from visualization.visualizecost import run_experiment_and_measure_time
+# import time
+# from visualization.visualizecost import plot_time_and_cost
+# from visualization.visualizecost import plot_cost_range
+#from algorithms.hill_climber_test import HillClimber
+# from algorithms.experiments import run_experiments_and_save_results
+# from algorithms.experiments import run_timed_experiments
+    #from code.algorithms import greedy as gr
+#from code.algorithms.hill_climber import HillClimber as hc
