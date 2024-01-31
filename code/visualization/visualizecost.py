@@ -2,7 +2,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from code.algorithms.algorithm import Greedy, Baseline
 from code.classes.district import District
-from experiments.experiment import run_experiment
+#from experiments.experiment import run_experiment
 import time
 
 """
