@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 import time 
 import subprocess
 import csv
-from export_json import export_json
 
 if __name__ == "__main__":
     # Create districts from files with batteries and houses

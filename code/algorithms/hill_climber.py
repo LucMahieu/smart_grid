@@ -16,7 +16,7 @@ class HillClimber():
         self.cable_networks = {battery: set() for battery in self.district.batteries}
 
 
-    def run(self):
+    def run(self, plot_results=False):
         """Runs all steps involved in the hill climber algorithm."""
         
         # Assign houses to batteries with the greedy algorithm
@@ -81,14 +81,11 @@ class HillClimber():
 
             # Calculate cost of cable routes for this battery and add to total
             self.district.district_cost_shared += self.calculate_network_cost(self.cable_networks[self.current_battery])
-
-        # Update the plot
-        self.collect_all_cables()
-        self.all_cables
-        self.plot_network()
         
-        # Show plot after it is finished
-        plt.show()
+        if plot_results == True:
+            self.collect_all_cables()
+            self.all_cables
+            self.plot_network()
 
         print(f'Total costs: {self.district.district_cost_shared}')
 
@@ -198,8 +195,7 @@ class HillClimber():
             # Also plot the batteries in corresponding color
             self.ax.plot(battery.pos_x, battery.pos_y, color=chosen_color, marker='s', markersize=15)
 
-        plt.draw()
-        plt.pause(0.01)
+        plt.show()
 
 
     def collect_network_cables(self):
