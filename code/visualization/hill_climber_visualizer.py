@@ -31,6 +31,7 @@ def plot_network(district, result):
     """
     ax = setup_plot(50, 50)
 
+    print(result.all_cables)
     # Extract x and y coordinates of each point in the whole cable route
     x = [point[0] for point in result.all_cables]
     y = [point[1] for point in result.all_cables]

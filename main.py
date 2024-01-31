@@ -6,6 +6,7 @@ from code.visualization import visualizecost as vc
 from experiments.experiment import run_timed_experiments, save_experiment_results_to_csv
 from code.visualization.visualize_results import load_scores_from_csv, plot_score_distribution, plot_histogram_valid_solutions
 from code.algorithms.hill_climber import HillClimber
+from code.visualization.hill_climber_visualizer import plot_network, setup_plot
 import random
 import matplotlib.pyplot as plt
 import time 
@@ -20,10 +21,13 @@ if __name__ == "__main__":
 
     districts = [district1, district2, district3]
 
-    R = Greedy()
-    R.run(district1)
+    result = HillClimber(district1)
+    result.run()
     output = export_json(district1)
-    vg(output)
+    plot_network(district1, result)
+
+
+    # vg(output)
 
     # kosten vergelijken, attributes van hillclimber opslaan en tweede run doen, vergelijken --> lage kost saven--> dit runnen met visualizegrid
     # bij greedy en baseline beste kosten eruit halen wat al kan met visualizegrid en runtimedexperiment
@@ -31,43 +35,43 @@ if __name__ == "__main__":
     # 1 functie voor plot en 1 functie voor run
 
 
-    max_duration = 10
+    # max_duration = 20
 
 
 
 
 
-    for district in districts:
-        for algorithm_class in [HillClimber]:
-            algorithm_name = algorithm_class.__name__
-            print(f"Uitvoeren van {algorithm_name} op district {district.name}")
+    # for district in districts:
+    #     for algorithm_class in [HillClimber]:
+    #         algorithm_name = algorithm_class.__name__
+    #         print(f"Uitvoeren van {algorithm_name} op district {district.name}")
 
-            if algorithm_class == HillClimber:
-                algorithm_instance = algorithm_class(district)
-            else:
-                algorithm_instance = algorithm_class()
+    #         if algorithm_class == HillClimber:
+    #             algorithm_instance = algorithm_class(district)
+    #         else:
+    #             algorithm_instance = algorithm_class()
                 
-            experiment_results, total_duration, all_scores, best_score = run_timed_experiments(algorithm_instance, algorithm_name, district, max_duration)
+    #         experiment_results, total_duration, all_scores, best_score = run_timed_experiments(algorithm_instance, algorithm_name, district, max_duration)
 
-            csv_filename = f"resultaten_{algorithm_name}_district{district.name}.csv"
-            save_experiment_results_to_csv(algorithm_name, experiment_results, total_duration, all_scores, csv_filename)
+    #         csv_filename = f"resultaten_{algorithm_name}_district{district.name}.csv"
+    #         save_experiment_results_to_csv(algorithm_name, experiment_results, total_duration, all_scores, csv_filename)
 
-            scores = []
-            with open(csv_filename, mode='r') as csv_file:
-                csv_reader = csv.reader(csv_file)
-                next(csv_reader, None)
-                for row in csv_reader:
-                    try:
-                        score = float(row[4])
-                        scores.append(score)
-                    except ValueError:
-                        continue
+    #         scores = []
+    #         with open(csv_filename, mode='r') as csv_file:
+    #             csv_reader = csv.reader(csv_file)
+    #             next(csv_reader, None)
+    #             for row in csv_reader:
+    #                 try:
+    #                     score = float(row[4])
+    #                     scores.append(score)
+    #                 except ValueError:
+    #                     continue
 
 
-        algorithm_name = csv_filename.split("_")[1].split(".")[0]  # Haal de naam van het algoritme uit het bestand
+    #     algorithm_name = csv_filename.split("_")[1].split(".")[0]  # Haal de naam van het algoritme uit het bestand
 
-        scores = load_scores_from_csv(csv_filename)
-        plot_score_distribution(scores, algorithm_name)
+    #     scores = load_scores_from_csv(csv_filename)
+    #     plot_score_distribution(scores, algorithm_name)
 
 
 

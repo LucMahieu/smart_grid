@@ -73,8 +73,8 @@ class HillClimber():
             # Collect all cables from all battery networks to plot
             self.collect_all_cables()
 
-        # Reset attributes after each run
-        self.__init__(self.district)
+        # # Reset attributes after each run
+        # self.__init__(self.district)
         
 
 
