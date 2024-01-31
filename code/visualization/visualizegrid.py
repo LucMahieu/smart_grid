@@ -70,7 +70,7 @@ def visualize_grid(output):
 
     # Show and save plot
     plt.show()
-    plt.savefig('grid.png')
+    plt.savefig('results/grid.png')
 
 if __name__ == '__main__':
     # Load output data from JSON file

@@ -1,0 +1,4 @@
+algorithm,run_number,run_duration,iterations,cost
+Baseline,0,2.5445797443389893,,50056
+Baseline,0,4.561345100402832,,52378
+Baseline,0,9.16629409790039,,50551

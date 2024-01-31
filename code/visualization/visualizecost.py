@@ -35,21 +35,20 @@ def collect_experiment_results(district, algorithm):
 
     return data
 
+def plot_smoothed_histogram(*data):
+    """ 
+    Plots a smoothed histogram of cost distribution of each algorithm in one plot.
+    """
+    for costs, label in data:
+        sns.kdeplot(costs, label=label, bw_adjust=0.5)
 
-def plot_smoothed_histogram(district, algorithm):
-    """
-    Plots a smoothed histogram of cost distribution for a specific district.
-    """
-    data = collect_experiment_results(district, algorithm)
-    plt.figure(figsize=(10, 6))
-    for costs, algorithm in data:
-        sns.kdeplot(costs, label=algorithm, bw_adjust=1)
-    
-    # Set plot properties
-    plt.title(f'Cost Distribution in District {district.name}')
+    plt.title('Cost Distribution of Different Algorithms')
     plt.xlabel('Cost')
     plt.ylabel('Density')
     plt.legend()
+    plt.show()
+    plt.ylim(0, 8)
+    plt.savefig('results/smoothedhistogram.png')
 
     # Show and save plot
     plt.show()
