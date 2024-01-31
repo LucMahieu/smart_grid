@@ -22,7 +22,7 @@ def load_scores_from_csv(csv_filename):
     return scores
 
 
-def plot_score_distribution(scores, algorithm_name):
+def plot_score_distribution(scores, algorithm_name, district_name):
     """
     Plots the distribution of costs of each algorithm.
     """
@@ -39,10 +39,14 @@ def plot_score_distribution(scores, algorithm_name):
         plt.title(f'Distribution of costs {algorithm_name}')
         plt.xlabel('Cost')
         plt.ylabel('Frequency')
-        plt.show()
+        #plt.show()
+
 
         # Save the plot
-        plt.savefig(f'results/Cost distribution_of_{algorithm_name}')
+        #plt.figure()
+        plt.savefig(f'results/Cost distribution_of_{algorithm_name}_of_{district_name}')
+        plt.close()
+
 
     # If there is no cost, solution is not valid
     else:

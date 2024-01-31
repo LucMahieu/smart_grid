@@ -69,8 +69,8 @@ def visualize_grid(output):
     ax.grid(True)
 
     # Show and save plot
-    plt.show()
-    plt.savefig('results/grid.png')
+    #plt.show()
+    plt.savefig(f'results/grid_of_{district}')
 
 if __name__ == '__main__':
     # Load output data from JSON file

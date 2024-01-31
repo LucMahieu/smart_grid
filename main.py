@@ -55,14 +55,15 @@ if __name__ == "__main__":
                     except ValueError:
                         continue
 
-        # Pick name of algoritm from file
-        algorithm_name = csv_filename.split("_")[1].split(".")[0]  
+            # Pick name of algoritm from file
+            algorithm_name = csv_filename.split("_")[1].split(".")[0]  
+            district_name = csv_filename.split("_")[2].split(".")[0]
 
 
-        scores = load_scores_from_csv(csv_filename)
+            scores = load_scores_from_csv(csv_filename)
 
-        # Plots cost distribution of each algorithm
-        plot_score_distribution(scores, algorithm_name)
+            # Plots cost distribution of each algorithm
+            plot_score_distribution(scores, algorithm_name, district_name)
 
     # visualizes the grid of Greedy and Baseline
     for district in districts:

@@ -5,24 +5,6 @@ from code.classes.district import District
 from code.visualization.visualize_results import load_scores_from_csv
 import numpy as np
 
-def plot_cost_range(costs, label):
-    """
-    Plots highest and lowest cost of an algorithm.
-    """
-    highest_cost = max(costs)
-    lowest_cost = min(costs)
-    
-    # Set plot properties
-    plt.figure(figsize=(10, 6))
-    plt.bar([0, 1], [highest_cost, lowest_cost], color=['red', 'green'], alpha=0.7)
-    plt.xticks([0, 1], ['Highest Cost', 'Lowest Cost'])
-    plt.ylabel('Cost')
-    plt.title(f'Cost Range for {label}')
-    plt.ylim(0, highest_cost * 1.1)
-
-    # Show plot
-    plt.show()
-
 
 def collect_experiment_results(district, algorithm):
     """
