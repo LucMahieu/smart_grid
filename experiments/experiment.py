@@ -1,9 +1,7 @@
-import random
 from code.algorithms.algorithm import Baseline, Greedy
 from code.algorithms.hill_climber import HillClimber
 from code.classes.district import District
 from code.classes.battery import Battery 
-import matplotlib.pyplot as plt
 import time 
 import subprocess
 import csv
@@ -318,4 +316,4 @@ def save_experiment_results_to_csv(algorithm_name, experiment_results, total_dur
         for result in experiment_results:
             writer.writerow(result)
     
-    print(f"Resultats saved in {csv_filename}")
+    print(f"Results saved in {csv_filename}")
