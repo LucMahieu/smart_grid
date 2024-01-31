@@ -35,17 +35,9 @@ if __name__ == "__main__":
     load_scores_from_csv("resultaten_Greedy_district1.csv")
     plot_histogram_valid_solutions(districts, algorithms, num_experiments)
     plot_score_distribution(districts, algorithms, num_experiments)
-    plot_smoothed_histogram(districts, algorithms, num_experiments)
+    plot_smoothed_histogram(districts, algorithms, num_experiments) #TODO: 
     plot_hillclimber_solution(districts, algorithms, num_experiments)
-
-    for district in districts:
-        district_scores_data = []
-        for algorithm in algorithms:
-            csv_filename = f"resultaten_{algorithm}_district{district}.csv"
-            scores = load_scores_from_csv(csv_filename)
-            district_scores_data.append((scores, algorithm))
-
-        plot_smoothed_histogram(district, *district_scores_data)
+        
 
 
 

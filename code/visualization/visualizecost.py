@@ -1,10 +1,9 @@
 import seaborn as sns
 import matplotlib.pyplot as plt
-from code.algorithms.algorithm import Greedy, Baseline
+# from ..algorithms.algorithm import Greedy, Baseline
 from code.classes.district import District
-import time
+from code.visualization.visualize_results import load_scores_from_csv
 import numpy as np
-
 
 def plot_cost_range(costs, label):
     """
@@ -23,13 +22,26 @@ def plot_cost_range(costs, label):
     plt.show()
 
 
-def plot_smoothed_histogram(district, *data):
+def collect_experiment_results(district, algorithm):
+    """
+    Collects experiment results for each algorithm and district.
+    """
+    data = []
+    csv_filename = f"./resultaten_{algorithm}_district{district.name}.csv"
+    scores = load_scores_from_csv(csv_filename)
+    data.append((scores, algorithm))
+
+    return data
+
+
+def plot_smoothed_histogram(district, algorithm):
     """
     Plots a smoothed histogram of cost distribution for a specific district.
     """
+    data = collect_experiment_results(district, algorithm)
     plt.figure(figsize=(10, 6))
-    for costs, label in data:
-        sns.kdeplot(costs, label=label, bw_adjust=1)
+    for costs, algorithm in data:
+        sns.kdeplot(costs, label=algorithm, bw_adjust=1)
     
     plt.title(f'Cost Distribution in District {district.name}')
     plt.xlabel('Cost')
@@ -39,71 +51,45 @@ def plot_smoothed_histogram(district, *data):
     plt.savefig(f'smoothed_histogram_district{district.name}.png')
 
 
+district1 = District(1, "./data/district_1/district-1_batteries.csv", "./data/district_1/district-1_houses.csv")
+plot_smoothed_histogram(district1, 'Greedy')
 
 
-
-
-
-def run_experiment_and_measure_time(district, algorithm_class, num_experiments):
+def plot_histogram_valid_solutions(algorithm_instance, num_experiments):
+    """ 
+    Creates two plots, one showing the cost distribution for valid solutions, 
+    and one showing the count of valid and invalid solutions.
     """
-    Runs experiment and measures the duration and the cost.
-    """
-    costs = []
-    times = []
+    # Run the algorithm and collect the experiment scores
+    experiment_scores = []
+    valid_solutions_count = 0
+    invalid_solutions_count = 0
 
     for _ in range(num_experiments):
-        # Reset the district to its initial state before each experiment
-        district.reset_state()
+        algorithm_instance.run()
+        cost = algorithm_instance.district.shared_costs()
+        experiment_scores.append(cost)
 
-        # Measure start time
-        start_time = time.time()
+        if algorithm_instance.district.is_valid_solution():
+            valid_solutions_count += 1
+        else:
+            invalid_solutions_count += 1
 
-        # Create an instance of the algorithm and run it
-        algorithm_instance = algorithm_class()
-        algorithm_instance.run(district)
+    # Create histogram
+    plt.hist(experiment_scores, bins=30, color='blue', alpha=0.7)
 
-        # Measure end time
-        end_time = time.time()
+    plt.title('Distribution of Solution Costs')
+    plt.xlabel('Cost')
+    plt.ylabel('Frequency')
+    plt.ylim(0, num_experiments)
 
-        # Calculate the shared cost for this iteration
-        current_cost = district.shared_costs()
+    # Display counts of valid and invalid solutions
+    plt.text(0.95, 0.95, f'Valid solutions: {valid_solutions_count}\nInvalid solutions: {invalid_solutions_count}',
+             horizontalalignment='right',
+             verticalalignment='top',
+             transform=plt.gca().transAxes)
 
-        # Store the cost and time
-        costs.append(current_cost if current_cost is not None else 0)
-        times.append(end_time - start_time)
-
-    return costs, times
-
-
-def plot_time_and_cost(costs_data, times_data):
-    """
-    Plots a comparison of the duration and the cost of the algorithms.
-    """
-    n_groups = len(costs_data)
-    fig, ax = plt.subplots()
-
-    # Calculate bar positions
-    index = np.arange(n_groups)
-    bar_width = 0.35
-
-    # Plotting costs
-    costs = [data[0] for data in costs_data]
-    ax.bar(index, costs, bar_width, label='Cost', alpha=0.7)
-
-    # Plotting times
-    times = [data[0] for data in times_data]
-    ax.bar(index + bar_width, times, bar_width, label='Time', alpha=0.7)
-
-    ax.set_xlabel('Algorithms')
-    ax.set_ylabel('Values')
-    ax.set_title('Cost and Time Comparison of Algorithms')
-    ax.set_xticks(index + bar_width / 2)
-    ax.set_xticklabels([data[1] for data in costs_data])
-    ax.legend()
-
-    # Set y-axis to logarithmic scale
-    ax.set_yscale('log')
-
-    plt.tight_layout()
+    # Show the plot
     plt.show()
-    plt.savefig('timeandcost.png')
+    plt.savefig('validsolutions.png')
+

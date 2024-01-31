@@ -251,3 +251,65 @@ def run_experiment(district, algorithm_class, num_experiments):
     return best_solution_cost, worst_solution_cost, experiment_scores, valid_solutions_count, invalid_solutions_count
 
 
+def run_experiment_and_measure_time(district, algorithm_class, num_experiments):
+    """
+    Runs experiment and measures the duration and the cost.
+    """
+    costs = []
+    times = []
+
+    for _ in range(num_experiments):
+        # Reset the district to its initial state before each experiment
+        district.reset_state()
+
+        # Measure start time
+        start_time = time.time()
+
+        # Create an instance of the algorithm and run it
+        algorithm_instance = algorithm_class()
+        algorithm_instance.run(district)
+
+        # Measure end time
+        end_time = time.time()
+
+        # Calculate the shared cost for this iteration
+        current_cost = district.shared_costs()
+
+        # Store the cost and time
+        costs.append(current_cost if current_cost is not None else 0)
+        times.append(end_time - start_time)
+
+    return costs, times
+
+
+def plot_time_and_cost(costs_data, times_data):
+    """
+    Plots a comparison of the duration and the cost of the algorithms.
+    """
+    n_groups = len(costs_data)
+    fig, ax = plt.subplots()
+
+    # Calculate bar positions
+    index = np.arange(n_groups)
+    bar_width = 0.35
+
+    # Plotting costs
+    costs = [data[0] for data in costs_data]
+    ax.bar(index, costs, bar_width, label='Cost', alpha=0.7)
+
+    # Plotting times
+    times = [data[0] for data in times_data]
+    ax.bar(index + bar_width, times, bar_width, label='Time', alpha=0.7)
+
+    ax.set_xlabel('Algorithms')
+    ax.set_ylabel('Values')
+    ax.set_title('Cost and Time Comparison of Algorithms')
+    ax.set_xticks(index + bar_width / 2)
+    ax.set_xticklabels([data[1] for data in costs_data])
+    ax.legend()
+
+    # Set y-axis to logarithmic scale
+    ax.set_yscale('log')
+    plt.tight_layout()
+    plt.show()
+    plt.savefig('timeandcost.png')
