@@ -3,7 +3,7 @@ from code.classes.district import District
 from export_json import export_json
 from code.visualization.visualizegrid import visualize_grid as vg
 from code.visualization import visualizecost as vc
-from experiments.experiments import run_timed_experiments, save_experiment_results_to_csv
+from experiments.experiment import run_timed_experiments, save_experiment_results_to_csv
 from code.visualization.visualize_results import load_scores_from_csv, plot_score_distribution, plot_histogram_valid_solutions
 from code.algorithms.hill_climber import HillClimber
 import random
@@ -20,13 +20,6 @@ if __name__ == "__main__":
     district3 = District(3, "data/district_3/district-3_batteries.csv", "data/district_3/district-3_houses.csv")
 
     districts = [district1, district2, district3]
-    # Create hill climber algorithm object
-    #hill_climber = hc.HillClimber(district1)
-
-    # Run hill climber algorithm
-    #hill_climber.run(district1.houses)
-
-
 
 
 max_duration = 10
@@ -66,7 +59,7 @@ for district in districts:
             algorithm_instance = algorithm_class(district)
         else:
             algorithm_instance = algorithm_class()
-
+            
         experiment_results, total_duration, all_scores, best_score = run_timed_experiments(algorithm_instance, algorithm_name, district, max_duration)
 
         csv_filename = f"resultaten_{algorithm_name}_district{district.name}.csv"
@@ -89,20 +82,6 @@ for district in districts:
     scores = load_scores_from_csv(csv_filename)
     #plot_score_distribution(scores, algorithm_name)
 
-   
-
-
-   
-
-
-
-
-    R = Greedy()
-    R.run(district1)
-    # # R = bs.Baseline()
-    # # R.run(district1)
-    print(district1.shared_costs())
-    output = export_json(district1)
 
     #vg.visualize_grid(output)
 
