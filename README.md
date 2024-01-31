@@ -15,6 +15,10 @@ Het hill climber algoritme past andere heuristieken toe om zo weinig mogelijk ka
 
 De resultaten staan in output.json
 
+### Visualisatie
+Voor elk district wordt elk algoritme gerund en wordt de kostendistributie gevisualiseerd. De runtime is gebaseerd op de ingevoerde duur, en dit zal ook het aantal iteraties bepalen. Dit is een histogram van de kosten per iteratie.
+Vervolgens wordt de grid gevisualiseerd, met daarop de kabelsegmenten, batterijen en huizen zichtbaar. 
+
 ## Aan de slag
 
 ### Vereisten
