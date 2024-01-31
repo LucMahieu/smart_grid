@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import random
 from ..classes.district import District
 from .algorithm import Greedy
-from export_json import export_json
+from archive.export_json import export_json
 #from visualization.visualizegrid import visualize_grid
 import json
 
@@ -32,10 +32,10 @@ class HillClimber():
             self.current_battery = battery
   
             # Select houses assigned to current battery
-            self.current_houses = self.district.battery_houses_connections[battery]
+            current_houses = self.district.battery_houses_connections[battery]
 
             # Connect houses with shortest connections first
-            shortest_connections = self.calculate_shortest_connections(self.current_houses)
+            shortest_connections = self.calculate_shortest_connections(current_houses)
             sorted_connections = self.sort_dict(shortest_connections)
             
             for connection in sorted_connections:
