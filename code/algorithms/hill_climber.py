@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import random
 from ..classes.district import District
 from .algorithm import Greedy
@@ -16,7 +16,7 @@ class HillClimber():
         self.cable_networks = {battery: set() for battery in self.district.batteries}
 
 
-    def run(self, plot_results=False):
+    def run(self):
         """
         Runs all steps involved in the hill climber algorithm.
         """
@@ -69,10 +69,9 @@ class HillClimber():
 
             # Calculate cost of cable routes for this battery and add to total
             self.district.district_cost_shared += self.calculate_network_cost(self.cable_networks[self.current_battery])
-        
-        if plot_results == True:
-            self.setup_plot()
-            self.plot_network()
+
+            # Collect all cables from all battery networks to plot
+            self.collect_all_cables()
 
         # Reset attributes after each run
         self.__init__(self.district)
@@ -140,80 +139,10 @@ class HillClimber():
         return (len(cable_route) - 1) * 9 + 5000
             
 
-    def setup_plot(self, max_x_value=50, max_y_value=50):
-        """
-        Initialise the plot out of loop so plot gets updated.
-        """
-        plt.figure(figsize=(6, 6))
-        self.ax = plt.gca()
-
-        # Create grid lines with 5 interval spacing
-        self.ax.set_xticks(range(0, max_x_value + 1, 5)) # major
-        self.ax.set_xticks(range(0, max_x_value + 1, 5)) # major
-
-        # Create gridlines with 1 interval spacing
-        self.ax.set_xticks(range(0, max_x_value + 1), minor=True)
-        self.ax.set_yticks(range(0, max_y_value + 1), minor=True)
-        self.ax.grid(True)
-        
-        # Adjust transparancy of gridlines with alpha
-        self.ax.grid(which='major', alpha=0.5) # the gridlines with interval of 5
-        self.ax.grid(which='minor', alpha=0.2)
-    
-
-    def plot_network(self):
-        """
-        Plots end result of the algorithm including all cables, houses, and 
-        batteries on the grid.
-        """
-        # Collect all cables from all battery networks to plot
-        self.collect_all_cables()
-
-        # Extract x and y coordinates of each point in the whole cable route
-        x = [point[0] for point in self.all_cables]
-        y = [point[1] for point in self.all_cables]
-
-        self.ax.plot(
-            x, y, marker='o', 
-            linestyle='None', 
-            color='black', 
-            markersize=3
-        )
-
-        colors = ['orange', 'purple', 'grey', 'red', 'green']
-        
-        # Plot each battery with its assigned houses in a different color
-        for i, battery in enumerate(self.district.batteries):
-            houses = self.district.battery_houses_connections[battery]
-            
-            # Extract x and y coordinates of each point in the cluster
-            x = [house.pos_x for house in houses]
-            y = [house.pos_y for house in houses]
-
-            chosen_color = colors[i]
-
-            # Plot the house cluster as points on a grid with the assigned color
-            self.ax.plot(
-                x, y, 
-                color=chosen_color, 
-                marker='o', 
-                linestyle='None', 
-                markersize=6
-            )
-
-            # Plot the batteries in color corresponding to houses
-            self.ax.plot(
-                battery.pos_x, 
-                battery.pos_y, 
-                color=chosen_color, 
-                marker='s', 
-                markersize=15)
-
-        plt.show()
-
-
     def collect_network_cables(self):
-        """Collects all cables that belong to the current battery (network)."""
+        """
+        Collects all cables that belong to the current battery (network).
+        """
         for cable_route in self.layed_cables[self.current_battery].values():
             self.cable_networks[self.current_battery].update(cable_route)
 
@@ -247,12 +176,16 @@ class HillClimber():
 
 
     def manhattan_distance(self, point1, point2):
-        """Calculate manhatten distance between two points."""
+        """
+        Calculate Manhattan distance between two points.
+        """
         return abs(point1[0] - point2[0]) + abs(point1[1] - point2[1])
         
 
     def calculate_shortest_connections(self, points):
-        """Calculate distances between coordinates (points on grid) and save."""
+        """
+        Calculate distances between coordinates (points on grid) and save.
+        """
         connections = {}
 
         # Make combinations of all points and calculate distances
@@ -278,7 +211,9 @@ class HillClimber():
 
 
     def cluster_connections(self):
-        """Connects cables with eachother to make a bigger cluster if possible."""
+        """
+        Connects cables with eachother to make a bigger cluster if possible.
+        """
         for connection, cables in self.layed_cables[self.current_battery].items():
             start_point = connection[0]
             end_point = connection[1]
@@ -310,15 +245,18 @@ class HillClimber():
 
 
     def sort_dict(self, dictionary):
-        """Sort dictionary by value."""
+        """
+        Sort dictionary by value.
+        """
         return dict(sorted(dictionary.items(), key=lambda x: x[1]))
     
 
     def choose_x_y_lines(self, cable, route_direction):
-        """Determine what will be the y-line and x-line of cable route between points.
-        These are the outer lines of the manhatten distance domain between the points.
-        Its value is either the x or y coordinate of the begin or end point."""
-        
+        """
+        Determine what will be the y-line and x-line of cable route between points.
+        These are the outer lines of the Manhattan distance domain between the points.
+        Its value is either the x or y coordinate of the begin or end point.
+        """
         begin_point = cable[0]
         end_point = cable[1]
 
@@ -341,7 +279,9 @@ class HillClimber():
 
 
     def lay_cable_connection(self, connection, route_direction=None):
-        """Lays cable route between two points."""
+        """
+        Lays cable route between two points.
+        """
         begin_point = connection[0]
         end_point = connection[1]
 

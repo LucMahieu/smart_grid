@@ -42,7 +42,7 @@ python main.py
 - **/data**: bevat de data van de huizen en batterijen in de drie districten
 - **/docs**: UML van de case
 - **/experiments**: code om experimenten uit te voeren
-- **/eresults**: resultaten van de verschillende experimenten
+- **/results**: resultaten van de verschillende experimenten
 
 ## Auteurs
 - Luc Mahieu
