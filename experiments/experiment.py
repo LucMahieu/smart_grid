@@ -279,10 +279,13 @@ def run_timed_experiments(algorithm_instance, algorithm_name, district, max_dura
         if isinstance(algorithm_instance, HillClimber):
             algorithm_instance.run()
             cost = district.district_cost_shared
+            # Reset state of district after each run
+            district.reset_state()
         else:
             algorithm_instance.run(district) # Greedy and Baseline
             cost = district.shared_costs()
-            all_scores.append(cost)
+        
+        all_scores.append(cost)
 
         run_end_time = time.time()
         run_duration = run_end_time - run_start_time
