@@ -73,6 +73,9 @@ class HillClimber():
         if plot_results == True:
             self.setup_plot()
             self.plot_network()
+        
+        # Reset state of district after each run
+        self.district.reset_state()
 
 
     def collect_all_cables(self):

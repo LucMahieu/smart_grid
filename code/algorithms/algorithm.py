@@ -4,6 +4,7 @@ class Algorithm():
     def __init__(self):
         self.crossed_battery = False
     
+    
     def run(self, district):
         """
         Makes connections between batteries and houses and lays cable routes between them based on Manhattan distance. 
@@ -41,6 +42,7 @@ class Algorithm():
                 break
 
         return district
+
 
     def assign_battery_to_house(self, district, house):
         """
