@@ -264,19 +264,17 @@ import csv
 
 
 
-
-
-"""
-Run experiments with algorithms and limit the total duration of experiments to 'max_duration'.
-"""
 def run_timed_experiments(algorithm_instance, algorithm_name, district, max_duration):
+    """
+    Run experiments with algorithms and limit the total duration of experiments to 'max_duration'.
+    """
     start = time.time()
     total_experiment_duration = 0
     experiment_results = []
     all_scores = []
     run_number = 0
 
-
+    # Continue until max duration is reached 
     while total_experiment_duration < max_duration:
         run_start_time = time.time()
 
@@ -284,6 +282,7 @@ def run_timed_experiments(algorithm_instance, algorithm_name, district, max_dura
             algorithm_instance.run()
         else:
             algorithm_instance.run(district)
+
         run_end_time = time.time()
         run_duration = run_end_time - run_start_time
         total_experiment_duration += run_duration
@@ -307,15 +306,16 @@ def run_timed_experiments(algorithm_instance, algorithm_name, district, max_dura
     return experiment_results, total_duration, all_scores, best_score
 
 
-"""
-Save experiment results to a CSV file.
-"""
 def save_experiment_results_to_csv(algorithm_name, experiment_results, total_duration, all_scores, csv_filename):
+    """
+    Save experiment results to a CSV file.
+    """
     with open(csv_filename, mode='w', newline='') as csv_file:
         fieldnames = ['algorithm', 'run_number', 'run_duration', 'iterations', 'cost']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
+
         for result in experiment_results:
             writer.writerow(result)
     
-    print(f"Resultaten opgeslagen in {csv_filename}")
+    print(f"Resultats saved in {csv_filename}")
