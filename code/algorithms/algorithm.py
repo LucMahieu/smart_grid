@@ -6,7 +6,8 @@ class Algorithm():
     
     def run(self, district):
         """
-        Makes connections between batteries and houses and lays cable routes between them based on Manhattan distance.
+        Makes connections between batteries and houses and lays cable routes between them based on Manhattan distance. 
+        Tries again when no battery with enough capacity is left, or if batteries are connected to eachother whilst laying the cable.
         """
         # Keep trying until valid solution is found
         while True:
@@ -29,6 +30,8 @@ class Algorithm():
                 
                 # Lays cable route based on steps that minimize distance
                 self.lay_cable_route(district, house)
+                
+                # If batteries are connected, solution is not valid
                 if self.crossed_battery == True:
                     valid_solution = False
                     break
@@ -54,17 +57,14 @@ class Algorithm():
                 batteries_with_capacity.append(battery)
 
         if batteries_with_capacity:
-            # Select battery from the list of batteries with enough capacity
-            selected_battery = self.select_battery(batteries_with_capacity, house)
-
-            # Connect selected battery to the current house
-            house.battery = selected_battery
+            # Select battery from the list of batteries with enough capacity and connect to house
+            house.battery = self.select_battery(batteries_with_capacity, house)
 
             # Update battery capacity
             house.battery.update_capacity(house)
 
             # Add current house to the list of houses that are connected to the selected battery
-            district.battery_houses_connections[selected_battery].append(house)
+            district.battery_houses_connections[house.battery].append(house)
 
 
     def lay_cable_route(self, district, house):
@@ -85,6 +85,7 @@ class Algorithm():
         # X an y-coordinate of position
         x_and_y = [0, 1]
         for x_or_y in x_and_y: 
+        
             # Adding cable segments 
             self.add_segments(current_pos, cable_end_pos, x_or_y, avoid_coordinates, house)
 
@@ -119,7 +120,7 @@ class Algorithm():
 class Greedy(Algorithm):
     def manhattan_distance(self, house, battery):
         """
-        Calculates Manhattan distance between house and battery.
+        Calculates Manhattan distance between a house and a battery.
         """
         return abs(house.pos_x - battery.pos_x) + abs(house.pos_y - battery.pos_y)
 
@@ -128,20 +129,18 @@ class Greedy(Algorithm):
         """
         Selects the battery closest to the selected house with enough capacity left.
         """
-        # Create dictionary to store distance between house and each battery with sufficient capacity left
+        # Create dictionary to store distances 
         distance_dict = {}
 
-        # Calculate manhattan distance for all batteries with enough capacity
+        # Calculate Manhattan distance for all batteries with enough capacity
         for battery in batteries_with_capacity:
             distance = self.manhattan_distance(house, battery)
             
             # Add calculated distance to dictionary
             distance_dict[battery] = distance
 
-        # Selecting closest battery from dictionary
-        best_battery = min(distance_dict, key = distance_dict.get)
-
-        return best_battery
+        # Return battery from dictionary that is closest to house
+        return min(distance_dict, key = distance_dict.get)
     
 
 class Baseline(Algorithm):
