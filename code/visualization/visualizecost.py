@@ -107,3 +107,31 @@ def plot_time_and_cost(costs_data, times_data):
     plt.tight_layout()
     plt.show()
     plt.savefig('timeandcost.png')
+
+
+
+
+def run_algorithm_and_collect_data(algorithm, district, num_iterations):
+    costs = []
+    for _ in range(num_iterations):
+        algorithm.run()
+        cost = district.shared_costs()
+        costs.append(cost)
+    return costs
+
+def plot_algorithm_performance(district, algorithms, num_iterations):
+    data = {}
+    for Algorithm in algorithms:
+        algorithm_instance = Algorithm(district)
+        algorithm_name = Algorithm.__name__
+        data[algorithm_name] = run_algorithm_and_collect_data(algorithm_instance, district, num_iterations)
+
+    plt.figure(figsize=(10, 6))
+    for algorithm_name, costs in data.items():
+        plt.plot(range(num_iterations), costs, label=algorithm_name)
+
+    plt.xlabel('Iteration')
+    plt.ylabel('Cost')
+    plt.title('Algorithm Performance Over Iterations')
+    plt.legend()
+    plt.show()
