@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from code.algorithms.algorithm import Greedy, Baseline
 from code.classes.district import District
 import time
-import numpy as np 
+import numpy as np
 
 
 def plot_cost_range(costs, label):

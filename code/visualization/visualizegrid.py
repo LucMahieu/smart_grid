@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 from PIL import Image
 import json
-import numpy as np
 
 
 def visualize_grid(output):
@@ -23,31 +22,31 @@ def visualize_grid(output):
     # Visualizing batteries
     for i, battery in enumerate(batteries):
         
+        # Selecting color
         color = colors[i % len(colors)]
+
+        # Plotting battery at right location
         battery_location = battery.get("location")
         x_battery, y_battery = map(float, battery_location.split(','))
-
-        
         battery_box = AnnotationBbox(OffsetImage(battery_icon, zoom=0.04), (x_battery, y_battery), frameon=False, pad=0)
         ax.add_artist(battery_box)
 
-        houses = battery.get("houses", [])
-
         # Visualizing houses
+        houses = battery.get("houses", [])
         for house in houses:
+
+            # Plotting house at right location
             house_location = house.get("location")
             x, y = map(float, house_location.split(','))
-
-            
             house_box = AnnotationBbox(OffsetImage(house_icon, zoom=0.04), (x, y), frameon=False, pad=0)
             ax.add_artist(house_box)
 
-            
+            # Visualizing cables
             cables = house.get("cables", [])
             prev_x, prev_y = x, y
-
-            # Visualizing cables
             for cable_point in cables:
+
+                # Plotting cable at right location
                 cable_x, cable_y = cable_point
                 ax.plot([prev_x, cable_x], [prev_y, cable_y], color=color, alpha=0.5)
                 prev_x, prev_y = cable_x, cable_y
