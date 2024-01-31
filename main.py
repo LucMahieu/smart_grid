@@ -8,7 +8,7 @@ from code.visualization.visualizegrid import visualize_grid as vg
 #from code.visualization import visualizecost as vc
 from experiments.experiments import run_timed_experiments, save_experiment_results_to_csv
 from code.visualization.visualize_results import load_scores_from_csv, plot_score_distribution, plot_histogram_valid_solutions
-from code.algorithms.hill_climber_test import HillClimber
+from code.algorithms.hill_climber import HillClimber
 import random
 import matplotlib.pyplot as plt
 import time 
