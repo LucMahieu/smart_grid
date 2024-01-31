@@ -278,15 +278,15 @@ def run_timed_experiments(algorithm_instance, algorithm_name, district, max_dura
 
         if isinstance(algorithm_instance, HillClimber):
             algorithm_instance.run()
+            cost = district.district_cost_shared
         else:
-            algorithm_instance.run(district)
+            algorithm_instance.run(district) # Greedy and Baseline
+            cost = district.shared_costs()
+            all_scores.append(cost)
 
         run_end_time = time.time()
         run_duration = run_end_time - run_start_time
         total_experiment_duration += run_duration
-
-        cost = district.shared_costs()
-        all_scores.append(cost)
 
         experiment_results.append({
             'algorithm': algorithm_name,
