@@ -6,7 +6,7 @@ import subprocess
 import csv
 
 
-def run_timed_experiments(algorithm_instance, algorithm_name, district, iterations):
+def run_experiments(algorithm_instance, algorithm_name, district, iterations):
     """
     Run experiments with algorithms and limit the total duration of experiments to 'max_duration'.
     """
