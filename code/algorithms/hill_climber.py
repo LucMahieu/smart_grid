@@ -1,10 +1,7 @@
-# import matplotlib.pyplot as plt
 import random
 from ..classes.district import District
 from .algorithm import Greedy
-from archive.export_json import export_json
-#from visualization.visualizegrid import visualize_grid
-import json
+
 
 class HillClimber():
     def __init__(self, district):
@@ -47,15 +44,14 @@ class HillClimber():
             
             # Lay cable routes between clusters
             for connection in self.connections:
-                # self.layed_cables[self.current_battery][connection] = self.lay_cable_connection(connection)
                 self.hill_climber(connection)
             
+            # Lay cable routes between clusters until only one cluster is left
             while len(self.clusters[self.current_battery]) > 1:
                 self.cluster_connections()
                 self.find_shortest_connections_between_clusters()
                 
                 for connection in self.connections:
-                    # self.layed_cables[self.current_battery][connection] = self.lay_cable_connection(connection)
                     self.hill_climber(connection)
 
             shortest_connection = self.calculate_shortest_distance_to_battery()
@@ -72,9 +68,6 @@ class HillClimber():
 
             # Collect all cables from all battery networks to plot
             self.collect_all_cables()
-
-        # Reset attributes after each run
-        self.__init__(self.district)
         
 
     def collect_all_cables(self):

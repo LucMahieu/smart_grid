@@ -13,11 +13,9 @@ def load_scores_from_csv(csv_filename):
         next(csv_reader, None)
 
         for row in csv_reader:
-            try:
-                score = float(row[4])
-                scores.append(score)
-            except ValueError:
-                continue
+            print(f"Row: {row}")
+            score = float(row[2])
+            scores.append(score)
 
     return scores
 

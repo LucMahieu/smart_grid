@@ -24,26 +24,23 @@ def plot_cost_range(costs, label):
     plt.show()
 
 
-def collect_experiment_results(district, algorithm):
+def collect_experiment_scores(district, algorithm):
     """
     Collects experiment results for each algorithm and district.
     """
-    data = []
-    csv_filename = f"./resultaten_{algorithm}_district{district.name}.csv"
+    csv_filename = f"./results_of_{algorithm}_district{district.name}.csv"
     scores = load_scores_from_csv(csv_filename)
-    data.append((scores, algorithm))
 
-    return data
+    return scores
 
 
-def plot_smoothed_histogram(district, algorithm):
+def plot_smoothed_histogram(district, data):
     """
     Plots a smoothed histogram of cost distribution for a specific district.
     """
-    data = collect_experiment_results(district, algorithm)
     plt.figure(figsize=(10, 6))
-    for costs, algorithm in data:
-        sns.kdeplot(costs, label=algorithm, bw_adjust=1)
+    for costs, label in data:
+        sns.kdeplot(costs, label=label)
     
     # Set plot properties
     plt.title(f'Cost Distribution in District {district.name}')
@@ -54,4 +51,5 @@ def plot_smoothed_histogram(district, algorithm):
     # Show and save plot
     plt.show()
     plt.savefig(f'smoothed_histogram_district{district.name}.png')
+
 
