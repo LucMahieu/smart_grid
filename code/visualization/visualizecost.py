@@ -1,9 +1,8 @@
 import seaborn as sns
 import matplotlib.pyplot as plt
-from algorithms.greedy import Greedy
-from algorithms.baseline import Baseline
-from classes.district import District
-from algorithms.experiments import run_experiment
+from code.algorithms.algorithm import Greedy, Baseline
+from code.classes.district import District
+from experiments.experiment import run_experiment
 import time
 
 # plots highest and lowest cost of an algorithm
