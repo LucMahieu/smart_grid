@@ -44,6 +44,8 @@ import matplotlib.pyplot as plt
 #     return best_solution_cost, worst_solution_cost, experiment_scores, valid_solutions_count, invalid_solutions_count
 
 
+from code.algorithms.hill_climber_test import HillClimber
+from code.algorithms.algorithm import Greedy, Baseline
 
 
 
@@ -52,55 +54,43 @@ import matplotlib.pyplot as plt
 """
 Run experiments with algorithms and limit the total duration of experiments to 'max_duration'.
 """
-def run_timed_experiments(algorithm_classes, district, max_duration):
+def run_timed_experiments(algorithm_instance, algorithm_name, district, max_duration):
     start = time.time()
     total_experiment_duration = 0
     experiment_results = []
-    run_number = 0
     all_scores = []
+    run_number = 0
+
 
     while total_experiment_duration < max_duration:
-        for algorithm_class in algorithm_classes:
-            run_number += 1
-            algorithm_instance = algorithm_class()
-            run_start_time = time.time()
-            algo_iterations = algorithm_instance.run(district)
-            run_end_time = time.time()
+        run_start_time = time.time()
 
-            run_duration = run_end_time - run_start_time
-            total_experiment_duration += run_duration
+        if isinstance(algorithm_instance, HillClimber):
+            algorithm_instance.run()
+        else:
+            algorithm_instance.run(district)
+        run_end_time = time.time()
+        run_duration = run_end_time - run_start_time
+        total_experiment_duration += run_duration
 
-            cost = district.shared_costs()
-            all_scores.append(cost)
+        cost = district.shared_costs()
+        all_scores.append(cost)
 
-            experiment_results.append({
-                'algorithm': algorithm_class.__name__,
-                'run_number': run_number,
-                'run_duration': run_duration,
-                'iterations': algo_iterations,
-                'cost': cost
-            })
+        experiment_results.append({
+            'algorithm': algorithm_name,
+            'run_number': run_number,
+            'run_duration': run_duration,
+            'cost': cost
+        })
 
-            if total_experiment_duration >= max_duration:
-                break
+        if total_experiment_duration >= max_duration:
+            break
 
     total_duration = time.time() - start
-
-    # Calculate the best score
-    best_score = min(all_scores)
-
-    results_dict = {}
-    
-    for result in experiment_results:
-        algorithm_name = result['algorithm']
-        if algorithm_name not in results_dict:
-            results_dict[algorithm_name] = {'scores': [], 'iterations': []}
-        
-        results_dict[algorithm_name]['scores'].append(result['cost'])
-        results_dict[algorithm_name]['iterations'].append(result['iterations'])
-    
+    best_score = min(all_scores) if all_scores else None
 
     return experiment_results, total_duration, all_scores, best_score
+
 
 """
 Save experiment results to a CSV file.
