@@ -24,7 +24,7 @@ def setup_plot(max_x_value, max_y_value):
         return ax
     
 
-def plot_network(district, result):
+def plot_hillclimber_solution(district, result):
     """
     Plots end result of the algorithm including all cables, houses, and 
     batteries on the grid.
