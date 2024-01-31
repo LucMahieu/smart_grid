@@ -28,8 +28,8 @@ def plot_score_distribution(scores, algorithm_name):
     """
     if scores:
         print(f"Number of experiments: {len(scores)}")
-        print(f"Mean score: {np.mean(scores)}")
-        print(f"Standard deviation: {np.std(scores)}")
+        print(f"Mean score: {round(np.mean(scores), 1)}")
+        print(f"Standard deviation: {round(np.std(scores), 1)}")
         print(f"Min score: {np.min(scores)}")
         print(f"Max score: {np.max(scores)}")
 

@@ -16,6 +16,7 @@ def run_timed_experiments(algorithm_instance, algorithm_name, district, iteratio
     # Continue until max duration is reached 
     for _ in range(iterations):
 
+        # HillClimber
         if isinstance(algorithm_instance, HillClimber):
             algorithm_instance.run()
             cost = district.district_cost_shared
