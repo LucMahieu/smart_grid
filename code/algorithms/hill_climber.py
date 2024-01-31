@@ -13,6 +13,7 @@ class HillClimber():
         self.clusters = {battery: [] for battery in self.district.batteries}
         self.current_battery = None
         self.all_cables = set()
+        self.cable_networks = {battery: set() for battery in self.district.batteries}
 
 
     def run(self):
@@ -72,20 +73,29 @@ class HillClimber():
             shortest_connection = self.calculate_shortest_distance_to_battery()
             self.layed_cables[self.current_battery][connection] = self.lay_cable_connection(shortest_connection)
 
-            # Collect and save all cable routes for this battery in one set
-            self.collect_all_cables()
-            # Add all cable routes to first house of battery (for export_json to work)
-            self.current_houses[0].cables = self.all_cables
+            # Add all cable routes for this battery to first house of battery (for export_json to work)
+            current_houses[0].cables = self.layed_cables[self.current_battery]
 
-            # Update de plot
-            # self.plot_network()
+            # Collect all cables for this battery
+            self.collect_network_cables()
 
+            # Calculate cost of cable routes for this battery and add to total
+            self.district.district_cost_shared += self.calculate_network_cost(self.cable_networks[self.current_battery])
+
+        # Update the plot
+        self.collect_all_cables()
+        self.all_cables
+        self.plot_network()
+        print(f'ALL CABLES: {self.all_cables}')
         # Show plot after it is finished
-        # plt.show()
+        plt.show()
 
-        # # Calculate cost of shared cables
-        self.district.district_cost_shared = self.calculate_cost_shared(self.all_cables)
-        print(self.district.district_cost_shared)
+        print(f'Total costs: {self.district.district_cost_shared}')
+
+    def collect_all_cables(self):
+        """Collects all cables from all battery networks in order to plot function."""
+        for battery in self.district.batteries:
+            self.all_cables.update(self.cable_networks[battery])
 
 
     def hill_climber(self, connection):
@@ -98,15 +108,15 @@ class HillClimber():
         # Collect all cables that are already layed and add new cable routes to it
         self.collect_all_cables()
 
-        possible_cable_network1 = self.all_cables.copy()
+        possible_cable_network1 = self.cable_networks[self.current_battery].copy()
         possible_cable_network1.update(cable_route1)
 
-        possible_cable_network2 = self.all_cables.copy()
+        possible_cable_network2 = self.cable_networks[self.current_battery].copy()
         possible_cable_network2.update(cable_route2)
 
         # Calculate cost of both cable networks
-        cost_network1 = self.calculate_cost_shared(possible_cable_network1)
-        cost_network2 = self.calculate_cost_shared(possible_cable_network2)
+        cost_network1 = self.calculate_network_cost(possible_cable_network1)
+        cost_network2 = self.calculate_network_cost(possible_cable_network2)
         # if cost_network1 != cost_network2:
         #     print(f"cost network 1: {cost_network1} with cable route: {cable_route1}")
         #     print(f"cost network 2: {cost_network2} with cable route: {cable_route2}\n")
@@ -137,9 +147,9 @@ class HillClimber():
         return (begin_point, end_point)
 
 
-    def calculate_cost_shared(self, cable_route):
+    def calculate_network_cost(self, cable_route):
         """Calculates the cost of the shared cables."""
-        return (len(cable_route) - 1) * 9 + 5000 * len(self.district.batteries)
+        return (len(cable_route) - 1) * 9 + 5000
             
 
     def setup_plot(self, max_x_value=50, max_y_value=50):
@@ -192,10 +202,10 @@ class HillClimber():
         plt.pause(0.01)
 
 
-    def collect_all_cables(self):
-        """Adds new cables to set with all cables and plots them"""
+    def collect_network_cables(self):
+        """Adds new cables to set with all cables for this battery."""
         for cable_route in self.layed_cables[self.current_battery].values():
-            self.all_cables.update(cable_route)
+            self.cable_networks[self.current_battery].update(cable_route)
 
 
     def find_shortest_connections_between_clusters(self):
