@@ -122,9 +122,13 @@ def run_algorithm_and_collect_data(algorithm, district, num_iterations):
 def plot_algorithm_performance(district, algorithms, num_iterations):
     data = {}
     for Algorithm in algorithms:
-        algorithm_instance = Algorithm(district)
+        algorithm_instance = Algorithm()
+        
+        algorithm_instance.set_district(district)
+        
         algorithm_name = Algorithm.__name__
         data[algorithm_name] = run_algorithm_and_collect_data(algorithm_instance, district, num_iterations)
+
 
     plt.figure(figsize=(10, 6))
     for algorithm_name, costs in data.items():
