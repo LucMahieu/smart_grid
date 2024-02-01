@@ -4,9 +4,10 @@ from experiments.experiment import run_experiments, save_experiment_results_to_c
 from code.visualization.visualize_results import plot_score_distribution
 from code.algorithms.hill_climber import HillClimber
 from code.visualization.hill_climber_visualizer import plot_hillclimber_solution
-from code.visualization.visualizecost import plot_smoothed_histogram
+from experiments.experiment import run_timed_experiments
 import random
 import matplotlib.pyplot as plt
+import csv
 
 # Create districts from files with batteries and houses
 district1 = District(1, "data/district_1/district-1_batteries.csv", "data/district_1/district-1_houses.csv")
@@ -28,6 +29,16 @@ hill.run()
 #     for algorithm_class in [HillClimber, Greedy, Baseline]: #Greedy, Baseline, 
 #         algorithm_name = algorithm_class.__name__
 #         print(f"Uitvoeren van {algorithm_name} op district {district.name}")
+    districts = [district1, district2, district3]
+    
+    max_duration = 10
+
+    # Looping through districts
+    for district in districts:
+        # Looping through algorithms
+        for algorithm_class in [HillClimber, Greedy, Baseline]:
+            algorithm_name = algorithm_class.__name__
+            print(f"Run {algorithm_name} in district {district.name}")
 
 #         # Create an instance of the algorithm
 #         if algorithm_class == HillClimber:
@@ -58,5 +69,5 @@ hill.run()
 #     plot_smoothed_histogram(district, data)
     
 
-
+                    
 

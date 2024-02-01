@@ -30,6 +30,7 @@ def collect_experiment_scores(district, algorithm):
     """
     csv_filename = f"./results_of_{algorithm}_district{district.name}.csv"
     scores = load_scores_from_csv(csv_filename)
+    data.append((scores, algorithm))
 
     return scores
 
@@ -47,6 +48,9 @@ def plot_smoothed_histogram(district, data):
     plt.xlabel('Cost')
     plt.ylabel('Density')
     plt.legend()
+    plt.show()
+    plt.ylim(0, 8)
+    plt.savefig('results/smoothedhistogram.png')
 
     # Show and save plot
     plt.show()

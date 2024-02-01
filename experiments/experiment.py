@@ -2,14 +2,17 @@ from code.algorithms.algorithm import Baseline, Greedy
 from code.algorithms.hill_climber import HillClimber
 from code.classes.district import District
 from code.classes.battery import Battery
+import time
 import subprocess
 import csv
 
 
-def run_experiments(algorithm_instance, algorithm_name, district, iterations):
+def run_timed_experiments(algorithm_instance, algorithm_name, district, max_duration):
     """
     Run experiments with algorithms for X iterations.
     """
+    start = time.time()
+    total_experiment_duration = 0
     experiment_results = []
     all_costs = []
     lowest_cost = float('inf')
@@ -20,7 +23,6 @@ def run_experiments(algorithm_instance, algorithm_name, district, iterations):
     for _ in range(iterations):
         print(f"iterations: {_}")
 
-        # HillClimber
         if isinstance(algorithm_instance, HillClimber):
             algorithm_instance.run()
             cost = district.district_cost_shared
@@ -39,31 +41,34 @@ def run_experiments(algorithm_instance, algorithm_name, district, iterations):
             district.reset_state()
             # Reset HillClimber attributes
             algorithm_instance.__init__(district)
+
+        # Greedy and Baseline
         else:
-            algorithm_instance.run(district) # Greedy and Baseline
+            algorithm_instance.run(district)
             cost = district.shared_costs()
         
         all_costs.append(cost)
 
         experiment_results.append({
             'algorithm': algorithm_name,
-            'iterations': iterations,
+            'run_number': run_number,
+            'run_duration': run_duration,
             'cost': cost
         })
 
     return experiment_results, all_costs, best_hill_climber_solution, best_district_solution
 
 
-def save_experiment_results_to_csv(experiment_results, csv_filename):
+def save_experiment_results_to_csv(algorithm_name, experiment_results, total_duration, all_scores, csv_filename):
     """
-    Save experiment results to a CSV file.
+    Saves algorithm, run_number, run_duration, iterations, cost to a CSV file for each algorithm.
     """
+
     with open(csv_filename, mode='w', newline='') as csv_file:
-        fieldnames = ['algorithm', 'iterations', 'cost']
+        fieldnames = ['algorithm', 'run_number', 'run_duration', 'iterations', 'cost']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
-
         for result in experiment_results:
             writer.writerow(result)
-    
+
     print(f"Results saved in {csv_filename}")
