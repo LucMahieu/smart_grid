@@ -7,53 +7,35 @@ import subprocess
 import csv
 
 
-def run_timed_experiments(algorithm_instance, algorithm_name, district, max_duration):
-    """
-    Run experiments with algorithms and limit the total duration of experiments to 'max_duration'.
-    """
-    start = time.time()
-    total_experiment_duration = 0
+def run_experiments(algorithm_instance, algorithm_name, district, num_experiments):
     experiment_results = []
     all_scores = []
-    run_number = 0
 
-    # Continue until max duration is reached 
-    while total_experiment_duration < max_duration:
-        run_start_time = time.time()
+    for _ in range(num_experiments):
+        district.reset_state()
 
+        # Run the algorithm
         if isinstance(algorithm_instance, HillClimber):
+            # For HillClimber, no district argument is needed
             algorithm_instance.run()
+            # Use district_cost_shared for HillClimber
             cost = district.district_cost_shared
-            # Reset state of district after each run
-            district.reset_state()
-            # Reset HillClimber attributes
-            algorithm_instance.__init__(district)
-
-        # Greedy and Baseline
         else:
+            # For Greedy and Baseline, use district as an argument
             algorithm_instance.run(district)
+            # Use shared_costs for Greedy and Baseline
             cost = district.shared_costs()
         
         all_scores.append(cost)
 
-        run_end_time = time.time()
-        run_duration = run_end_time - run_start_time
-        total_experiment_duration += run_duration
-
         experiment_results.append({
             'algorithm': algorithm_name,
-            'run_number': run_number,
-            'run_duration': run_duration,
             'cost': cost
         })
 
-        if total_experiment_duration >= max_duration:
-            break
-
-    total_duration = time.time() - start
     best_score = min(all_scores) if all_scores else None
 
-    return experiment_results, total_duration, all_scores, best_score
+    return experiment_results, all_scores, best_score
 
 
 
