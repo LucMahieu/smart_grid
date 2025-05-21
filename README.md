@@ -1,50 +1,55 @@
 # SmartGrid Tesla Engineers
 
-Tegenwoordig produceren veel huizen zelf groene energie, bijvoorbeeld via zonnepanelen. Wanneer een huis meer energie produceert dan nodig is voor eigen gebruik, kan het overschot aan energie worden opgeleverd aan een energieleverancier. Hiervoor is infrastructuur (het grid) nodig. Op het grid staan huizen en batterijen, die verbonden worden via kabels. De capaciteit van een batterij mag niet overschreden worden door de gecombineerde outputs van de gekoppelde huizen. Ook mogen batterijen niet aan elkaar verbonden zijn, ook niet via een huis. Verder mag een huis niet aan meerdere batterijen verbonden zijn. 
+Nowadays, many homes generate their own green energy, for example through solar panels. When a home produces more energy than it needs for personal use, the surplus energy can be supplied to an energy provider. This requires infrastructure (the grid). On the grid, homes and batteries are connected via cables. The capacity of a battery may not be exceeded by the combined outputs of the connected houses. Also, batteries may not be connected to each other, not even indirectly via a house. Furthermore, a house may not be connected to multiple batteries.
 
-In de SmartGrid case is het doel om de kosten van het grid, gebaseerd op de prijs van kabelsegmenten en batterijen, te minimaliseren. Het is voordelig als huizen een kabel kunnen delen, aangezien dit het aantal benodigde kabelsegmenten minimaliseert en dit dus de kosten drukt. Er wordt data van drie districten gebruikt. We hebben drie algoritmes getest: baseline (randomise), greedy en hillclimber.
+In the SmartGrid case, the goal is to minimize the cost of the grid, based on the price of cable segments and batteries. It is advantageous if houses can share a cable, as this minimizes the number of required cable segments and therefore reduces costs. Data from three districts is used. We tested three algorithms: baseline (randomize), greedy, and hill climber.
 
 #### Baseline
-In het baseline algoritme, worden de huizen in een willekeurige volgorde afgegaan en gekoppeld aan een willekeurige batterij die nog genoeg capaciteit voor deze connectie over heeft. Vervolgens wordt de kabel gelegd op basis van de Manhattan distance, waarbij batterijen niet aan elkaar verbonden mogen worden. Het proces wordt herhaald totdat een valide oplossing is gevonden.
+
+In the baseline algorithm, houses are processed in a random order and connected to a randomly chosen battery that still has enough capacity for the connection. The cable is then laid based on Manhattan distance, with the constraint that batteries cannot be connected to each other. The process is repeated until a valid solution is found.
 
 #### Greedy
-Het greedy algoritme volgt dezelfde stappen als baseline, met als verschil dat een huis wordt gekoppeld aan de dichtsbijzijnde batterij i.p.v. een willekeurige batterij die capaciteit over heeft. Er is geen verschil in het leggen van de kabel, dit gebeurt nog steeds op basis van de Manhattan distance.
+
+The greedy algorithm follows the same steps as the baseline, with the difference that a house is connected to the nearest battery instead of a random one with available capacity. Cable placement is still based on Manhattan distance.
 
 #### Hill Climber
-Het hill climber algoritme past andere heuristieken toe om zo weinig mogelijk kabels neer te leggen en zoveel mogelijk kabels te delen.Om te bepalen welke huizen bij welke batterij horen, wordt het greedy algoritme gebruikt. De optimalisatie die de hill climber toevoegt is gefocust op de manier waarop de huizen, die horen bij een batterij, met elkaar verbonden zijn. Het idee is dat er telkens de kortste route tussen het bestaande kabel netwerk en potentiele nieuwe onderdelen van het netwerk bepaald wordt om er vervolgens een kabel tussen te leggen. Daarbij worden eerst de huizen met elkaar verbonden, waardoor er kleine clusters van verbonden huizen ontstaan. Deze clusters worden vervolgens weer verbonden met elkaar door de kortste afstand tussen de kabels van clusters te bepalen en alleen de kortste routes per cluster aan te leggen. Dit proces herhaalt zich tot alle clusters van huizen met elkaar verbonden zijn, waarna de batterij op de kortst mogelijke manier verbonden wordt met het uiteindelijke cluster aan verbonden huizen. Het eindresultaat is een soort slinger van huizen die met de batterij verbonden zijn.
 
-De resultaten staan in output.json
+The hill climber algorithm uses different heuristics to lay as few cables as possible and to share cables wherever possible. To determine which houses belong to which battery, the greedy algorithm is used. The optimization that the hill climber adds focuses on how the houses assigned to a battery are interconnected. The idea is to repeatedly determine the shortest route between the existing cable network and potential new parts of the network, and then lay a cable between them. Initially, houses are connected to each other, creating small clusters of connected houses. These clusters are then connected by determining the shortest distance between cables from different clusters and laying only the shortest routes for each cluster. This process repeats until all house clusters are connected, after which the battery is connected in the shortest possible way to the final cluster of connected houses. The end result is a kind of chain of houses connected to the battery.
 
-## Aan de slag
+The results are available in `output.json`.
 
-### Vereisten
+## Getting Started
 
-Voor het schrijven van de code hebben we Python 3.9.18 gebruikt. Alle benodigde packages staan genoemd in requirements.txt en kunnen geïnstalleerd worden d.m.v het volgende commando: 
+### Requirements
+
+We used Python 3.9.18 to write the code. All required packages are listed in `requirements.txt` and can be installed using the following command:
 
 ```
 pip install -r requirements.txt
 ```
 
-### Gebruik
+### Usage
 
-De code wordt gerund door het aanroepen van:
+The code is run by executing:
 
 ```
 python main.py
 ```
 
-### Structuur
+### Structure
 
-- **/code**: bevat code die geschreven is voor het oplossen van de case
-  - **/code/algorithms**: bevat de algoritme classes; greedy, baseline en hillclimber
-  - **/code/classes**: bevat de classes batterij, huis en grid
-  - **/code/visualisation**: bevat de visualisatie van het grid en de kosten
-- **/data**: bevat de data van de huizen en batterijen in de drie districten
-- **/docs**: UML van de case
-- **/experiments**: code om experimenten uit te voeren
-- **/results**: resultaten van de verschillende experimenten
+* **/code**: contains code written to solve the case
 
-## Auteurs
-- Luc Mahieu
-- Ayse Acar
-- Dita van Leeuwen
+  * **/code/algorithms**: contains the algorithm classes; greedy, baseline, and hill climber
+  * **/code/classes**: contains the classes for battery, house, and grid
+  * **/code/visualisation**: contains the visualization of the grid and costs
+* **/data**: contains data for houses and batteries in the three districts
+* **/docs**: UML of the case
+* **/experiments**: code for running experiments
+* **/results**: results of the different experiments
+
+## Authors
+
+* Luc Mahieu
+* Ayse Acar
+* Dita van Leeuwen
